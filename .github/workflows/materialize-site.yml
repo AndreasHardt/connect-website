@@ -2,11 +2,8 @@ name: Website einmalig materialisieren
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches: [main]
-    paths:
-      - 'bootstrap/**'
-      - '.github/workflows/materialize-site.yml'
 
 permissions:
   contents: write
@@ -20,14 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor != 'github-actions[bot]' }}
     steps:
-      - name: Repository auschecken
+      - name: Hauptbranch auschecken
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Paket zusammensetzen und prüfen
         shell: bash
         run: |
           set -euo pipefail
-          test -f bootstrap/part-15.txt || { echo 'Noch nicht alle 15 Teile vorhanden.'; exit 0; }
+          test -f bootstrap/part-15.txt
           cat bootstrap/part-*.txt | base64 --decode > /tmp/connect-site.zip
           echo '3cb4617f00e5776f58c92de1b657d700a0c1a74aac2fd0046d9ba5dabd4af6ad  /tmp/connect-site.zip' | sha256sum -c -
 
@@ -53,4 +52,4 @@ jobs:
           git config user.email 'iwe@hardt-wiehl.de'
           git add -A
           git commit -m 'Geprüften Website-Teststand veröffentlichen'
-          git push
+          git push origin main
