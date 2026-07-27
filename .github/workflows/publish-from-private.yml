@@ -1,0 +1,82 @@
+name: Connect-Website veröffentlichen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: connect-website-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Öffentliches Website-Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Privates Connect-Repository lesen
+        uses: actions/checkout@v4
+        with:
+          repository: AndreasHardt/connect.hardt-wiehl
+          token: ${{ secrets.CONNECT_CODE_TOKEN }}
+          path: _private
+
+      - name: Geprüften Webstand übernehmen
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f _private/published/index.html
+          test -f _private/published/assets/app.js
+          test -f _private/published/data/rules.v1.json
+
+          cp CNAME /tmp/CNAME
+          cp .nojekyll /tmp/nojekyll
+
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name .git \
+            ! -name .github \
+            ! -name _private \
+            -exec rm -rf {} +
+
+          cp -a _private/published/. .
+          cp /tmp/CNAME CNAME
+          cp /tmp/nojekyll .nojekyll
+          rm -f .htaccess
+          rm -rf bootstrap
+          rm -f .github/workflows/materialize-site.yml
+          rm -rf _private
+
+      - name: Veröffentlichung prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f index.html
+          test -f assets/app.js
+          test -f assets/evaluation.js
+          test -f assets/engine.js
+          test -f assets/report.js
+          test -f assets/styles.css
+          test -f data/ui-config.json
+          test -f data/rules.v1.json
+          test -f CNAME
+          grep -q 'connect.hardt-wiehl.de' CNAME
+          grep -q 'TESTSYSTEM' index.html
+
+      - name: Änderungen veröffentlichen
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Connect Website Automatik'
+          git config user.email 'iwe@hardt-wiehl.de'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Keine Änderungen zu veröffentlichen.'
+            exit 0
+          fi
+          git commit -m 'Geprüften Website-Teststand veröffentlichen'
+          git push
