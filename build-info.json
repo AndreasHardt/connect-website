@@ -1,0 +1,15 @@
+{
+  "application": "Hardt-Wiehl Connect – Schweißnaht mit Qualität",
+  "version": "0.3.0",
+  "app_mode": "test",
+  "domain": "connect.hardt-wiehl.de",
+  "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
+  "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
+  "built_at": "2026-07-27T20:01:06.634Z",
+  "files": {
+    "assets/engine.js": "bc918a37258fb0957f2764366166d0071bdde9dabb11f0192172b9deae02c5cb",
+    "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
+    "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
+    "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a"
+  }
+}
