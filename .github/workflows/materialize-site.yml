@@ -1,0 +1,56 @@
+name: Website einmalig materialisieren
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'bootstrap/**'
+      - '.github/workflows/materialize-site.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: connect-site-materialize
+  cancel-in-progress: false
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Paket zusammensetzen und prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f bootstrap/part-15.txt || { echo 'Noch nicht alle 15 Teile vorhanden.'; exit 0; }
+          cat bootstrap/part-*.txt | base64 --decode > /tmp/connect-site.zip
+          echo '3cb4617f00e5776f58c92de1b657d700a0c1a74aac2fd0046d9ba5dabd4af6ad  /tmp/connect-site.zip' | sha256sum -c -
+
+      - name: Fertige Website entpacken
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp CNAME /tmp/CNAME
+          cp .nojekyll /tmp/nojekyll
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github ! -name bootstrap -exec rm -rf {} +
+          unzip -q -o /tmp/connect-site.zip -d .
+          cp /tmp/CNAME CNAME
+          cp /tmp/nojekyll .nojekyll
+          rm -f .htaccess
+
+      - name: Transportdateien entfernen und veröffentlichen
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf bootstrap
+          rm -f .github/workflows/materialize-site.yml
+          git config user.name 'Connect Website Automatik'
+          git config user.email 'iwe@hardt-wiehl.de'
+          git add -A
+          git commit -m 'Geprüften Website-Teststand veröffentlichen'
+          git push
