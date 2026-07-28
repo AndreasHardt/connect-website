@@ -1,40 +1,41 @@
-const state = { hideBooleanOnly: false };
+const state = { measurementOnly: false };
 
 function classifyCards() {
   document.querySelectorAll('[data-criterion]').forEach(card => {
-    const inputs = [...card.querySelectorAll('[data-input-id]')];
-    const booleanOnly = inputs.length > 0 && inputs.every(input => input.type === 'checkbox');
-    card.dataset.booleanOnly = booleanOnly ? 'true' : 'false';
+    const hasNumericInput = Boolean(card.querySelector('[data-input-id][type="number"]'));
+    const calculatedFromGeometry = Boolean(card.querySelector('.calculated-note'));
+    const measurementRelevant = hasNumericInput || calculatedFromGeometry;
+    card.dataset.measurementRelevant = measurementRelevant ? 'true' : 'false';
   });
 }
 
 function applyFilter() {
   classifyCards();
   document.querySelectorAll('[data-criterion]').forEach(card => {
-    card.classList.toggle('hidden', state.hideBooleanOnly && card.dataset.booleanOnly === 'true');
+    card.classList.toggle('hidden', state.measurementOnly && card.dataset.measurementRelevant !== 'true');
   });
   document.querySelectorAll('.criterion-group').forEach(group => {
     const visibleCards = [...group.querySelectorAll('[data-criterion]')].some(card => !card.classList.contains('hidden'));
     group.classList.toggle('hidden', !visibleCards);
   });
-  const button = document.querySelector('#toggle-boolean-only');
+  const button = document.querySelector('#toggle-measurement-only');
   if (button) {
-    button.setAttribute('aria-pressed', String(state.hideBooleanOnly));
-    button.textContent = state.hideBooleanOnly ? 'Ja/Nein-Kriterien einblenden' : 'Ja/Nein-Kriterien ausblenden';
+    button.setAttribute('aria-pressed', String(state.measurementOnly));
+    button.textContent = state.measurementOnly ? 'Alle Kriterien anzeigen' : 'Nur messwertabhängige Kriterien anzeigen';
   }
 }
 
 function ensureButton() {
   const actions = document.querySelector('.criteria-toolbar .toolbar-actions');
-  if (!actions || document.querySelector('#toggle-boolean-only')) return;
+  if (!actions || document.querySelector('#toggle-measurement-only')) return;
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'secondary';
-  button.id = 'toggle-boolean-only';
+  button.id = 'toggle-measurement-only';
   button.setAttribute('aria-pressed', 'false');
-  button.textContent = 'Ja/Nein-Kriterien ausblenden';
+  button.textContent = 'Nur messwertabhängige Kriterien anzeigen';
   button.addEventListener('click', () => {
-    state.hideBooleanOnly = !state.hideBooleanOnly;
+    state.measurementOnly = !state.measurementOnly;
     applyFilter();
   });
   actions.prepend(button);
