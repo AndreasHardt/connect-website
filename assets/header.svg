@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1032 576" role="img" aria-labelledby="title desc">
+  <title id="title">Kehlnahtgeometrie</title>
+  <desc id="desc">Technische Darstellung einer Kehlnaht mit den Schenkellängen z1 und z2 sowie der Kehlnahtdicke a.</desc>
+  <defs>
+    <marker id="arrow-white" markerWidth="16" markerHeight="16" refX="8" refY="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M2 2 L14 8 L2 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-dark" markerWidth="12" markerHeight="12" refX="6" refY="6" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M2 2 L10 6 L2 10" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="270" y="88" width="94" height="332" fill="#858585"/>
+  <rect x="270" y="420" width="475" height="94" fill="#595959"/>
+  <path d="M364 256 L526 420 L364 420 Z" fill="#b4b4b4"/>
+  <line x1="332" y1="262" x2="332" y2="416" stroke="#fff" stroke-width="7" marker-start="url(#arrow-white)" marker-end="url(#arrow-white)"/>
+  <line x1="370" y1="448" x2="520" y2="448" stroke="#fff" stroke-width="7" marker-start="url(#arrow-white)" marker-end="url(#arrow-white)"/>
+  <line x1="370" y1="414" x2="446" y2="340" stroke="#fff" stroke-width="7" marker-start="url(#arrow-white)" marker-end="url(#arrow-white)"/>
+  <line x1="365" y1="414" x2="404" y2="391" stroke="#333" stroke-width="4" marker-start="url(#arrow-dark)" marker-end="url(#arrow-dark)"/>
+  <g fill="#fff" font-family="Arial, Helvetica, sans-serif">
+    <text x="278" y="352" font-size="32">z<tspan baseline-shift="sub" font-size="22">2</tspan></text>
+    <text x="430" y="490" font-size="32">z<tspan baseline-shift="sub" font-size="22">1</tspan></text>
+    <text x="420" y="390" font-size="32">a</text>
+    <text x="627" y="498" font-size="28">Bauteil 1</text>
+    <text x="296" y="208" font-size="28" transform="rotate(-90 296 208)">Bauteil 2</text>
+  </g>
+</svg>

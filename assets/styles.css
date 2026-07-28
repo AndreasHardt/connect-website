@@ -26,8 +26,9 @@ button { cursor:pointer; }
 .hero-standard { margin:0; max-width:800px; color:var(--navy); font-size:clamp(.92rem,1.5vw,1.0625rem); line-height:1.4; font-weight:600; }
 .hero-process { margin:18px 0 0; max-width:800px; color:var(--muted); font-size:clamp(.84rem,1.2vw,.9375rem); line-height:1.5; font-weight:600; }
 .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.09em; font-size:.72rem; font-weight:900; }
-.joint-illustration { min-height:140px; display:grid; place-items:center; }
-.joint-illustration svg, .schematic svg { width:100%; max-width:260px; height:auto; }
+.joint-illustration { min-height:140px; display:grid; place-items:center; background:url('./header.svg?v=e71ee05b1b7d') center/contain no-repeat; }
+.joint-illustration > svg { display:none; }
+.schematic svg { width:100%; max-width:260px; height:auto; }
 .stepper { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin:18px 0; overflow:hidden; }
 .step { border:0; border-right:1px solid var(--line); background:#fff; padding:15px 12px; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:9px; }
 .step:last-child { border-right:0; }
