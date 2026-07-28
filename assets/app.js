@@ -629,7 +629,7 @@ import {
   actualText as formatActual,
   assessmentText as formatAssessment,
   detailsText as formatDetails,
-} from './result-format.js?v=86e928f144b6';
+} from './result-format.js?v=044d1e9cde1f';
 
 function renderEditionResultRow(item, edition) {
   if (!item) return '';
@@ -660,8 +660,8 @@ renderResults = function renderResultsSemantic(data) {
     : primary.status === 'fail'
       ? 'Anforderung nicht erfüllt'
       : 'Bewertung noch nicht abschließend';
-  const combined = data.geometry?.combined_features ? ' · mehrere geometrische Merkmale getrennt bewertet' : '';
-  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · 2023 SOLL: <strong>${primary.required_quality}</strong> · Bewertung: <strong>${primary.achieved_quality ? `${primary.achieved_quality} erreicht` : statusLabels[primary.status] || primary.status}</strong>${combined}`;
+  const combined = data.geometry?.combined_features ? ' | mehrere geometrische Merkmale getrennt bewertet' : '';
+  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> | 2023 SOLL: <strong>${primary.required_quality}</strong> | Bewertung: <strong>${primary.achieved_quality ? `${primary.achieved_quality} erreicht` : statusLabels[primary.status] || primary.status}</strong>${combined}`;
   const comparisonById = Object.fromEntries((data.comparison?.results || []).map(item => [item.rule_id, item]));
   $('#results-list').innerHTML = primary.results.map(item => {
     const comparison = comparisonById[item.rule_id];
@@ -679,4 +679,15 @@ renderResults = function renderResultsSemantic(data) {
   }).join('');
   $('#download-pdf').disabled = false;
 };
+
+function normalizeVisibleSeparators(root = document) {
+  const footer = root.querySelector?.('#footer-library');
+  if (footer?.textContent?.includes(' · ')) footer.textContent = footer.textContent.replaceAll(' · ', ' | ');
+}
+
+const footerLibrary = document.querySelector('#footer-library');
+if (footerLibrary) {
+  new MutationObserver(() => normalizeVisibleSeparators()).observe(footerLibrary, { childList: true, characterData: true, subtree: true });
+  normalizeVisibleSeparators();
+}
 

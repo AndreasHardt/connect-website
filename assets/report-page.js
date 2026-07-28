@@ -4,7 +4,7 @@ import {
   actualText,
   assessmentText,
   statusLabel,
-} from './result-format.js?v=86e928f144b6';
+} from './result-format.js?v=044d1e9cde1f';
 
 const inspectionLabels = {
   complete: 'vollständig',
@@ -48,7 +48,7 @@ function geometryRows(geometry, jointType) {
     <tr><td>Schenkellänge z1</td><td>${mm(geometry.z1)}</td><td>Schenkellänge z2</td><td>${mm(geometry.z2)}</td></tr>
     <tr><td>Höhenmesswert m</td><td>${mm(geometry.m)}</td><td>Vergleichshöhe m0</td><td>${mm(geometry.m0)}</td></tr>
     <tr><td>Nahtbreite b</td><td>${mm(geometry.b)}</td><td>Schenkelbezogene Kehlnahtdicke az</td><td>${mm(geometry.az)}</td></tr>
-    <tr><td>Profilabweichung</td><td>${escapeHtml(profile)} · ${mm(geometry.profile_h)}</td><td>Ungleichschenkligkeit hz</td><td>${mm(geometry.asymmetry_h)}</td></tr>
+    <tr><td>Profilabweichung</td><td>${escapeHtml(profile)} | ${mm(geometry.profile_h)}</td><td>Ungleichschenkligkeit hz</td><td>${mm(geometry.asymmetry_h)}</td></tr>
     <tr><td>Tatsächliche Kehlnahtdicke aA</td><td>${mm(geometry.aA)}</td><td>Ermittlungsart</td><td>${escapeHtml(source)}</td></tr>
     <tr><td>Direkt gemessenes aA</td><td>${mm(geometry.direct_aA)}</td><td>Direkt gemessene Überhöhung h</td><td>${mm(geometry.direct_h)}</td></tr>
     <tr><td>Kerbentiefe Übergang 1</td><td>${mm(geometry.notch1)}</td><td>Kerbentiefe Übergang 2</td><td>${mm(geometry.notch2)}</td></tr>`;
@@ -81,7 +81,7 @@ function resultRows(result, otherResult) {
 }
 
 function reportHeader(report, access, result, edition, config, today) {
-  return `<header><div class="brand">${escapeHtml(config.title)}</div><div class="subtitle">${escapeHtml(config.subtitle)}</div><div class="meta">${escapeHtml(config.platform || 'Hardt-Wiehl Connect')} · ${escapeHtml(config.domain)}</div></header>
+  return `<header><div class="brand">${escapeHtml(config.title)}</div><div class="subtitle">${escapeHtml(config.subtitle)}</div><div class="meta">${escapeHtml(config.platform || 'Hardt-Wiehl Connect')} | ${escapeHtml(config.domain)}</div></header>
     <h1>${edition === 2023 ? 'Bericht nach DIN EN ISO 5817:2023' : 'Vergleichsbericht nach DIN EN ISO 5817:2014'}</h1>
     ${edition === 2014 ? '<div class="legacy-notice"><strong>Vergleich nach älterer Normausgabe.</strong> Maßgebend bleibt die Ausgabe 2023.</div>' : ''}
     <table class="info">
@@ -104,7 +104,7 @@ function reportSection({ edition, result, otherResult, report, geometry, access,
   return `<section class="report-section ${isLegacy ? 'comparison-report' : 'current-report'}" data-edition="${edition}">
     ${isTest ? '<div class="watermark">TESTBERICHT</div>' : ''}<div class="report-content">
     ${testNotice}${reportHeader(report, access, result, edition, config, today)}
-    <div class="traceability">Regelbibliothek ${escapeHtml(result.library_version)} · Inhaltshash ${escapeHtml(result.library_content_sha256.slice(0, 16))}… · Assistentversion ${escapeHtml(config.prototype_version)}. Die Bewertung gilt nur für den dokumentierten, zugänglichen Prüfbereich.</div>
+    <div class="traceability">Regelbibliothek ${escapeHtml(result.library_version)} | Inhaltshash ${escapeHtml(result.library_content_sha256.slice(0, 16))}… | Assistentversion ${escapeHtml(config.prototype_version)}. Die Bewertung gilt nur für den dokumentierten, zugänglichen Prüfbereich.</div>
     <h2>Vorgaben, Messung und Berechnung</h2><table class="info">${geometryRows(geometry, result.joint_type)}</table>
     ${combinedNotice}
     <h2>Einzelergebnisse – Ausgabe ${edition}</h2>

@@ -59,9 +59,9 @@ export function requirementText(item) {
   const formula = formulaText(item);
   if (hasNumericValue(item.governing_limit)) {
     const symbol = measurementSymbol(item);
-    return `${quality} · ${symbol} ${comparisonOperator(item)} ${formatValue(item.governing_limit, valueUnit(item))}`;
+    return `${quality} | ${symbol} ${comparisonOperator(item)} ${formatValue(item.governing_limit, valueUnit(item))}`;
   }
-  if (formula) return `${quality} · ${lowerFirst(formula)}`;
+  if (formula) return `${quality} | ${lowerFirst(formula)}`;
   return quality;
 }
 
@@ -84,8 +84,8 @@ export function assessmentText(item) {
   const achieved = item.achieved_quality || null;
   if (item.status === 'pass') return achieved ? `${required} erfüllt` : 'erfüllt';
   if (item.status === 'fail') {
-    if (achieved) return `${required} nicht erfüllt · ${achieved} erfüllt`;
-    return 'nicht zulässig · D nicht erfüllt';
+    if (achieved) return `${required} nicht erfüllt | ${achieved} erfüllt`;
+    return 'nicht zulässig | D nicht erfüllt';
   }
   return STATUS_LABELS[item.status] || String(item.status || '—');
 }
