@@ -26,7 +26,7 @@ button { cursor:pointer; }
 .hero-standard { margin:0; max-width:800px; color:var(--navy); font-size:clamp(.92rem,1.5vw,1.0625rem); line-height:1.4; font-weight:600; }
 .hero-process { margin:18px 0 0; max-width:800px; color:var(--muted); font-size:clamp(.84rem,1.2vw,.9375rem); line-height:1.5; font-weight:600; }
 .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.09em; font-size:.72rem; font-weight:900; }
-.joint-illustration { min-height:140px; display:grid; place-items:center; background:url('./header.svg?v=e71ee05b1b7d') center/contain no-repeat; }
+.joint-illustration { min-height:140px; display:grid; place-items:center; background:url('./graphics/header.svg?v=e71ee05b1b7d') center/contain no-repeat; }
 .joint-illustration > svg { display:none; }
 .schematic svg { width:100%; max-width:260px; height:auto; }
 .stepper { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin:18px 0; overflow:hidden; }
@@ -239,4 +239,38 @@ body.production-mode .test-system-banner { display:none; }
   .result-actions-bottom button { width:100%; }
   .result-edition-row { align-items:flex-start; }
   .result-edition-row .badge { white-space:normal; }
+}
+
+
+/* Semantische Ergebnisdarstellung: SOLL, IST und Bewertung */
+.result-card { grid-template-columns:60px minmax(0,1fr); }
+.result-card-content { min-width:0; }
+.result-editions { margin-top:11px; display:grid; gap:8px; }
+.result-edition-row { display:grid; grid-template-columns:52px minmax(0,1fr) minmax(0,1fr) minmax(0,1.15fr); gap:8px; align-items:stretch; padding:9px; border:1px solid rgba(23,61,95,.12); border-radius:12px; background:rgba(255,255,255,.76); }
+.result-edition-row.edition-2014 { background:rgba(102,119,132,.13); border-color:rgba(102,119,132,.24); }
+.edition-label { display:flex; align-items:center; justify-content:center; min-width:0; border-radius:9px; background:var(--navy); color:#fff; font-size:.76rem; font-weight:900; }
+.edition-2014 .edition-label { background:var(--grey); color:#fff; }
+.result-value { min-width:0; padding:5px 7px; border-left:1px solid rgba(23,61,95,.12); }
+.result-value small { display:block; margin-bottom:3px; color:var(--muted); font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+.result-value strong { display:block; color:var(--ink); font-size:.86rem; line-height:1.35; overflow-wrap:anywhere; }
+.result-assessment.pass strong { color:var(--green); }
+.result-assessment.fail strong { color:var(--red); }
+.result-assessment.manual_review strong,.result-assessment.incomplete strong { color:var(--amber); }
+.result-details { margin-top:10px; border-top:1px dashed rgba(23,61,95,.22); padding-top:9px; color:var(--muted); font-size:.79rem; }
+.result-details summary { cursor:pointer; color:var(--navy); font-weight:800; }
+.result-details > div { margin-top:8px; }
+.result-details ul { margin:5px 0 0 18px; padding:0; }
+.metric,.comparison-metric { display:none!important; }
+
+@media (max-width:820px) {
+  .result-edition-row { grid-template-columns:44px 1fr; }
+  .edition-label { grid-row:1 / span 3; }
+  .result-value { grid-column:2; border-left:0; border-top:1px solid rgba(23,61,95,.12); padding:7px 5px; }
+  .result-value:nth-child(2) { border-top:0; }
+}
+
+@media (max-width:620px) {
+  .result-card { grid-template-columns:46px minmax(0,1fr); gap:10px; }
+  .result-card .rule-number { width:44px; height:44px; }
+  .result-edition-row { padding:7px; }
 }

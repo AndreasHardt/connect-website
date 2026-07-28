@@ -1,5 +1,5 @@
 import { createEvaluationService } from './evaluation.js?v=adb22d1bde14';
-import { openReport } from './report.js?v=6ddf7303a525';
+import { openReport } from './report.js?v=7e2eaafd8c9f';
 import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=9081e0752fa6';
 
 const state = {
@@ -622,4 +622,61 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+
+import {
+  requirementText as formatRequirement,
+  actualText as formatActual,
+  assessmentText as formatAssessment,
+  detailsText as formatDetails,
+} from './result-format.js?v=86e928f144b6';
+
+function renderEditionResultRow(item, edition) {
+  if (!item) return '';
+  return `<div class="result-edition-row edition-${edition}">
+    <div class="edition-label">${edition}</div>
+    <div class="result-value"><small>SOLL</small><strong>${escapeHtml(formatRequirement(item))}</strong></div>
+    <div class="result-value"><small>IST</small><strong>${escapeHtml(formatActual(item))}</strong></div>
+    <div class="result-value result-assessment ${escapeHtml(item.status)}"><small>Bewertung</small><strong>${escapeHtml(formatAssessment(item))}</strong></div>
+  </div>`;
+}
+
+function renderResultDetails(item, comparison) {
+  const primaryDetails = formatDetails(item);
+  const comparisonDetails = formatDetails(comparison);
+  if (!primaryDetails.length && !comparisonDetails.length) return '';
+  const list = (edition, values) => values.length
+    ? `<div><strong>${edition}</strong><ul>${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}</ul></div>`
+    : '';
+  return `<details class="result-details"><summary>Details und Berechnungsgrundlage anzeigen</summary>${list('2023', primaryDetails)}${list('2014', comparisonDetails)}</details>`;
+}
+
+renderResults = function renderResultsSemantic(data) {
+  const primary = data.primary;
+  setEvaluationState(primary.status);
+  const summary = $('#result-summary');
+  summary.querySelector('h2').textContent = primary.status === 'pass'
+    ? 'Anforderung erfüllt'
+    : primary.status === 'fail'
+      ? 'Anforderung nicht erfüllt'
+      : 'Bewertung noch nicht abschließend';
+  const combined = data.geometry?.combined_features ? ' · mehrere geometrische Merkmale getrennt bewertet' : '';
+  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · 2023 SOLL: <strong>${primary.required_quality}</strong> · Bewertung: <strong>${primary.achieved_quality ? `${primary.achieved_quality} erreicht` : statusLabels[primary.status] || primary.status}</strong>${combined}`;
+  const comparisonById = Object.fromEntries((data.comparison?.results || []).map(item => [item.rule_id, item]));
+  $('#results-list').innerHTML = primary.results.map(item => {
+    const comparison = comparisonById[item.rule_id];
+    return `<article class="result-card panel result-status-${escapeHtml(item.status)}">
+      <div class="rule-number">${escapeHtml(item.table_no)}</div>
+      <div class="result-card-content">
+        <h3>${escapeHtml(item.name)}</h3>
+        <div class="result-editions">
+          ${renderEditionResultRow(item, '2023')}
+          ${renderEditionResultRow(comparison, '2014')}
+        </div>
+        ${renderResultDetails(item, comparison)}
+      </div>
+    </article>`;
+  }).join('');
+  $('#download-pdf').disabled = false;
+};
 
