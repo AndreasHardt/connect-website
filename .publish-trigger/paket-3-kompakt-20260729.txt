@@ -1,0 +1,1 @@
+Veröffentlichung von Paket 3: kompaktere responsive Benutzeroberfläche.
