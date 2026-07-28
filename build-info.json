@@ -5,23 +5,24 @@
   "domain": "connect.hardt-wiehl.de",
   "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
   "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-28T20:31:36.586Z",
+  "built_at": "2026-07-28T22:09:49.292Z",
   "files": {
-    "assets/app.js": "4833925bb5b86641475bbc94848983324dc8fb9b86492b4d974c3d6d7902d9e9",
+    "assets/app.js": "b02de6e0ba98cc1b1450228ec95c94b1d9f65877f302b8c1433b6b94e7a0b7a4",
     "assets/criterion-filter.js": "4a01de6ecc5f68246680f9986130f2364d5b4cf7eed43da211a08dac1574c649",
     "assets/engine.js": "bc918a37258fb0957f2764366166d0071bdde9dabb11f0192172b9deae02c5cb",
     "assets/evaluation.js": "adb22d1bde1497088cf6217a1b80e20f008e1d70d2a7a4422490e9e62a2567ab",
     "assets/geometry.js": "7caea745e2d1b61ec21b04ace62bebd03db087bce18e4c99faeb54be2728ce18",
     "assets/graphics/README.md": "f977af8e8f280f360219946cb9399357573c27baa6ee931985d6ec54667b558c",
     "assets/graphics/header.svg": "e71ee05b1b7d291dd670a8c5487ae4467621371f2a974c11562cd56d6a37f055",
+    "assets/graphics/report-geometry.js": "a9ef7e972fab8839ea04ac1824c66d7fb0bf10abf17960511d8f1127e61f1f53",
     "assets/report-page.js": "c9341c606d456524b1af2b9a6f869de097730d33e94b307834b1385e13a7b3a6",
-    "assets/report.css": "71c4cc564ae18e2a11276719b8a68ad211fe4d45615f96e4f12b2cdad891b4ed",
+    "assets/report.css": "38ae756c4b156bb4d3b56d6347d0502e5bd399d88e1fc38192f3abc6ad67482e",
     "assets/report.js": "7e2eaafd8c9f005c0b2137e1c09f93fc1009a1d9d0172c74d74f9ba7f6d63ecd",
     "assets/result-format.js": "044d1e9cde1fd44944c338db6a2ff7335e49d274a1e7cf4b08d69751fcb696f3",
     "assets/styles.css": "3e46e3d126085a4872271c07fa8ea26691a6977ed6173d589e8053fa0bf6e014",
     "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
     "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
     "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a",
-    "report.html": "c261a4344abec966c22a7d3057a403509c2e88f0c124fca6d7a6dac567e4cb5b"
+    "report.html": "d9f3e265a2b0b09a23fd87ef910af804010cb19b1bf984e4574a6ecc476c9be9"
   }
 }

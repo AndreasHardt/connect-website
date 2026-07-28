@@ -691,7 +691,6 @@ if (footerLibrary) {
   normalizeVisibleSeparators();
 }
 
-
 // Ergänzung des vollständigen UI-Codes um das modellbasierte Kehlnahtbild.
 aASourceLabels.model = 'aus der interpolierten Modellkontur';
 
@@ -703,7 +702,15 @@ function modelFilletSvg(result) {
     </svg>`;
   }
 
+  const nominalA = Number(document.getElementById('geo-a')?.value);
+  const nominalPoint = Number.isFinite(nominalA) && nominalA > 0
+    ? {
+        x: result.points.root.x + nominalA * Math.cos(result.gammaRad / 2),
+        y: result.points.root.y + nominalA * Math.sin(result.gammaRad / 2),
+      }
+    : null;
   const points = [result.points.root, result.points.transition1, result.points.transition2, result.points.middle, result.points.control];
+  if (nominalPoint) points.push(nominalPoint);
   const minX = Math.min(...points.map(item => item.x), 0);
   const maxX = Math.max(...points.map(item => item.x), 0);
   const minY = Math.min(...points.map(item => item.y), 0);
@@ -727,19 +734,20 @@ function modelFilletSvg(result) {
   const middle = map(result.points.middle);
   const control = map(result.points.control);
   const minimum = map(result.points.minimum);
+  const nominal = nominalPoint ? map(nominalPoint) : null;
   const gamma = result.gammaRad;
   const u1 = {x: Math.cos(gamma), y: Math.sin(gamma)};
-  const edge1Start = map({x: -u1.x * extension, y: -u1.y * extension});
   const edge1End = map({x: result.points.transition1.x + u1.x * extension, y: result.points.transition1.y + u1.y * extension});
   const edge2Start = map({x: -extension, y: 0});
-  const edge2End = map({x: result.points.transition2.x + extension, y: 0});
 
   return `<svg class="weld-preview" viewBox="0 0 ${width} ${height}" role="img" aria-label="Interpolierte Kehlnahtkontur">
-    <line x1="${edge1Start.x}" y1="${edge1Start.y}" x2="${edge1End.x}" y2="${edge1End.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
-    <line x1="${edge2Start.x}" y1="${edge2Start.y}" x2="${edge2End.x}" y2="${edge2End.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+    <line x1="${root.x}" y1="${root.y}" x2="${edge1End.x}" y2="${edge1End.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+    <line x1="${edge2Start.x}" y1="${edge2Start.y}" x2="${root.x}" y2="${root.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
     <path d="M ${root.x} ${root.y} L ${p1.x} ${p1.y} Q ${control.x} ${control.y} ${p2.x} ${p2.y} Z" fill="currentColor" opacity="0.14"/>
     <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="currentColor" stroke-width="1.5" stroke-dasharray="7 5" opacity="0.55"/>
     <path d="M ${p1.x} ${p1.y} Q ${control.x} ${control.y} ${p2.x} ${p2.y}" fill="none" stroke="currentColor" stroke-width="3.5"/>
+    ${nominal ? `<line x1="${root.x}" y1="${root.y}" x2="${nominal.x}" y2="${nominal.y}" stroke="#b33a3a" stroke-width="1.25"/>
+    <text x="${nominal.x + 5}" y="${nominal.y - 5}" fill="#b33a3a" font-size="10" font-weight="700">a Soll</text>` : ''}
     <line x1="${root.x}" y1="${root.y}" x2="${middle.x}" y2="${middle.y}" stroke="#3f7898" stroke-width="2" stroke-dasharray="5 4"/>
     <circle cx="${p1.x}" cy="${p1.y}" r="3" fill="currentColor"/>
     <circle cx="${p2.x}" cy="${p2.y}" r="3" fill="currentColor"/>
@@ -765,6 +773,17 @@ function applyModelFieldLabels() {
   });
   document.getElementById('direct-h-field')?.classList.add('hidden');
   document.getElementById('direct-aA-field')?.classList.add('hidden');
+}
+
+function ensureHeaderGraphic() {
+  const target = document.getElementById('joint-illustration');
+  if (!target) return;
+  target.style.display = 'grid';
+  target.style.minHeight = '120px';
+  target.style.backgroundImage = `url("${new URL('./graphics/header.svg', import.meta.url)}")`;
+  target.style.backgroundPosition = 'center';
+  target.style.backgroundRepeat = 'no-repeat';
+  target.style.backgroundSize = 'contain';
 }
 
 function renderModelGeometryVisual() {
@@ -796,6 +815,7 @@ refreshGeometry = function refreshGeometryWithModel(options = {}) {
 };
 
 queueMicrotask(() => {
+  ensureHeaderGraphic();
   applyModelFieldLabels();
   refreshGeometry({schedule:false});
 });
