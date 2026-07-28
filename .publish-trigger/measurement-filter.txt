@@ -1,0 +1,1 @@
+Messwertabhängigen Kriterienfilter veröffentlichen.
