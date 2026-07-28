@@ -112,6 +112,44 @@ function patchDecimalDisplay() {
   });
 }
 
+function patchReportDocument(doc) {
+  if (!doc?.body) return;
+  doc.querySelectorAll('th').forEach(cell => {
+    if (cell.textContent.trim() === 'Soll') cell.textContent = 'SOLL';
+    if (cell.textContent.trim() === 'Erreicht') cell.textContent = 'IST';
+  });
+  doc.querySelectorAll('td, strong').forEach(cell => {
+    if (cell.textContent.trim() === 'Geforderte Gruppe') cell.textContent = 'SOLL';
+    if (cell.textContent.trim() === 'Erreichte Gruppe') cell.textContent = 'IST';
+  });
+  roundTextNode(doc.body);
+}
+
+function installReportPatch() {
+  if (window.__hardtWiehlReportPatchInstalled) return;
+  window.__hardtWiehlReportPatchInstalled = true;
+  const originalOpen = window.open.bind(window);
+  window.open = (...args) => {
+    const reportWindow = originalOpen(...args);
+    if (!reportWindow) return reportWindow;
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      try {
+        if (reportWindow.closed) {
+          window.clearInterval(timer);
+          return;
+        }
+        patchReportDocument(reportWindow.document);
+        if (reportWindow.document.querySelector('.page') && attempts >= 4) window.clearInterval(timer);
+      } catch {
+        if (attempts >= 20) window.clearInterval(timer);
+      }
+    }, 75);
+    return reportWindow;
+  };
+}
+
 function applyFilter() {
   classifyCards();
   document.querySelectorAll('[data-criterion]').forEach(card => {
@@ -170,5 +208,6 @@ document.addEventListener('change', event => {
 document.addEventListener('input', event => {
   if (event.target.matches('#geometry-fields input')) refresh();
 });
+installReportPatch();
 document.addEventListener('DOMContentLoaded', refresh);
 refresh();
