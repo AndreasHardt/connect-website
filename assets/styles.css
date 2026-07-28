@@ -19,9 +19,12 @@ button { cursor:pointer; }
 .version-pill { padding:7px 11px; border-radius:999px; background:var(--pale); color:var(--navy); font-size:.76rem; font-weight:800; }
 .page-shell { max-width:1180px; margin:24px auto 34px; padding:0 18px; }
 .panel { background:rgba(255,255,255,.97); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
-.hero { display:grid; grid-template-columns:1.5fr .7fr; gap:28px; align-items:center; padding:30px 34px; background:linear-gradient(135deg,#fff 0,#f3f8fb 100%); }
-.hero h1 { margin:5px 0 10px; color:var(--navy); font-size:clamp(1.7rem,3vw,2.5rem); line-height:1.08; }
-.hero p { margin:0; max-width:760px; color:var(--muted); line-height:1.65; }
+.hero { display:grid; grid-template-columns:1.55fr .65fr; gap:32px; align-items:center; padding:30px 34px; background:linear-gradient(135deg,#fff 0,#f3f8fb 100%); }
+.hero-copy { min-width:0; }
+.hero-kicker { display:block; color:var(--blue); text-transform:uppercase; letter-spacing:.09em; font-size:.8125rem; line-height:1.3; font-weight:900; }
+.hero-title { margin:6px 0 10px; color:var(--navy); font-size:clamp(1.65rem,3.2vw,2.25rem); line-height:1.1; font-weight:800; }
+.hero-standard { margin:0; max-width:800px; color:var(--navy); font-size:clamp(.92rem,1.5vw,1.0625rem); line-height:1.4; font-weight:600; }
+.hero-process { margin:18px 0 0; max-width:800px; color:var(--muted); font-size:clamp(.84rem,1.2vw,.9375rem); line-height:1.5; font-weight:600; }
 .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.09em; font-size:.72rem; font-weight:900; }
 .joint-illustration { min-height:140px; display:grid; place-items:center; }
 .joint-illustration svg, .schematic svg { width:100%; max-width:260px; height:auto; }
@@ -126,6 +129,10 @@ button:disabled { opacity:.45; cursor:not-allowed; }
   .version-pill { display:none; }
   .page-shell { margin-top:14px; padding:0 10px; }
   .hero,.step-panel,.criterion-card { padding:20px 17px; }
+  .hero-kicker { font-size:.75rem; }
+  .hero-title { font-size:1.75rem; }
+  .hero-standard { font-size:.92rem; }
+  .hero-process { margin-top:15px; font-size:.84rem; }
   .step { padding:11px 5px; flex-direction:column; gap:4px; font-size:.68rem; }
   .step span { width:24px; height:24px; }
   .section-heading { display:block; }

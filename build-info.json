@@ -5,14 +5,14 @@
   "domain": "connect.hardt-wiehl.de",
   "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
   "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-28T12:49:26.636Z",
+  "built_at": "2026-07-28T14:26:57.946Z",
   "files": {
     "assets/app.js": "3a26b4a28adcedf3c3bb5bb2487b8e470c6a21941c8d40d8480eaef0a3b118d5",
     "assets/engine.js": "bc918a37258fb0957f2764366166d0071bdde9dabb11f0192172b9deae02c5cb",
     "assets/evaluation.js": "adb22d1bde1497088cf6217a1b80e20f008e1d70d2a7a4422490e9e62a2567ab",
     "assets/geometry.js": "9081e0752fa6c0f1062ee4f270fe7574636b1f5eb255207c20dc385da10d43b1",
     "assets/report.js": "6ddf7303a525f6e305c8e3fc8c5562416a6a0fc17e9c750e04fa7e8a3d352e19",
-    "assets/styles.css": "62dedfecf5a414fed3df70322a03bf3f3e4eb8b56b5965d03aaba18d9c1349c4",
+    "assets/styles.css": "98fba4c889dd95fe892ec854a9b6bde0378425cea7af76c249b1829498698274",
     "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
     "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
     "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a"
