@@ -1,4 +1,4 @@
-import { RuleEngine, EngineError, RequestError } from './engine.js';
+import { RuleEngine, EngineError, RequestError } from './engine.js?v=bc918a37258f';
 
 export function createEvaluationService(library, config) {
   const engine = new RuleEngine(library);

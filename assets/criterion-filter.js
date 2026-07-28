@@ -47,8 +47,6 @@ function refresh() {
 }
 
 const criteriaList = document.querySelector('#criteria-list');
-if (criteriaList) {
-  new MutationObserver(refresh).observe(criteriaList, { childList: true, subtree: true });
-}
+if (criteriaList) new MutationObserver(refresh).observe(criteriaList, { childList: true, subtree: true });
 document.addEventListener('DOMContentLoaded', refresh);
 refresh();

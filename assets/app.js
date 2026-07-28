@@ -1,12 +1,13 @@
-import { createEvaluationService } from './evaluation.js';
-import { openReport } from './report.js';
+import { createEvaluationService } from './evaluation.js?v=adb22d1bde14';
+import { openReport } from './report.js?v=f4b75c027bb4';
+import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=9081e0752fa6';
 
 const state = {
   config: null,
-  currentStep: 1,
   lastPayload: null,
   lastResult: null,
   service: null,
+  geometry: null,
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -20,6 +21,12 @@ const statusLabels = {
 const inspectionLabels = {
   complete: 'vollständig', one_sided: 'einseitig', not_assessable: 'nicht bewertbar'
 };
+const aASourceLabels = {
+  legs: 'aus dem kleineren Schenkel', middle: 'aus dem mittleren Messwert', direct: 'direkt gemessen'
+};
+const profileLabels = {
+  straight: 'gerades Profil', convex: 'Überhöhung', concave: 'Unterwölbung'
+};
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
@@ -27,8 +34,15 @@ function escapeHtml(value) {
 
 function jointType() { return $('input[name="joint_type"]:checked').value; }
 function requiredQuality() { return $('input[name="required_quality"]:checked').value; }
+function numberOrNull(value) {
+  const parsed = Number(value);
+  return value !== '' && Number.isFinite(parsed) ? parsed : null;
+}
+function formatMm(value, digits = 2) {
+  return Number.isFinite(value) ? `${value.toLocaleString('de-DE', {minimumFractionDigits: digits, maximumFractionDigits: digits})} mm` : '-';
+}
 
-function jointSvg(type, compact = false) {
+function jointSvg(type) {
   if (type === 'butt') {
     return `<svg viewBox="0 0 300 180" role="img" aria-label="Schematische Stumpfnaht">
       <rect x="15" y="112" width="115" height="28" rx="3" fill="#173d5f"/>
@@ -36,10 +50,8 @@ function jointSvg(type, compact = false) {
       <path d="M125 112 L145 70 L155 70 L175 112" fill="#66a4c7" stroke="#246b99" stroke-width="3"/>
       <path d="M145 70 Q150 56 155 70" fill="none" stroke="#246b99" stroke-width="4"/>
       <line x1="150" y1="54" x2="150" y2="16" stroke="#b33a3a" stroke-width="2"/>
-      <path d="M144 22l6-8 6 8" fill="none" stroke="#b33a3a" stroke-width="2"/>
       <text x="160" y="28" fill="#b33a3a" font-size="14" font-weight="700">h</text>
       <line x1="128" y1="50" x2="172" y2="50" stroke="#173d5f" stroke-width="2"/>
-      <path d="M134 45l-7 5 7 5M166 45l7 5-7 5" fill="none" stroke="#173d5f" stroke-width="2"/>
       <text x="145" y="45" fill="#173d5f" font-size="14" font-weight="700">b</text>
       <text x="42" y="130" fill="#fff" font-size="14" font-weight="700">t</text>
       <text x="220" y="130" fill="#fff" font-size="14" font-weight="700">t</text>
@@ -50,38 +62,24 @@ function jointSvg(type, compact = false) {
     <rect x="40" y="28" width="25" height="123" rx="3" fill="#173d5f"/>
     <path d="M65 126 L65 70 Q72 82 128 126 Z" fill="#66a4c7" stroke="#246b99" stroke-width="3"/>
     <line x1="74" y1="117" x2="115" y2="117" stroke="#b33a3a" stroke-width="2"/>
-    <path d="M80 112l-7 5 7 5M109 112l7 5-7 5" fill="none" stroke="#b33a3a" stroke-width="2"/>
     <text x="91" y="110" fill="#b33a3a" font-size="14" font-weight="700">z1</text>
     <line x1="74" y1="117" x2="74" y2="80" stroke="#a86b00" stroke-width="2"/>
-    <path d="M69 86l5-7 5 7M69 111l5 7 5-7" fill="none" stroke="#a86b00" stroke-width="2"/>
     <text x="80" y="96" fill="#a86b00" font-size="14" font-weight="700">z2</text>
     <line x1="67" y1="122" x2="97" y2="92" stroke="#1f7a4d" stroke-width="2" stroke-dasharray="5 4"/>
     <text x="98" y="88" fill="#1f7a4d" font-size="14" font-weight="700">m</text>
   </svg>`;
 }
 
-function geometrySvg(type) {
-  return jointSvg(type);
-}
-
 function showAlert(messages) {
   const alert = $('#alert');
   if (!messages || !messages.length) {
-    alert.classList.add('hidden'); alert.innerHTML = ''; return;
+    alert.classList.add('hidden');
+    alert.innerHTML = '';
+    return;
   }
   alert.innerHTML = `<strong>Bitte prüfen:</strong><ul>${messages.map(message => `<li>${escapeHtml(message)}</li>`).join('')}</ul>`;
   alert.classList.remove('hidden');
   alert.scrollIntoView({behavior:'smooth', block:'center'});
-}
-
-function updateJointVisuals() {
-  const type = jointType();
-  $('#joint-illustration').innerHTML = jointSvg(type);
-  $('#geometry-schematic').innerHTML = geometrySvg(type);
-  $('#general-a-field')?.classList.toggle('hidden', type !== 'fillet');
-  $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
-  renderGeometryFields();
-  renderCriteria();
 }
 
 function geometryValue(id) {
@@ -89,39 +87,58 @@ function geometryValue(id) {
   return element ? element.value : '';
 }
 
-function updateThroat() {
-  if (jointType() !== 'fillet') return;
-  const z1 = parseFloat(geometryValue('z1'));
-  const z2 = parseFloat(geometryValue('z2'));
-  const measuredHeight = parseFloat(geometryValue('m'));
-  const notch1 = parseFloat(geometryValue('notch1'));
-  const notch2 = parseFloat(geometryValue('notch2'));
-  const angle = parseFloat(geometryValue('angle')) || 90;
-  const aA = $('#geo-aA');
-  if (Number.isFinite(z1) && Number.isFinite(z2)) {
-    const halfAngle = (angle / 2) * Math.PI / 180;
-    const calculated = Math.min(z1, z2) * Math.sin(halfAngle);
-    if (aA) aA.value = calculated.toFixed(3);
-    const theoreticalHeight = (2 * z1 * z2 * Math.cos(halfAngle)) / (z1 + z2);
-    const profileDifference = Number.isFinite(measuredHeight) ? measuredHeight - theoreticalHeight : null;
-    const profileText = profileDifference === null
-      ? 'Mittleren Höhenmesswert m eingeben.'
-      : Math.abs(profileDifference) < 0.005
-        ? 'gerades Nahtprofil (Δm ≈ 0,00 mm)'
-        : profileDifference > 0
-          ? `Überhöhung ${profileDifference.toFixed(2)} mm`
-          : `Unterwölbung ${Math.abs(profileDifference).toFixed(2)} mm`;
-    const validNotches = [notch1, notch2].filter(Number.isFinite);
-    const maxNotch = validNotches.length ? Math.max(...validNotches) : null;
-    $('#geometry-formula').innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
-      aA = min(z1, z2) × sin(α/2) = <strong>${calculated.toFixed(2)} mm</strong><br>
-      Ungleichschenkligkeit = |z1 − z2| = <strong>${Math.abs(z1-z2).toFixed(2)} mm</strong><br>
-      theoretischer Höhenwert m0 = <strong>${theoreticalHeight.toFixed(2)} mm</strong><br>
-      Profil: <strong>${profileText}</strong>${maxNotch === null ? '' : `<br>größte Kerbentiefe = <strong>${maxNotch.toFixed(2)} mm</strong>`}`;
-  } else {
-    if (aA) aA.value = '';
-    $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2 eingeben, um Kehlnahtdicke, Vergleichshöhe und Profilabweichung automatisch zu berechnen.';
+function filletGeometryInput() {
+  return {
+    z1: numberOrNull(geometryValue('z1')),
+    z2: numberOrNull(geometryValue('z2')),
+    m: numberOrNull(geometryValue('m')),
+    gamma: numberOrNull(geometryValue('angle')),
+    directAA: numberOrNull(geometryValue('direct-aA')),
+    directH: numberOrNull(geometryValue('direct-h')),
+    tolerance: GEOMETRY_TOLERANCE_MM,
+  };
+}
+
+function renderGeometrySummary(result) {
+  if (!result?.b) {
+    $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2, den Bauteilwinkel γ und den Höhenmesswert m eingeben.';
+    return;
   }
+  const profileText = `${profileLabels[result.profileClass]} (${result.profileH >= 0 ? '+' : '−'}${formatMm(Math.abs(result.profileH))})`;
+  const requirements = [];
+  if (result.needsDirectH) requirements.push('Maximale Nahtüberhöhung h direkt messen.');
+  if (result.needsDirectAA) requirements.push('Kleinste tatsächliche Kehlnahtdicke aA direkt messen.');
+  const warnings = [...(result.errors || []), ...requirements];
+  const combined = result.combinedFeatures
+    ? '<br><strong>Hinweis:</strong> Ungleichschenkligkeit und Profilabweichung treten gemeinsam auf und werden getrennt bewertet.'
+    : '';
+  $('#geometry-formula').innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
+    Nahtbreite b = <strong>${formatMm(result.b)}</strong><br>
+    Schenkelbezogene Kehlnahtdicke az = <strong>${formatMm(result.az)}</strong><br>
+    Vergleichshöhe m0 = <strong>${formatMm(result.m0)}</strong><br>
+    Ungleichschenkligkeit hz = <strong>${formatMm(result.asymmetryH)}</strong><br>
+    Profilabweichung senkrecht zu b = <strong>${profileText}</strong><br>
+    tatsächliche Kehlnahtdicke aA = <strong>${formatMm(result.aA)}</strong>${result.aASource ? ` (${escapeHtml(aASourceLabels[result.aASource])})` : ''}
+    ${warnings.length ? `<div class="alert">${warnings.map(item => escapeHtml(item)).join('<br>')}</div>` : ''}${combined}<br>
+    <small>Symmetrie- und Profiltoleranz: ${formatMm(result.tolerance, 1)}; messtechnische, nicht normative Toleranz.</small>`;
+}
+
+function refreshGeometry() {
+  if (jointType() !== 'fillet') {
+    state.geometry = null;
+    $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>Nahtdicke s und Breite b werden am Nahtabschnitt gemessen. Die Breite b wird für die Bewertung der Decklagenüberhöhung verwendet.';
+    updateConditionalFields();
+    return;
+  }
+  const result = computeFilletGeometry(filletGeometryInput());
+  state.geometry = result;
+  const bField = $('#geo-b');
+  const aAField = $('#geo-aA');
+  if (bField) bField.value = Number.isFinite(result.b) ? result.b.toFixed(3) : '';
+  if (aAField) aAField.value = Number.isFinite(result.aA) ? result.aA.toFixed(3) : '';
+  $('#direct-h-field')?.classList.toggle('hidden', !result.needsDirectH);
+  $('#direct-aA-field')?.classList.toggle('hidden', !result.needsDirectAA);
+  renderGeometrySummary(result);
   updateConditionalFields();
 }
 
@@ -129,30 +146,56 @@ function renderGeometryFields() {
   const type = jointType();
   const container = $('#geometry-fields');
   const existing = {};
-  $$('[id^="geo-"]').forEach(input => existing[input.id.replace('geo-','')] = input.value);
+  $$('[id^="geo-"]', container).forEach(input => { existing[input.id.replace('geo-', '')] = input.value; });
   const fields = type === 'butt' ? [
     {id:'s', label:'Gemessene Nahtdicke s', unit:'mm', value:existing.s || '8.0', min:.1, step:.1},
+    {id:'b', label:'Gemessene Nahtbreite b', unit:'mm', value:existing.b || '', min:.1, step:.1},
   ] : [
     {id:'z1', label:'Schenkellänge z1', unit:'mm', value:existing.z1 || '7.0', min:.1, step:.1},
-    {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.5', min:.1, step:.1},
-    {id:'m', label:'Mittlerer Höhenmesswert m', unit:'mm', value:existing.m || '', min:0, step:.01},
-    {id:'notch1', label:'Kerbentiefe Seite 1', unit:'mm', value:existing.notch1 || '', min:0, step:.01},
-    {id:'notch2', label:'Kerbentiefe Seite 2', unit:'mm', value:existing.notch2 || '', min:0, step:.01},
-    {id:'aA', label:'Berechnete Kehlnahtdicke aA', unit:'mm', value:existing.aA || '', min:0, step:.001, readonly:true},
+    {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.0', min:.1, step:.1},
+    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:existing.m || '', min:0, step:.01},
+    {id:'notch1', label:'Kerbentiefe Übergang 1', unit:'mm', value:existing.notch1 || '0', min:0, step:.01},
+    {id:'notch2', label:'Kerbentiefe Übergang 2', unit:'mm', value:existing.notch2 || '0', min:0, step:.01},
+    {id:'direct-h', wrapperId:'direct-h-field', hidden:true, label:'Maximale Nahtüberhöhung h direkt gemessen', unit:'mm', value:existing['direct-h'] || '', min:0, step:.01},
+    {id:'direct-aA', wrapperId:'direct-aA-field', hidden:true, label:'Kleinste tatsächliche Kehlnahtdicke aA direkt gemessen', unit:'mm', value:existing['direct-aA'] || '', min:.01, step:.01},
+    {id:'b', label:'Berechnete Nahtbreite b', unit:'mm', value:'', min:0, step:.001, readonly:true},
+    {id:'aA', label:'Verwendete tatsächliche Kehlnahtdicke aA', unit:'mm', value:'', min:0, step:.001, readonly:true},
   ];
-  container.innerHTML = fields.map(field => `<label>${escapeHtml(field.label)}
-    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" ${field.max ? `max="${field.max}"` : ''} step="${field.step}" value="${field.value}" ${field.readonly ? 'readonly' : ''}><span>${field.unit}</span></div>
+  container.innerHTML = fields.map(field => `<label ${field.wrapperId ? `id="${field.wrapperId}"` : ''} class="${field.hidden ? 'hidden' : ''}">${escapeHtml(field.label)}
+    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
   </label>`).join('');
-  $$('[id^="geo-"]', container).forEach(input => input.addEventListener('input', () => { updateThroat(); updateConditionalFields(); }));
-  if (type === 'fillet') {
-    updateThroat();
-  } else {
-    $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>t beschreibt die allgemeine Bauteildicke; s ist die am Nahtabschnitt gemessene und für die Regel verwendete Nahtdicke. Deck- und Wurzelseite werden getrennt über die Zugänglichkeit geführt.';
-  }
+  $$('[id^="geo-"]', container).forEach(input => {
+    if (!input.readOnly) input.addEventListener('input', refreshGeometry);
+  });
+  refreshGeometry();
+}
+
+function updateJointVisuals() {
+  const type = jointType();
+  $('#joint-illustration').innerHTML = jointSvg(type);
+  $('#geometry-schematic').innerHTML = jointSvg(type);
+  $('#general-a-field')?.classList.toggle('hidden', type !== 'fillet');
+  $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
+  renderGeometryFields();
+  renderCriteria();
+}
+
+function hiddenSystemField(ruleId, fieldId) {
+  return (ruleId === 'IMP-000007' && ['undercut_left_h','undercut_right_h'].includes(fieldId))
+    || (ruleId === 'IMP-000010' && ['fillet_reinforcement_h','fillet_reinforcement_width_b'].includes(fieldId))
+    || (ruleId === 'IMP-000009' && fieldId === 'butt_reinforcement_width_b');
+}
+
+function criterionSystemNote(ruleId) {
+  if (ruleId === 'IMP-000007') return 'Die Kerbtiefen werden aus der Messdatenerfassung übernommen.';
+  if (ruleId === 'IMP-000010') return 'Überhöhung h und Breite b werden aus der Kehlnahtgeometrie übernommen.';
+  if (ruleId === 'IMP-000009') return 'Die Nahtbreite b wird aus der Messdatenerfassung übernommen.';
+  return '';
 }
 
 function fieldHtml(ruleId, field) {
   if (field.joint_types && !field.joint_types.includes(jointType())) return '';
+  if (hiddenSystemField(ruleId, field.id)) return '';
   const id = `${ruleId}-${field.id}`;
   const condition = field.show_if ? `data-show-field="${field.show_if.field}" data-show-equals="${field.show_if.equals}"` : '';
   const geometryCondition = field.show_if_geometry ? `data-show-geometry="${field.show_if_geometry.field}" data-show-lte="${field.show_if_geometry.lte}"` : '';
@@ -161,8 +204,7 @@ function fieldHtml(ruleId, field) {
   const geometryDifference = field.show_if_geometry_difference ? `data-difference-left="${field.show_if_geometry_difference.left}" data-difference-right="${field.show_if_geometry_difference.right}" data-difference-operator="${field.show_if_geometry_difference.operator}"` : '';
   const wrapper = `data-field-wrapper data-rule-id="${ruleId}" ${condition} ${geometryCondition} ${positiveCondition} ${anyPositiveCondition} ${geometryDifference}`;
   if (field.type === 'boolean') {
-    const checked = field.default ? 'checked' : '';
-    return `<label class="switch-row" ${wrapper}><input id="${id}" data-input-id="${field.id}" type="checkbox" ${checked}><span>${escapeHtml(field.label)}</span>${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</label>`;
+    return `<label class="switch-row" ${wrapper}><input id="${id}" data-input-id="${field.id}" type="checkbox" ${field.default ? 'checked' : ''}><span>${escapeHtml(field.label)}</span>${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</label>`;
   }
   if (field.type === 'select') {
     return `<label ${wrapper}>${escapeHtml(field.label)}<select id="${id}" data-input-id="${field.id}">${field.options.map(option => `<option value="${option.value}" ${option.value === field.default ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}</select>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
@@ -179,12 +221,11 @@ function criterionAvailable(item) {
 function snapshotCriteria() {
   const snapshot = {};
   $$('[data-criterion]').forEach(card => {
-    const ruleId = card.dataset.criterion;
     const values = {};
     $$('[data-input-id]', card).forEach(input => {
       values[input.dataset.inputId] = input.type === 'checkbox' ? input.checked : input.value;
     });
-    snapshot[ruleId] = {
+    snapshot[card.dataset.criterion] = {
       values,
       quality: $('[data-quality-override]', card)?.value || '',
       open: card.open || false
@@ -210,6 +251,8 @@ function renderCriteria() {
       <div class="criterion-group-list">${items.map(item => {
         const available = criterionAvailable(item);
         const sideLabel = item.side === 'root' ? 'Wurzelseite' : item.side === 'face' ? 'Deckseite' : 'zugänglicher Prüfbereich';
+        const fields = item.fields.map(field => fieldHtml(item.rule_id, field)).filter(Boolean).join('');
+        const systemNote = criterionSystemNote(item.rule_id);
         return `<details class="criterion-card panel ${available ? '' : 'criterion-unavailable'}" data-criterion="${item.rule_id}" data-side="${item.side}">
           <summary class="criterion-header">
             <div class="rule-number">${item.table_no}</div>
@@ -218,7 +261,7 @@ function renderCriteria() {
           </summary>
           <div class="criterion-body">
             <div class="criterion-tools">
-              <div class="criterion-fields">${item.fields.length ? item.fields.map(field => fieldHtml(item.rule_id, field)).join('') : '<div class="calculated-note">Die Bewertung wird vollständig aus den allgemeinen Vorgaben und den erfassten Messwerten berechnet.</div>'}</div>
+              <div class="criterion-fields">${systemNote ? `<div class="calculated-note">${escapeHtml(systemNote)}</div>` : ''}${fields || (!systemNote ? '<div class="calculated-note">Die Bewertung wird vollständig aus den allgemeinen Vorgaben und den erfassten Messwerten berechnet.</div>' : '')}</div>
               <label class="quality-override">Sollgruppe dieses Kriteriums<select data-quality-override>
                 <option value="">wie Gesamt (${overallQuality})</option><option>B</option><option>C</option><option>D</option>
               </select></label>
@@ -240,36 +283,44 @@ function renderCriteria() {
       if (override) override.value = saved.quality;
       card.open = saved.open;
     }
-    if (card.classList.contains('criterion-unavailable')) {
-      $$('input,select', card).forEach(input => input.disabled = true);
-    }
+    if (card.classList.contains('criterion-unavailable')) $$('input,select', card).forEach(input => { input.disabled = true; });
   });
   $$('[data-input-id]').forEach(input => input.addEventListener('input', updateConditionalFields));
   $$('[data-input-id]').forEach(input => input.addEventListener('change', updateConditionalFields));
   updateConditionalFields();
 }
 
+function systemCriterionValue(ruleId, fieldId) {
+  if (ruleId === 'IMP-000007' && fieldId === 'undercut_left_h') return numberOrNull(geometryValue('notch1')) ?? 0;
+  if (ruleId === 'IMP-000007' && fieldId === 'undercut_right_h') return numberOrNull(geometryValue('notch2')) ?? 0;
+  if (ruleId === 'IMP-000010' && fieldId === 'fillet_reinforcement_h') return state.geometry?.reinforcementH;
+  if (ruleId === 'IMP-000010' && fieldId === 'fillet_reinforcement_width_b') return state.geometry?.b;
+  if (ruleId === 'IMP-000009' && fieldId === 'butt_reinforcement_width_b') return numberOrNull(geometryValue('b'));
+  return null;
+}
+
+function criterionInputValue(ruleId, fieldId) {
+  const source = $(`#${ruleId}-${fieldId}`);
+  if (source) return source.type === 'checkbox' ? source.checked : source.value;
+  return systemCriterionValue(ruleId, fieldId);
+}
+
 function updateConditionalFields() {
   $$('[data-field-wrapper]').forEach(wrapper => {
     let visible = true;
+    const ruleId = wrapper.dataset.ruleId;
     if (wrapper.dataset.showField) {
-      const source = $(`#${wrapper.dataset.ruleId}-${wrapper.dataset.showField}`);
-      visible = source ? String(source.checked) === wrapper.dataset.showEquals : false;
+      visible = String(Boolean(criterionInputValue(ruleId, wrapper.dataset.showField))) === wrapper.dataset.showEquals;
     }
     if (wrapper.dataset.showGeometry) {
       const value = parseFloat(geometryValue(wrapper.dataset.showGeometry));
       visible = visible && Number.isFinite(value) && value <= parseFloat(wrapper.dataset.showLte);
     }
     if (wrapper.dataset.showPositive) {
-      const source = $(`#${wrapper.dataset.ruleId}-${wrapper.dataset.showPositive}`);
-      visible = visible && source && Number(source.value) > 0;
+      visible = visible && Number(criterionInputValue(ruleId, wrapper.dataset.showPositive)) > 0;
     }
     if (wrapper.dataset.showAnyPositive) {
-      const fields = wrapper.dataset.showAnyPositive.split(',');
-      visible = visible && fields.some(field => {
-        const source = $(`#${wrapper.dataset.ruleId}-${field}`);
-        return source && Number(source.value) > 0;
-      });
+      visible = visible && wrapper.dataset.showAnyPositive.split(',').some(field => Number(criterionInputValue(ruleId, field)) > 0);
     }
     if (wrapper.dataset.differenceLeft) {
       const left = Number(geometryValue(wrapper.dataset.differenceLeft));
@@ -281,7 +332,27 @@ function updateConditionalFields() {
   });
 }
 
+function systemValuesForCriterion(ruleId) {
+  if (ruleId === 'IMP-000007') {
+    return {
+      undercut_left_h: numberOrNull(geometryValue('notch1')) ?? 0,
+      undercut_right_h: numberOrNull(geometryValue('notch2')) ?? 0,
+    };
+  }
+  if (ruleId === 'IMP-000010') {
+    return {
+      fillet_reinforcement_h: state.geometry?.reinforcementH,
+      fillet_reinforcement_width_b: state.geometry?.b,
+    };
+  }
+  if (ruleId === 'IMP-000009') {
+    return {butt_reinforcement_width_b: numberOrNull(geometryValue('b'))};
+  }
+  return {};
+}
+
 function collectPayload() {
+  refreshGeometry();
   const criteria = {};
   $$('[data-criterion]').forEach(card => {
     const ruleId = card.dataset.criterion;
@@ -292,9 +363,11 @@ function collectPayload() {
       else if (input.type === 'number') values[input.dataset.inputId] = input.value === '' ? null : Number(input.value);
       else values[input.dataset.inputId] = input.value;
     });
+    Object.assign(values, systemValuesForCriterion(ruleId));
     const override = $('[data-quality-override]', card).value;
     criteria[ruleId] = {values, required_quality: override || null};
   });
+  const g = state.geometry;
   return {
     report: {
       report_id: $('#report_id').value.trim(), inspection_date: $('#inspection_date').value,
@@ -304,51 +377,63 @@ function collectPayload() {
     joint_type: jointType(), required_quality: requiredQuality(),
     accessibility: {face: $('#access_face').checked, root: $('#access_root').checked},
     geometry: {
-      t: numberOrNull(geometryValue('t')), s: numberOrNull(geometryValue('s')),
-      a: numberOrNull(geometryValue('a')), aA: numberOrNull(geometryValue('aA')),
-      z1: numberOrNull(geometryValue('z1')), z2: numberOrNull(geometryValue('z2')),
-      angle: numberOrNull(geometryValue('angle')), m: numberOrNull(geometryValue('m')),
-      notch1: numberOrNull(geometryValue('notch1')), notch2: numberOrNull(geometryValue('notch2'))
+      t: numberOrNull(geometryValue('t')),
+      s: numberOrNull(geometryValue('s')),
+      a: numberOrNull(geometryValue('a')),
+      aA: jointType() === 'fillet' ? g?.aA ?? null : null,
+      z1: numberOrNull(geometryValue('z1')),
+      z2: numberOrNull(geometryValue('z2')),
+      gamma: numberOrNull(geometryValue('angle')),
+      m: numberOrNull(geometryValue('m')),
+      b: jointType() === 'fillet' ? g?.b ?? null : numberOrNull(geometryValue('b')),
+      az: g?.az ?? null,
+      m0: g?.m0 ?? null,
+      delta_m: g?.deltaM ?? null,
+      profile_h: g?.profileH ?? null,
+      reinforcement_h: g?.reinforcementH ?? null,
+      asymmetry_h: g?.asymmetryH ?? null,
+      profile_class: g?.profileClass ?? null,
+      aA_source: g?.aASource ?? null,
+      direct_aA: numberOrNull(geometryValue('direct-aA')),
+      direct_h: numberOrNull(geometryValue('direct-h')),
+      notch1: numberOrNull(geometryValue('notch1')),
+      notch2: numberOrNull(geometryValue('notch2')),
+      combined_features: Boolean(g?.combinedFeatures),
+      tolerance_mm: GEOMETRY_TOLERANCE_MM,
     },
-    criteria, compare_2014: $('#compare_2014').checked
+    criteria,
+    compare_2014: $('#compare_2014').checked
   };
 }
 
-function numberOrNull(value) { const parsed = Number(value); return value !== '' && Number.isFinite(parsed) ? parsed : null; }
-
-function frontendValidation(step) {
+function frontendValidation() {
+  refreshGeometry();
   const errors = [];
-  if (step >= 1 && !$('#access_face').checked && !$('#access_root').checked) errors.push('Mindestens eine Prüfseite muss zugänglich sein.');
-  if (step >= 2) {
-    const t = numberOrNull(geometryValue('t'));
-    if (t === null || t < .5) errors.push('Bauteildicke t muss mindestens 0,5 mm betragen.');
-    if (jointType() === 'butt') {
-      const s = numberOrNull(geometryValue('s')); if (s === null || s <= 0) errors.push('Nahtdicke s ist erforderlich.');
-    } else {
-      ['a','aA','z1','z2'].forEach(key => { const value = numberOrNull(geometryValue(key)); if (value === null || value <= 0) errors.push(`${key} muss größer als 0 sein.`); });
-      const m = numberOrNull(geometryValue('m')); if (m === null || m < 0) errors.push('Der mittlere Höhenmesswert m ist erforderlich.');
-      ['notch1','notch2'].forEach(key => { const value = numberOrNull(geometryValue(key)); if (value !== null && value < 0) errors.push(`${key} darf nicht negativ sein.`); });
+  if (!$('#access_face').checked && !$('#access_root').checked) errors.push('Mindestens eine Prüfseite muss zugänglich sein.');
+  const t = numberOrNull(geometryValue('t'));
+  if (t === null || t < .5) errors.push('Bauteildicke t muss mindestens 0,5 mm betragen.');
+  if (jointType() === 'butt') {
+    const s = numberOrNull(geometryValue('s'));
+    const b = numberOrNull(geometryValue('b'));
+    if (s === null || s <= 0) errors.push('Gemessene Nahtdicke s ist erforderlich.');
+    if (b === null || b <= 0) errors.push('Gemessene Nahtbreite b ist erforderlich.');
+  } else {
+    const a = numberOrNull(geometryValue('a'));
+    if (a === null || a <= 0) errors.push('Nenn-Kehlnahtdicke a muss größer als 0 mm sein.');
+    errors.push(...(state.geometry?.errors || []));
+    if (state.geometry?.needsDirectH && !Number.isFinite(state.geometry.reinforcementH)) {
+      errors.push('Bei ungleichschenkliger und überwölbter Naht ist die maximale Nahtüberhöhung h direkt zu messen.');
     }
+    if (state.geometry?.needsDirectAA && !Number.isFinite(state.geometry.aA)) {
+      errors.push('Bei ungleichschenkliger und unterwölbter Naht ist die kleinste tatsächliche Kehlnahtdicke aA direkt zu messen.');
+    }
+    if (!Number.isFinite(state.geometry?.aA) || state.geometry.aA <= 0) errors.push('Die tatsächliche Kehlnahtdicke aA konnte nicht bestimmt werden.');
+    ['notch1','notch2'].forEach(key => {
+      const value = numberOrNull(geometryValue(key));
+      if (value !== null && value < 0) errors.push(`${key} darf nicht negativ sein.`);
+    });
   }
-  return errors;
-}
-
-async function evaluate() {
-  const errors = frontendValidation(3);
-  if (errors.length) { showAlert(errors); return false; }
-  showAlert([]);
-  const payload = collectPayload();
-  $('#next-button').disabled = true; $('#next-button').textContent = 'Bewertung läuft...';
-  try {
-    await new Promise(resolve => setTimeout(resolve, 0));
-    const data = state.service.evaluatePayload(payload);
-    state.lastPayload = payload; state.lastResult = data;
-    renderResults(data); $('#download-pdf').disabled = false; return true;
-  } catch (error) {
-    showAlert(String(error.message || error).split('\n')); return false;
-  } finally {
-    $('#next-button').disabled = false; updateNavigation();
-  }
+  return [...new Set(errors)];
 }
 
 function valueText(item) {
@@ -365,7 +450,8 @@ function renderResults(data) {
   const primary = data.primary;
   const summary = $('#result-summary');
   summary.querySelector('h2').textContent = primary.status === 'pass' ? 'Anforderung erfüllt' : primary.status === 'fail' ? 'Anforderung nicht erfüllt' : 'Bewertung noch nicht abschließend';
-  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · gefordert <strong>${primary.required_quality}</strong> · erreicht <strong>${primary.achieved_quality || '-'}</strong>`;
+  const combined = data.geometry?.combined_features ? ' · mehrere geometrische Merkmale getrennt bewertet' : '';
+  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · gefordert <strong>${primary.required_quality}</strong> · erreicht <strong>${primary.achieved_quality || '-'}</strong>${combined}`;
   const comparisonById = Object.fromEntries((data.comparison?.results || []).map(item => [item.rule_id,item]));
   $('#results-list').innerHTML = primary.results.map(item => {
     const comp = comparisonById[item.rule_id];
@@ -383,26 +469,9 @@ function renderResults(data) {
   }).join('');
 }
 
-async function downloadPdf() {
-  if (!state.lastResult) return;
-  const button = $('#download-pdf'); button.disabled = true; button.textContent = 'Bericht wird geöffnet...';
-  try {
-    openReport(state.lastResult, state.config);
-  } catch (error) {
-    showAlert(String(error.message || error).split('\n'));
-  } finally {
-    button.disabled = false; button.textContent = 'Bericht / PDF';
-  }
-}
-
-function scrollToSection(targetId) {
-  const target = document.getElementById(targetId);
-  if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
 async function evaluateAndShowResult() {
   const button = $('#evaluate-button');
-  const errors = frontendValidation(3);
+  const errors = frontendValidation();
   if (errors.length) { showAlert(errors); return; }
   showAlert([]);
   const payload = collectPayload();
@@ -415,12 +484,27 @@ async function evaluateAndShowResult() {
     state.lastResult = data;
     renderResults(data);
     $('#download-pdf').disabled = false;
-    scrollToSection('evaluation-result');
+    document.getElementById('evaluation-result')?.scrollIntoView({behavior:'smooth', block:'start'});
   } catch (error) {
     showAlert(String(error.message || error).split('\n'));
   } finally {
     button.disabled = false;
     button.textContent = 'Bewertung berechnen';
+  }
+}
+
+function downloadPdf() {
+  if (!state.lastResult) return;
+  const button = $('#download-pdf');
+  button.disabled = true;
+  button.textContent = 'Bericht wird geöffnet...';
+  try {
+    openReport(state.lastResult, state.config);
+  } catch (error) {
+    showAlert(String(error.message || error).split('\n'));
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Bericht / PDF';
   }
 }
 
@@ -442,18 +526,19 @@ async function init() {
   }
   $('#version-pill').textContent = `Assistent ${state.config.prototype_version}`;
   $('#footer-library').textContent = `Regelbibliothek ${state.config.library.version} · ${state.config.criteria.length} aktive V1-Kriterien · Berechnung lokal im Browser`;
-  if ((state.config.app_mode || 'test') !== 'production') document.body.classList.add('test-mode');
-  else document.body.classList.add('production-mode');
+  document.body.classList.add((state.config.app_mode || 'test') !== 'production' ? 'test-mode' : 'production-mode');
   updateJointVisuals();
   $$('input[name="joint_type"]').forEach(input => input.addEventListener('change', updateJointVisuals));
   $$('input[name="required_quality"]').forEach(input => input.addEventListener('change', renderCriteria));
+  $('#geo-angle').addEventListener('input', refreshGeometry);
+  $('#geo-a').addEventListener('input', updateConditionalFields);
   $('#evaluate-button').addEventListener('click', evaluateAndShowResult);
   $('#download-pdf').addEventListener('click', downloadPdf);
   $('#access_face').addEventListener('change', renderCriteria);
   $('#access_root').addEventListener('change', renderCriteria);
-  $('#expand-all').addEventListener('click', () => $$('[data-criterion]:not(.criterion-unavailable)').forEach(card => card.open = true));
-  $('#collapse-all').addEventListener('click', () => $$('[data-criterion]').forEach(card => card.open = false));
-  $$('.step[data-target]').forEach(step => step.addEventListener('click', () => scrollToSection(step.dataset.target)));
+  $('#expand-all').addEventListener('click', () => $$('[data-criterion]:not(.criterion-unavailable)').forEach(card => { card.open = true; }));
+  $('#collapse-all').addEventListener('click', () => $$('[data-criterion]').forEach(card => { card.open = false; }));
+  $$('.step[data-target]').forEach(step => step.addEventListener('click', () => document.getElementById(step.dataset.target)?.scrollIntoView({behavior:'smooth', block:'start'})));
 }
 
 document.addEventListener('DOMContentLoaded', init);

@@ -8,7 +8,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Schweißnaht mit Qualität | Hardt-Wiehl Connect</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=20260728-2">
+  <link rel="stylesheet" href="./assets/styles.css?v=8a5364742c73">
 </head>
 <body>
 <div class="test-system-banner" id="test-system-banner"><strong>TESTSYSTEM</strong><span>Bewertungen und Berichte sind noch nicht zur produktiven Verwendung freigegeben.</span></div>
@@ -64,8 +64,8 @@
     <div class="choice-grid">
       <fieldset>
         <legend>Nahtart</legend>
-        <label class="choice-card"><input type="radio" name="joint_type" value="fillet" checked><span class="choice-icon fillet-icon"></span><span><strong>Kehlnaht</strong><small>Geometrie mit a, aA, z1 und z2</small></span></label>
-        <label class="choice-card"><input type="radio" name="joint_type" value="butt"><span class="choice-icon butt-icon"></span><span><strong>Stumpfnaht</strong><small>Geometrie mit t und s</small></span></label>
+        <label class="choice-card"><input type="radio" name="joint_type" value="fillet" checked><span class="choice-icon fillet-icon"></span><span><strong>Kehlnaht</strong><small>Geometrie mit a, aA, z1, z2 und m</small></span></label>
+        <label class="choice-card"><input type="radio" name="joint_type" value="butt"><span class="choice-icon butt-icon"></span><span><strong>Stumpfnaht</strong><small>Geometrie mit t, s und b</small></span></label>
       </fieldset>
       <fieldset>
         <legend>Zugänglichkeit</legend>
@@ -84,13 +84,13 @@
       <label>Prüfort<input id="location" placeholder="Werkstatt / Baustelle"></label>
       <label>Bauteildicke t<div class="input-unit"><input id="geo-t" type="number" min="0.5" step="0.1" value="8.0"><span>mm</span></div></label>
       <label id="general-a-field">Nenn-Kehlnahtdicke a<div class="input-unit"><input id="geo-a" type="number" min="0.1" step="0.1" value="5.0"><span>mm</span></div></label>
-      <label id="general-angle-field">Öffnungswinkel α<div class="input-unit"><input id="geo-angle" type="number" min="45" max="135" step="1" value="90"><span>°</span></div></label>
+      <label id="general-angle-field">Eingeschlossener Bauteilwinkel γ<div class="input-unit"><input id="geo-angle" type="number" min="45" max="135" step="1" value="90"><span>°</span></div></label>
     </div>
     <label class="full-width">Bemerkungen<textarea id="notes" rows="3" placeholder="Optionaler Kommentar zum Nahtabschnitt"></textarea></label>
   </section>
 
   <section class="panel step-panel" id="base-geometry" data-panel="2">
-    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Messdatenerfassung</h2></div><p>Hier werden nur tatsächlich am Nahtabschnitt gemessene Werte eingegeben. Abgeleitete Geometriewerte berechnet die Anwendung automatisch.</p></div>
+    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Messdatenerfassung</h2></div><p>Gemessene Werte werden hier einmalig erfasst. Breite, Vergleichsgeometrie, Profilabweichung und tatsächliche Kehlnahtdicke werden automatisch bestimmt; bei nicht eindeutigen Mischkonturen fordert die Anwendung gezielt eine direkte Zusatzmessung an.</p></div>
     <div class="geometry-layout">
       <div class="geometry-card">
         <div class="schematic" id="geometry-schematic"></div>
@@ -121,7 +121,7 @@
 
 <footer class="site-footer"><span id="footer-library">Regelbibliothek wird geladen...</span><span>connect.hardt-wiehl.de</span></footer>
 <noscript><div class="alert">JavaScript ist für die lokale Bewertung erforderlich.</div></noscript>
-<script type="module" src="./assets/app.js?v=20260728-2"></script>
-<script type="module" src="./assets/criterion-filter.js?v=20260728-2"></script>
+<script type="module" src="./assets/app.js?v=adb6de6f1784"></script>
+<script type="module" src="./assets/criterion-filter.js?v=4a01de6ecc5f"></script>
 </body>
 </html>

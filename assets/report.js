@@ -6,13 +6,27 @@ const statusLabels = {
 const inspectionLabels = {
   complete: 'vollständig', one_sided: 'einseitig', not_assessable: 'nicht bewertbar'
 };
+const aASourceLabels = {
+  legs: 'aus dem kleineren Schenkel', middle: 'aus dem mittleren Messwert', direct: 'direkt gemessen'
+};
+const profileLabels = {
+  straight: 'gerades Profil', convex: 'Überhöhung', concave: 'Unterwölbung'
+};
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 }
 
 function mm(value) {
-  return value === null || value === undefined ? '-' : `${Number(value).toLocaleString('de-DE', {maximumFractionDigits: 2})} mm`;
+  return value === null || value === undefined || !Number.isFinite(Number(value))
+    ? '-'
+    : `${Number(value).toLocaleString('de-DE', {maximumFractionDigits: 3})} mm`;
+}
+
+function degree(value) {
+  return value === null || value === undefined || !Number.isFinite(Number(value))
+    ? '-'
+    : `${Number(value).toLocaleString('de-DE', {maximumFractionDigits: 1})}°`;
 }
 
 function measure(value) {
@@ -34,6 +48,24 @@ function resultRows(results) {
   </tr>`).join('');
 }
 
+function geometryRows(geometry, jointType) {
+  if (jointType === 'Stumpfnaht') {
+    return `<tr><td>Bauteildicke t</td><td>${mm(geometry.t)}</td><td>Gemessene Nahtdicke s</td><td>${mm(geometry.s)}</td></tr>
+      <tr><td>Gemessene Nahtbreite b</td><td>${mm(geometry.b)}</td><td></td><td></td></tr>`;
+  }
+  const profile = profileLabels[geometry.profile_class] || '-';
+  const source = aASourceLabels[geometry.aA_source] || '-';
+  return `<tr><td>Bauteildicke t</td><td>${mm(geometry.t)}</td><td>Nenn-Kehlnahtdicke a</td><td>${mm(geometry.a)}</td></tr>
+    <tr><td>Bauteilwinkel γ</td><td>${degree(geometry.gamma)}</td><td>Messtechnische Toleranz</td><td>${mm(geometry.tolerance_mm)}</td></tr>
+    <tr><td>Schenkellänge z1</td><td>${mm(geometry.z1)}</td><td>Schenkellänge z2</td><td>${mm(geometry.z2)}</td></tr>
+    <tr><td>Höhenmesswert m</td><td>${mm(geometry.m)}</td><td>Vergleichshöhe m0</td><td>${mm(geometry.m0)}</td></tr>
+    <tr><td>Nahtbreite b</td><td>${mm(geometry.b)}</td><td>Schenkelbezogene Kehlnahtdicke az</td><td>${mm(geometry.az)}</td></tr>
+    <tr><td>Profilabweichung</td><td>${escapeHtml(profile)} · ${mm(geometry.profile_h)}</td><td>Ungleichschenkligkeit hz</td><td>${mm(geometry.asymmetry_h)}</td></tr>
+    <tr><td>Tatsächliche Kehlnahtdicke aA</td><td>${mm(geometry.aA)}</td><td>Ermittlungsart</td><td>${escapeHtml(source)}</td></tr>
+    <tr><td>Direkt gemessenes aA</td><td>${mm(geometry.direct_aA)}</td><td>Direkt gemessene Überhöhung h</td><td>${mm(geometry.direct_h)}</td></tr>
+    <tr><td>Kerbentiefe Übergang 1</td><td>${mm(geometry.notch1)}</td><td>Kerbentiefe Übergang 2</td><td>${mm(geometry.notch2)}</td></tr>`;
+}
+
 export function reportHtml(data, config) {
   const isTest = (data.app_mode || config.app_mode) !== 'production';
   const report = data.report || {};
@@ -44,6 +76,9 @@ export function reportHtml(data, config) {
   const today = new Date().toISOString().slice(0, 10);
   const watermark = isTest ? '<div class="watermark">TESTBERICHT</div>' : '';
   const testNotice = isTest ? '<div class="test-notice"><strong>TESTSYSTEM:</strong> Dieser Bericht ist noch nicht zur produktiven Verwendung freigegeben.</div>' : '';
+  const combinedNotice = geometry.combined_features
+    ? '<div class="note"><strong>Kombinierte Geometriemerkmale:</strong> Ungleichschenkligkeit und Profilabweichung treten im selben Querschnitt auf. Die Merkmale wurden nach den jeweiligen Einzelkriterien bewertet und nicht automatisch summiert.</div>'
+    : '';
 
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><title>${escapeHtml(report.report_id || 'ISO5817-Prüfbericht')}</title>
   <style>
@@ -66,14 +101,16 @@ export function reportHtml(data, config) {
   <h1>Prüfbericht – Sichtprüfung und geometrische Bewertung</h1>
   <table class="info">
     <tr><td>Berichtsnummer</td><td>${escapeHtml(report.report_id || '-')}</td><td>Prüfdatum</td><td>${escapeHtml(report.inspection_date || today)}</td></tr>
-    <tr><td>Bauteil</td><td>${escapeHtml(report.component || '-')}</td><td>Nahtbezeichnung</td><td>${escapeHtml(report.weld_id || '-')}</td></tr>
-    <tr><td>Prüfer</td><td>${escapeHtml(report.inspector || '-')}</td><td>Prüfort</td><td>${escapeHtml(report.location || '-')}</td></tr>
-    <tr><td>Nahtart</td><td>${escapeHtml(primary.joint_type)}</td><td>Normausgabe</td><td>DIN EN ISO 5817:2023</td></tr>
-    <tr><td>Geforderte Gruppe</td><td>${escapeHtml(primary.required_quality)}</td><td>Zugänglichkeit</td><td>Deckseite: ${access.face ? 'ja' : 'nein'}; Wurzelseite: ${access.root ? 'ja' : 'nein'}</td></tr>
+    <tr><td>WPS</td><td>${escapeHtml(report.wps || '-')}</td><td>Bauteil</td><td>${escapeHtml(report.component || '-')}</td></tr>
+    <tr><td>Nahtbezeichnung</td><td>${escapeHtml(report.weld_id || '-')}</td><td>Prüfer</td><td>${escapeHtml(report.inspector || '-')}</td></tr>
+    <tr><td>Prüfort</td><td>${escapeHtml(report.location || '-')}</td><td>Nahtart</td><td>${escapeHtml(primary.joint_type)}</td></tr>
+    <tr><td>Normausgabe</td><td>DIN EN ISO 5817:2023</td><td>Geforderte Gruppe</td><td>${escapeHtml(primary.required_quality)}</td></tr>
+    <tr><td>Zugänglichkeit</td><td colspan="3">Deckseite: ${access.face ? 'ja' : 'nein'}; Wurzelseite: ${access.root ? 'ja' : 'nein'}</td></tr>
   </table>
   <div class="summary"><div><strong>Prüfstatus</strong><span>${escapeHtml(inspectionLabels[primary.inspection_status] || primary.inspection_status)}</span></div><div><strong>Gesamtergebnis</strong><span>${escapeHtml(statusLabels[primary.status] || primary.status)}</span></div><div><strong>Erreichte Gruppe</strong><span>${escapeHtml(primary.achieved_quality || '-')}</span></div></div>
   <div class="traceability">Regelbibliothek ${escapeHtml(primary.library_version)} · Inhaltshash ${escapeHtml(primary.library_content_sha256.slice(0,16))}… · Assistentversion ${escapeHtml(data.assistant_version)}. Die Bewertung gilt nur für den dokumentierten, zugänglichen Prüfbereich.</div>
-  <h2>Grundgeometrie</h2><table class="info"><tr><td>Bauteildicke t</td><td>${mm(geometry.t)}</td><td>Nahtdicke s</td><td>${mm(geometry.s)}</td></tr><tr><td>Nenn-Kehlnahtdicke a</td><td>${mm(geometry.a)}</td><td>Tatsächliche Kehlnahtdicke aA</td><td>${mm(geometry.aA)}</td></tr><tr><td>Schenkellänge z1</td><td>${mm(geometry.z1)}</td><td>Schenkellänge z2</td><td>${mm(geometry.z2)}</td></tr></table>
+  <h2>Vorgaben, Messung und Berechnung</h2><table class="info">${geometryRows(geometry, primary.joint_type)}</table>
+  ${combinedNotice}
   <h2>Einzelergebnisse – Ausgabe 2023</h2><table class="result-table"><thead><tr><th>Nr.</th><th>Kriterium</th><th>Soll</th><th>Erreicht</th><th>Status</th><th>Messwert / Grenze</th><th>Bewertung</th></tr></thead><tbody>${resultRows(primary.results)}</tbody></table>
   ${comparison ? `<h2>Optionaler Vergleich – Ausgabe 2014</h2><div class="note">Die Ausgabe 2014 wird nur vergleichend dargestellt. Maßgebend ist die Ausgabe 2023.</div><table class="result-table"><thead><tr><th>Nr.</th><th>Kriterium</th><th>Soll</th><th>Erreicht</th><th>Status</th><th>Messwert / Grenze</th><th>Bewertung</th></tr></thead><tbody>${resultRows(comparison.results)}</tbody></table>` : ''}
   ${report.notes ? `<h2>Bemerkungen</h2><div class="note">${escapeHtml(report.notes)}</div>` : ''}
