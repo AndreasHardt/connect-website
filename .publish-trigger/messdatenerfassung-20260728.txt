@@ -1,1 +1,1 @@
-Aktuellen geprüften Teststand mit WPS, Messdatenerfassung und mittlerem Höhenmesswert veröffentlichen.
+Aktuellen geprüften Teststand mit Kehlnahtgeometrie, Bauteilwinkel γ, automatischer Breite b und Mischkontur-Logik veröffentlichen.
