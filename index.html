@@ -27,22 +27,22 @@
     <div>
       <span class="eyebrow">Vollständiger V1-Web-Assistent</span>
       <h1>Alle 26 V1-Kriterien an einer Prüfstelle bewerten</h1>
-      <p>Der Assistent führt durch Kehl- oder Stumpfnaht, Zugänglichkeit, Grundgeometrie und sämtliche aktiven VT-Kriterien. Maßgebend ist die Ausgabe 2023; die Ausgabe 2014 kann vergleichend zugeschaltet werden.</p>
+      <p>Alle Eingaben, Prüfkriterien und Ergebnisse stehen auf einer Seite. Maßgebend ist die Ausgabe 2023; die Ausgabe 2014 kann vergleichend zugeschaltet werden.</p>
     </div>
     <div class="joint-illustration" id="joint-illustration" aria-label="Schematische Nahtdarstellung"></div>
   </section>
 
-  <nav class="stepper panel" aria-label="Arbeitsschritte">
-    <button class="step active" data-step="1"><span>1</span><strong>Prüfkopf</strong></button>
-    <button class="step" data-step="2"><span>2</span><strong>Geometrie</strong></button>
-    <button class="step" data-step="3"><span>3</span><strong>Kriterien</strong></button>
-    <button class="step" data-step="4"><span>4</span><strong>Ergebnis</strong></button>
+  <nav class="stepper panel" aria-label="Sprungnavigation">
+    <button class="step active" type="button" data-target="inspection-header"><span>1</span><strong>Prüfkopf und Anforderung</strong></button>
+    <button class="step" type="button" data-target="base-geometry"><span>2</span><strong>Grundgeometrie</strong></button>
+    <button class="step" type="button" data-target="inspection-criteria"><span>3</span><strong>Prüfkriterien</strong></button>
+    <button class="step" type="button" data-target="evaluation-result"><span>4</span><strong>Ergebnis</strong></button>
   </nav>
 
   <div id="alert" class="alert hidden" role="alert"></div>
 
-  <section class="panel step-panel" data-panel="1">
-    <div class="section-heading"><div><span class="eyebrow">Schritt 1</span><h2>Prüfkopf und Anforderung</h2></div><p>Die Angaben erscheinen später im PDF-Bericht.</p></div>
+  <section class="panel step-panel" id="inspection-header" data-panel="1">
+    <div class="section-heading"><div><span class="eyebrow">Bereich 1</span><h2>Prüfkopf und Anforderung</h2></div><p>Die Angaben erscheinen später im PDF-Bericht.</p></div>
     <div class="form-grid report-grid">
       <label>Berichtsnummer<input id="report_id" value="EMP-2026-001"></label>
       <label>Prüfdatum<input id="inspection_date" type="date"></label>
@@ -84,8 +84,8 @@
     <label class="full-width">Bemerkungen<textarea id="notes" rows="3" placeholder="Optionaler Kommentar zur Prüfstelle"></textarea></label>
   </section>
 
-  <section class="panel step-panel hidden" data-panel="2">
-    <div class="section-heading"><div><span class="eyebrow">Schritt 2</span><h2>Grundgeometrie</h2></div><p>Systemwerte werden an alle passenden Kriterien weitergereicht.</p></div>
+  <section class="panel step-panel" id="base-geometry" data-panel="2">
+    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Grundgeometrie</h2></div><p>Systemwerte werden an alle passenden Kriterien weitergereicht.</p></div>
     <div class="geometry-layout">
       <div class="geometry-card">
         <div class="schematic" id="geometry-schematic"></div>
@@ -98,24 +98,22 @@
     </div>
   </section>
 
-  <section class="step-panel hidden" data-panel="3">
-    <div class="section-heading panel"><div><span class="eyebrow">Schritt 3</span><h2>Vollständige V1-Prüfkriterien</h2></div><p>Alle 26 aktiven Kriterien werden aus derselben Regelbibliothek und mit demselben Rechenkern bewertet.</p></div>
+  <section class="step-panel" id="inspection-criteria" data-panel="3">
+    <div class="section-heading panel"><div><span class="eyebrow">Bereich 3</span><h2>Prüfkriterien</h2></div><p>Alle 26 aktiven Kriterien werden aus derselben Regelbibliothek und mit demselben Rechenkern bewertet.</p></div>
     <div class="criteria-toolbar panel"><div><strong>Arbeitsweise:</strong> Alle Kriterien starten mit „nicht vorhanden“ bzw. 0 mm. Öffnen Sie nur die Karten, an denen ein Befund oder Messwert vorliegt.</div><div class="toolbar-actions"><button type="button" class="secondary" id="expand-all">Alle öffnen</button><button type="button" class="secondary" id="collapse-all">Alle schließen</button></div></div><div id="criteria-list" class="criteria-list"></div>
   </section>
 
-  <section class="step-panel hidden" data-panel="4">
+  <div class="navigation-bar panel">
+    <button class="primary" id="evaluate-button" type="button">Bewertung berechnen</button>
+  </div>
+
+  <section class="step-panel" id="evaluation-result" data-panel="4">
     <div class="result-hero panel" id="result-summary">
-      <div><span class="eyebrow">Schritt 4</span><h2>Ergebnis</h2><p>Die Bewertung wurde noch nicht ausgeführt.</p></div>
-      <div class="result-actions"><button class="secondary" id="evaluate-again">Neu berechnen</button><button class="primary" id="download-pdf" disabled>Bericht / PDF</button></div>
+      <div><span class="eyebrow">Bereich 4</span><h2>Ergebnis</h2><p>Die Bewertung wurde noch nicht ausgeführt.</p></div>
+      <div class="result-actions"><button class="primary" id="download-pdf" disabled>Bericht / PDF</button></div>
     </div>
     <div id="results-list" class="results-list"></div>
   </section>
-
-  <div class="navigation-bar panel">
-    <button class="secondary" id="back-button" disabled>Zurück</button>
-    <div class="progress-note" id="progress-note">Schritt 1 von 4</div>
-    <button class="primary" id="next-button">Weiter</button>
-  </div>
 </main>
 
 <footer class="site-footer"><span id="footer-library">Regelbibliothek wird geladen...</span><span>connect.hardt-wiehl.de</span></footer>

@@ -381,33 +381,33 @@ async function downloadPdf() {
   }
 }
 
-function updateNavigation() {
-  const next = $('#next-button'); const back = $('#back-button');
-  back.disabled = state.currentStep === 1;
-  next.textContent = state.currentStep === 3 ? 'Jetzt bewerten' : state.currentStep === 4 ? 'Zur Prüfstelle' : 'Weiter';
-  $('#progress-note').textContent = `Schritt ${state.currentStep} von 4`;
-  $$('.step').forEach(step => {
-    const number = Number(step.dataset.step);
-    step.classList.toggle('active', number === state.currentStep);
-    step.classList.toggle('completed', number < state.currentStep);
-  });
+function scrollToSection(targetId) {
+  const target = document.getElementById(targetId);
+  if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function goToStep(step) {
-  state.currentStep = Math.max(1,Math.min(4,step));
-  $$('.step-panel').forEach(panel => panel.classList.toggle('hidden', Number(panel.dataset.panel) !== state.currentStep));
-  updateNavigation(); window.scrollTo({top:140,behavior:'smooth'});
-}
-
-async function nextStep() {
-  if (state.currentStep < 3) {
-    const errors = frontendValidation(state.currentStep);
-    if (errors.length) { showAlert(errors); return; }
-    showAlert([]); goToStep(state.currentStep + 1); return;
+async function evaluateAndShowResult() {
+  const button = $('#evaluate-button');
+  const errors = frontendValidation(3);
+  if (errors.length) { showAlert(errors); return; }
+  showAlert([]);
+  const payload = collectPayload();
+  button.disabled = true;
+  button.textContent = 'Bewertung läuft...';
+  try {
+    await new Promise(resolve => setTimeout(resolve, 0));
+    const data = state.service.evaluatePayload(payload);
+    state.lastPayload = payload;
+    state.lastResult = data;
+    renderResults(data);
+    $('#download-pdf').disabled = false;
+    scrollToSection('evaluation-result');
+  } catch (error) {
+    showAlert(String(error.message || error).split('\n'));
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Bewertung berechnen';
   }
-  if (state.currentStep === 3) {
-    if (await evaluate()) goToStep(4);
-  } else goToStep(1);
 }
 
 async function init() {
@@ -423,27 +423,24 @@ async function init() {
     state.config = state.service.config;
   } catch (error) {
     showAlert([String(error.message || error)]);
-    $('#next-button').disabled = true;
+    $('#evaluate-button').disabled = true;
     return;
   }
   $('#version-pill').textContent = `Assistent ${state.config.prototype_version}`;
   $('#footer-library').textContent = `Regelbibliothek ${state.config.library.version} · ${state.config.criteria.length} aktive V1-Kriterien · Berechnung lokal im Browser`;
   if ((state.config.app_mode || 'test') !== 'production') document.body.classList.add('test-mode');
   else document.body.classList.add('production-mode');
-  updateJointVisuals(); updateNavigation();
+  updateJointVisuals();
   $$('input[name="joint_type"]').forEach(input => input.addEventListener('change', updateJointVisuals));
   $$('input[name="required_quality"]').forEach(input => input.addEventListener('change', renderCriteria));
-  $('#next-button').addEventListener('click', nextStep);
-  $('#back-button').addEventListener('click', () => goToStep(state.currentStep - 1));
-  $('#evaluate-again').addEventListener('click', () => goToStep(3));
+  $('#evaluate-button').addEventListener('click', evaluateAndShowResult);
   $('#download-pdf').addEventListener('click', downloadPdf);
   $('#access_face').addEventListener('change', renderCriteria);
   $('#access_root').addEventListener('change', renderCriteria);
   $('#expand-all').addEventListener('click', () => $$('[data-criterion]:not(.criterion-unavailable)').forEach(card => card.open = true));
   $('#collapse-all').addEventListener('click', () => $$('[data-criterion]').forEach(card => card.open = false));
-  $$('.step').forEach(step => step.addEventListener('click', () => {
-    const target = Number(step.dataset.step); if (target < state.currentStep || (target === 4 && state.lastResult)) goToStep(target);
-  }));
+  $$('.step[data-target]').forEach(step => step.addEventListener('click', () => scrollToSection(step.dataset.target)));
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
