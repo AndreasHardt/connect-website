@@ -5,7 +5,7 @@
   "domain": "connect.hardt-wiehl.de",
   "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
   "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-28T22:09:49.292Z",
+  "built_at": "2026-07-28T22:22:59.977Z",
   "files": {
     "assets/app.js": "b02de6e0ba98cc1b1450228ec95c94b1d9f65877f302b8c1433b6b94e7a0b7a4",
     "assets/criterion-filter.js": "4a01de6ecc5f68246680f9986130f2364d5b4cf7eed43da211a08dac1574c649",
@@ -19,7 +19,7 @@
     "assets/report.css": "38ae756c4b156bb4d3b56d6347d0502e5bd399d88e1fc38192f3abc6ad67482e",
     "assets/report.js": "7e2eaafd8c9f005c0b2137e1c09f93fc1009a1d9d0172c74d74f9ba7f6d63ecd",
     "assets/result-format.js": "044d1e9cde1fd44944c338db6a2ff7335e49d274a1e7cf4b08d69751fcb696f3",
-    "assets/styles.css": "3e46e3d126085a4872271c07fa8ea26691a6977ed6173d589e8053fa0bf6e014",
+    "assets/styles.css": "defd9aab5f028632e132376b67bd54f467d522bb677f60b9c4f60e6e914c2bfd",
     "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
     "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
     "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a",

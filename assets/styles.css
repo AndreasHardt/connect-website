@@ -274,3 +274,100 @@ body.production-mode .test-system-banner { display:none; }
   .result-card .rule-number { width:44px; height:44px; }
   .result-edition-row { padding:7px; }
 }
+
+/* Paket 3: kompaktere, weiterhin touch-taugliche Oberfläche */
+:root { --radius:14px; }
+.site-header { padding-top:10px; padding-bottom:10px; }
+.brand-mark { width:40px; height:40px; border-radius:11px; }
+.brand-mark svg { width:29px; }
+.page-shell { margin-top:16px; margin-bottom:24px; }
+.hero { gap:22px; padding:22px 26px; }
+.hero-title { margin:4px 0 7px; }
+.hero-process { margin-top:11px; }
+.joint-illustration { min-height:118px; }
+.stepper { margin:12px 0; }
+.step { padding:11px 9px; gap:7px; }
+.step span { width:25px; height:25px; }
+.step-panel { padding:21px 23px; }
+.section-heading { gap:16px; margin-bottom:15px; }
+.section-heading h2 { font-size:1.32rem; }
+.section-heading p { font-size:.84rem; line-height:1.4; }
+.form-grid { gap:12px 14px; }
+.report-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+label { gap:5px; }
+input,select,textarea { padding:9px 10px; border-radius:8px; }
+.full-width { margin-top:13px; }
+.choice-grid { gap:14px; margin-top:15px; }
+fieldset { padding:12px 13px; border-radius:11px; }
+.choice-card { gap:9px; padding:9px 10px; margin-top:7px; }
+.choice-icon { transform:scale(.9); transform-origin:center; }
+.quality-selector span { padding:9px; }
+.field-help { margin-top:6px; line-height:1.35; }
+.switch-row { padding:5px 0; }
+.geometry-layout { grid-template-columns:.72fr 1.28fr; gap:18px; }
+.geometry-card { padding:14px; border-radius:13px; }
+.schematic { min-height:190px; }
+.formula-box { padding:9px 10px; line-height:1.45; }
+.auto-throat-row { margin-top:10px; }
+.criteria-list { gap:11px; }
+.criterion-card { padding:16px 18px; }
+.criterion-header { gap:10px; }
+.rule-number { width:46px; height:46px; border-radius:12px; }
+.criterion-tools { gap:13px; margin-top:12px; }
+.criterion-fields { gap:10px; }
+.result-hero { padding:18px 21px; }
+.results-list { gap:10px; margin-top:11px; }
+.result-card { padding:14px 16px; gap:12px; }
+.result-card .rule-number { width:44px; height:44px; }
+.result-meta { margin-top:6px; gap:5px; }
+.metric { min-width:145px; padding:9px 10px; }
+.comparison-row { margin-top:7px; padding-top:7px; }
+.navigation-bar { margin-top:12px; padding:9px 11px; }
+button.primary,button.secondary { padding:9px 14px; }
+.alert { margin-bottom:12px; padding:10px 13px; }
+.site-footer { padding-bottom:20px; }
+
+/* Kurze Zahlenfelder erhalten auf großen Bildschirmen weniger Breite. */
+@media (min-width:861px) {
+  .report-grid > label:has(input[type="number"]),
+  #geometry-fields > label:has(input[type="number"]) { max-width:230px; }
+  #geometry-fields { grid-template-columns:repeat(3,minmax(150px,1fr)); }
+}
+
+@media (max-width:1100px) {
+  .report-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+
+@media (max-width:860px) {
+  .page-shell { margin-top:12px; padding:0 12px; }
+  .site-header { padding-left:14px; padding-right:14px; }
+  .hero { padding:18px; gap:14px; }
+  .joint-illustration { min-height:105px !important; }
+  .step-panel { padding:17px 16px; }
+  .section-heading { display:block; }
+  .section-heading p { margin-top:7px; text-align:left; max-width:none; }
+  .report-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .geometry-layout { gap:13px; }
+  .schematic { min-height:170px; }
+}
+
+@media (max-width:560px) {
+  .brand-mark { width:36px; height:36px; }
+  .brand { font-size:.94rem; }
+  .subtitle { font-size:.68rem; }
+  .version-pill { padding:5px 8px; }
+  .hero { padding:15px; }
+  .hero-process { margin-top:8px; }
+  .stepper { grid-template-columns:repeat(2,1fr); }
+  .step:nth-child(2) { border-right:0; }
+  .step:nth-child(-n+2) { border-bottom:1px solid var(--line); }
+  .step { min-height:48px; justify-content:flex-start; }
+  .report-grid,.form-grid,.choice-grid,.criterion-fields { grid-template-columns:1fr; }
+  .criterion-card { padding:14px; }
+  .criterion-header { grid-template-columns:auto 1fr; }
+  .criterion-header .role-tag { grid-column:2; justify-self:start; }
+  .criterion-tools { margin-top:10px; }
+  .result-card { grid-template-columns:42px 1fr; }
+  .result-card .metric { grid-column:1 / -1; text-align:left; }
+  input,select,textarea,button.primary,button.secondary { min-height:42px; }
+}
