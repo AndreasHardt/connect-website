@@ -1,6 +1,6 @@
 import { createEvaluationService } from './evaluation.js?v=adb22d1bde14';
 import { openReport } from './report.js?v=7e2eaafd8c9f';
-import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=9081e0752fa6';
+import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=7caea745e2d1';
 
 const state = {
   config: null,
@@ -691,3 +691,111 @@ if (footerLibrary) {
   normalizeVisibleSeparators();
 }
 
+
+// Ergänzung des vollständigen UI-Codes um das modellbasierte Kehlnahtbild.
+aASourceLabels.model = 'aus der interpolierten Modellkontur';
+
+function modelFilletSvg(result) {
+  if (!result?.points) {
+    return `<svg class="weld-preview" viewBox="0 0 300 210" role="img" aria-label="Vorschau der Kehlnaht">
+      <path d="M48 175 H262 M48 175 L48 38" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.34"/>
+      <text x="155" y="105" text-anchor="middle" fill="currentColor" opacity="0.72" font-size="13">z1, z2, m und γ eingeben</text>
+    </svg>`;
+  }
+
+  const points = [result.points.root, result.points.transition1, result.points.transition2, result.points.middle, result.points.control];
+  const minX = Math.min(...points.map(item => item.x), 0);
+  const maxX = Math.max(...points.map(item => item.x), 0);
+  const minY = Math.min(...points.map(item => item.y), 0);
+  const maxY = Math.max(...points.map(item => item.y), 0);
+  const span = Math.max(maxX - minX, maxY - minY, 1);
+  const extension = Math.max(5, span * 0.18);
+  const padding = 22;
+  const width = 300;
+  const height = 220;
+  const scale = Math.min(
+    (width - 2 * padding) / (maxX - minX + 2 * extension),
+    (height - 2 * padding) / (maxY - minY + 2 * extension),
+  );
+  const map = pointValue => ({
+    x: padding + (pointValue.x - minX + extension) * scale,
+    y: height - padding - (pointValue.y - minY + extension) * scale,
+  });
+  const root = map(result.points.root);
+  const p1 = map(result.points.transition1);
+  const p2 = map(result.points.transition2);
+  const middle = map(result.points.middle);
+  const control = map(result.points.control);
+  const minimum = map(result.points.minimum);
+  const gamma = result.gammaRad;
+  const u1 = {x: Math.cos(gamma), y: Math.sin(gamma)};
+  const edge1Start = map({x: -u1.x * extension, y: -u1.y * extension});
+  const edge1End = map({x: result.points.transition1.x + u1.x * extension, y: result.points.transition1.y + u1.y * extension});
+  const edge2Start = map({x: -extension, y: 0});
+  const edge2End = map({x: result.points.transition2.x + extension, y: 0});
+
+  return `<svg class="weld-preview" viewBox="0 0 ${width} ${height}" role="img" aria-label="Interpolierte Kehlnahtkontur">
+    <line x1="${edge1Start.x}" y1="${edge1Start.y}" x2="${edge1End.x}" y2="${edge1End.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+    <line x1="${edge2Start.x}" y1="${edge2Start.y}" x2="${edge2End.x}" y2="${edge2End.y}" stroke="currentColor" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+    <path d="M ${root.x} ${root.y} L ${p1.x} ${p1.y} Q ${control.x} ${control.y} ${p2.x} ${p2.y} Z" fill="currentColor" opacity="0.14"/>
+    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="currentColor" stroke-width="1.5" stroke-dasharray="7 5" opacity="0.55"/>
+    <path d="M ${p1.x} ${p1.y} Q ${control.x} ${control.y} ${p2.x} ${p2.y}" fill="none" stroke="currentColor" stroke-width="3.5"/>
+    <line x1="${root.x}" y1="${root.y}" x2="${middle.x}" y2="${middle.y}" stroke="#3f7898" stroke-width="2" stroke-dasharray="5 4"/>
+    <circle cx="${p1.x}" cy="${p1.y}" r="3" fill="currentColor"/>
+    <circle cx="${p2.x}" cy="${p2.y}" r="3" fill="currentColor"/>
+    <circle cx="${middle.x}" cy="${middle.y}" r="4.5" fill="#3f7898"/>
+    <circle cx="${minimum.x}" cy="${minimum.y}" r="2.8" fill="currentColor"/>
+  </svg>`;
+}
+
+function applyModelFieldLabels() {
+  const labels = {
+    'geo-z1': 'Messwert z1 am Übergang Bauteil 1',
+    'geo-z2': 'Messwert z2 am Übergang Bauteil 2',
+    'geo-notch1': 'Einbrandkerbe 1 an Bauteil 1',
+    'geo-notch2': 'Einbrandkerbe 2 an Bauteil 2',
+    'geo-aA': 'Modellierte tatsächliche Kehlnahtdicke aA',
+  };
+  Object.entries(labels).forEach(([id, text]) => {
+    const input = document.getElementById(id);
+    const label = input?.closest('label');
+    if (!label) return;
+    const firstTextNode = [...label.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    if (firstTextNode) firstTextNode.textContent = `${text}\n    `;
+  });
+  document.getElementById('direct-h-field')?.classList.add('hidden');
+  document.getElementById('direct-aA-field')?.classList.add('hidden');
+}
+
+function renderModelGeometryVisual() {
+  const target = document.getElementById('geometry-schematic');
+  if (!target) return;
+  target.innerHTML = jointType() === 'fillet' ? modelFilletSvg(state.geometry) : jointSvg('butt');
+  applyModelFieldLabels();
+}
+
+const refreshGeometryBase = refreshGeometry;
+refreshGeometry = function refreshGeometryWithModel(options = {}) {
+  refreshGeometryBase(options);
+  renderModelGeometryVisual();
+  if (jointType() === 'fillet' && state.geometry?.b) {
+    const summary = document.getElementById('geometry-formula');
+    if (summary) {
+      const sign = state.geometry.profileH >= 0 ? '+' : '−';
+      const profileText = `${profileLabels[state.geometry.profileClass]} (${sign}${formatMm(Math.abs(state.geometry.profileH))})`;
+      summary.innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
+        Nahtbreite b = <strong>${formatMm(state.geometry.b)}</strong><br>
+        Referenz-Kehlnahtdicke a0 = <strong>${formatMm(state.geometry.referenceAA)}</strong><br>
+        Vergleichshöhe m0 = <strong>${formatMm(state.geometry.m0)}</strong><br>
+        Ungleichschenkligkeit hz = <strong>${formatMm(state.geometry.asymmetryH)}</strong><br>
+        Profilabweichung am Punkt m = <strong>${profileText}</strong><br>
+        tatsächliche Kehlnahtdicke aA = <strong>${formatMm(state.geometry.aA)}</strong> (${escapeHtml(aASourceLabels.model)})<br>
+        <small>Kontur und aA beruhen auf einem interpolierten Geometriemodell. Die Profilbewertung erfolgt ausschließlich am Messpunkt m.</small>`;
+    }
+  }
+};
+
+queueMicrotask(() => {
+  applyModelFieldLabels();
+  refreshGeometry({schedule:false});
+});

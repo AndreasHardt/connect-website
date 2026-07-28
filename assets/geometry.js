@@ -8,6 +8,53 @@ function finiteNonNegative(value) {
   return Number.isFinite(value) && value >= 0;
 }
 
+function point(x, y) {
+  return {x, y};
+}
+
+function bezierPoint(p1, control, p2, t) {
+  const u = 1 - t;
+  return point(
+    u * u * p1.x + 2 * u * t * control.x + t * t * p2.x,
+    u * u * p1.y + 2 * u * t * control.y + t * t * p2.y,
+  );
+}
+
+function distanceFromOrigin(p) {
+  return Math.hypot(p.x, p.y);
+}
+
+function minimumBezierDistance(p1, control, p2) {
+  const samples = 160;
+  let bestT = 0;
+  let bestDistance = distanceFromOrigin(p1);
+
+  for (let index = 1; index <= samples; index += 1) {
+    const t = index / samples;
+    const distance = distanceFromOrigin(bezierPoint(p1, control, p2, t));
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestT = t;
+    }
+  }
+
+  let left = Math.max(0, bestT - 1 / samples);
+  let right = Math.min(1, bestT + 1 / samples);
+  for (let iteration = 0; iteration < 48; iteration += 1) {
+    const third = (right - left) / 3;
+    const t1 = left + third;
+    const t2 = right - third;
+    const d1 = distanceFromOrigin(bezierPoint(p1, control, p2, t1));
+    const d2 = distanceFromOrigin(bezierPoint(p1, control, p2, t2));
+    if (d1 <= d2) right = t2;
+    else left = t1;
+  }
+
+  const t = (left + right) / 2;
+  const minimumPoint = bezierPoint(p1, control, p2, t);
+  return {distance: distanceFromOrigin(minimumPoint), t, point: minimumPoint};
+}
+
 export function computeFilletGeometry(input = {}) {
   const tolerance = Number.isFinite(input.tolerance) && input.tolerance >= 0
     ? input.tolerance
@@ -16,16 +63,10 @@ export function computeFilletGeometry(input = {}) {
   const z2 = Number(input.z2);
   const m = Number(input.m);
   const gamma = Number(input.gamma);
-  const directAA = input.directAA === null || input.directAA === undefined || input.directAA === ''
-    ? null
-    : Number(input.directAA);
-  const directH = input.directH === null || input.directH === undefined || input.directH === ''
-    ? null
-    : Number(input.directH);
   const errors = [];
 
-  if (!finitePositive(z1)) errors.push('Schenkellänge z1 muss größer als 0 mm sein.');
-  if (!finitePositive(z2)) errors.push('Schenkellänge z2 muss größer als 0 mm sein.');
+  if (!finitePositive(z1)) errors.push('Messwert z1 muss größer als 0 mm sein.');
+  if (!finitePositive(z2)) errors.push('Messwert z2 muss größer als 0 mm sein.');
   if (!finiteNonNegative(m)) errors.push('Der Höhenmesswert m auf der Winkelhalbierenden ist erforderlich.');
   if (!Number.isFinite(gamma) || gamma <= 0 || gamma >= 180) {
     errors.push('Der eingeschlossene Bauteilwinkel γ muss zwischen 0° und 180° liegen.');
@@ -50,8 +91,32 @@ export function computeFilletGeometry(input = {}) {
 
   const gammaRad = gamma * Math.PI / 180;
   const halfGamma = gammaRad / 2;
-  const bSquared = z1 ** 2 + z2 ** 2 - 2 * z1 * z2 * Math.cos(gammaRad);
-  const b = Math.sqrt(Math.max(0, bSquared));
+  const sinGamma = Math.sin(gammaRad);
+  const cosHalfGamma = Math.cos(halfGamma);
+  const sinHalfGamma = Math.sin(halfGamma);
+
+  if (Math.abs(sinGamma) < 1e-9 || Math.abs(cosHalfGamma) < 1e-9) {
+    return {
+      valid: false,
+      errors: ['Der Bauteilwinkel liegt zu nahe an einer geometrisch entarteten Lage.'],
+      tolerance,
+      b: null,
+      az: null,
+      m0: null,
+      profileH: null,
+      asymmetryH: null,
+      aA: null,
+      reinforcementH: null,
+      needsDirectAA: false,
+      needsDirectH: false,
+    };
+  }
+
+  const p1 = point(z1 / Math.tan(gammaRad), z1);
+  const p2 = point(z2 / sinGamma, 0);
+  const middlePoint = point(m * cosHalfGamma, m * sinHalfGamma);
+  const b = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
   if (!finitePositive(b)) {
     return {
       valid: false,
@@ -69,11 +134,12 @@ export function computeFilletGeometry(input = {}) {
     };
   }
 
-  const az = Math.min(z1, z2) * Math.cos(halfGamma);
-  const m0 = (2 * z1 * z2 * Math.cos(halfGamma)) / (z1 + z2);
-  const profileFactor = ((z1 + z2) * Math.sin(halfGamma)) / b;
+  const m0 = (z1 * z2) / ((z1 + z2) * sinHalfGamma);
   const deltaM = m - m0;
+  const profileFactor = (z1 + z2) / (2 * b * cosHalfGamma);
   const profileH = deltaM * profileFactor;
+  const reinforcementH = Math.max(profileH, 0);
+  const underfillH = Math.max(-profileH, 0);
   const asymmetryH = Math.abs(z1 - z2);
   const symmetric = asymmetryH <= tolerance;
   const profileClass = Math.abs(profileH) <= tolerance
@@ -81,48 +147,32 @@ export function computeFilletGeometry(input = {}) {
     : profileH > 0
       ? 'convex'
       : 'concave';
-  const needsDirectAA = !symmetric && profileClass === 'concave';
-  const needsDirectH = !symmetric && profileClass === 'convex';
+
+  const interpolationT = z1 / (z1 + z2);
+  const interpolationU = 1 - interpolationT;
+  const denominator = 2 * interpolationT * interpolationU;
+  const controlPoint = point(
+    (middlePoint.x - interpolationU ** 2 * p1.x - interpolationT ** 2 * p2.x) / denominator,
+    (middlePoint.y - interpolationU ** 2 * p1.y - interpolationT ** 2 * p2.y) / denominator,
+  );
+
+  const minimum = minimumBezierDistance(p1, controlPoint, p2);
+  const aA = minimum.distance;
+  const referenceAA = Math.abs(p1.x * p2.y - p1.y * p2.x) / b;
+  const az = referenceAA;
   const validationErrors = [];
 
-  if (directAA !== null) {
-    if (!finitePositive(directAA)) validationErrors.push('Die direkt gemessene Kehlnahtdicke aA muss größer als 0 mm sein.');
-    if (finitePositive(directAA) && directAA > az + tolerance) {
-      validationErrors.push('Die direkt gemessene Kehlnahtdicke aA darf den durch den kleineren Schenkel begrenzten Wert az nicht überschreiten.');
-    }
-  }
-  if (directH !== null) {
-    if (!finiteNonNegative(directH)) validationErrors.push('Die direkt gemessene maximale Nahtüberhöhung h darf nicht negativ sein.');
-    if (finiteNonNegative(directH) && directH + tolerance < Math.max(profileH, 0)) {
-      validationErrors.push('Die direkt gemessene maximale Nahtüberhöhung h darf nicht kleiner als die am mittleren Messpunkt ermittelte lokale Überhöhung sein.');
-    }
+  if (!finitePositive(aA)) {
+    validationErrors.push('Die tatsächliche Kehlnahtdicke aA konnte aus der Modellkontur nicht bestimmt werden.');
   }
 
-  let aA = null;
-  let aASource = null;
-  if (needsDirectAA) {
-    if (finitePositive(directAA) && directAA <= az + tolerance) {
-      aA = directAA;
-      aASource = 'direct';
-    }
-  } else if (symmetric && profileClass === 'concave') {
-    aA = Math.min(az, m);
-    aASource = 'middle';
-  } else {
-    aA = az;
-    aASource = 'legs';
-  }
-
-  let reinforcementH = 0;
-  let reinforcementSource = 'none';
-  if (profileClass === 'convex') {
-    if (needsDirectH) {
-      reinforcementH = finiteNonNegative(directH) ? directH : null;
-      reinforcementSource = reinforcementH === null ? null : 'direct';
-    } else {
-      reinforcementH = Math.max(profileH, 0);
-      reinforcementSource = 'middle';
-    }
+  const extremeRatio = Math.max(z1, z2) / Math.min(z1, z2);
+  const modelStable = extremeRatio <= 8
+    && Number.isFinite(controlPoint.x)
+    && Number.isFinite(controlPoint.y)
+    && aA > 0;
+  if (!modelStable) {
+    validationErrors.push('Die Messwertkombination führt zu einer instabilen Modellkontur und muss fachlich geprüft werden.');
   }
 
   return {
@@ -133,23 +183,37 @@ export function computeFilletGeometry(input = {}) {
     z2,
     m,
     gamma,
+    gammaRad,
     b,
     az,
+    referenceAA,
     m0,
     deltaM,
     profileFactor,
     profileH,
+    reinforcementH,
+    underfillH,
     asymmetryH,
     symmetric,
     profileClass,
-    needsDirectAA,
-    needsDirectH,
-    directAA,
-    directH,
+    needsDirectAA: false,
+    needsDirectH: false,
+    directAA: null,
+    directH: null,
     aA,
-    aASource,
-    reinforcementH,
-    reinforcementSource,
+    aASource: 'model',
+    reinforcementSource: profileClass === 'convex' ? 'middle' : 'none',
     combinedFeatures: !symmetric && profileClass !== 'straight',
+    modelStable,
+    points: {
+      root: point(0, 0),
+      transition1: p1,
+      transition2: p2,
+      middle: middlePoint,
+      control: controlPoint,
+      minimum: minimum.point,
+    },
+    interpolationT,
+    minimumT: minimum.t,
   };
 }
