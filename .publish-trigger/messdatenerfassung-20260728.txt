@@ -1,1 +1,1 @@
-Aktuellen geprüften Teststand mit Kehlnahtgeometrie, Bauteilwinkel γ, automatischer Breite b und Mischkontur-Logik veröffentlichen.
+Freigegebenen UX- und Berichtsmaßnahmenplan veröffentlichen. Quelle: privater TESTSYSTEM-Build 414748b73e0a92e245f85bb414e8560ba4d9d508; App-Hash 3a26b4a28adcedf3c3bb5bb2487b8e470c6a21941c8d40d8480eaef0a3b118d5; Report-Hash 6ddf7303a525f6e305c8e3fc8c5562416a6a0fc17e9c750e04fa7e8a3d352e19.
