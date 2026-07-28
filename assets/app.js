@@ -56,7 +56,7 @@ function jointSvg(type, compact = false) {
     <path d="M69 86l5-7 5 7M69 111l5 7 5-7" fill="none" stroke="#a86b00" stroke-width="2"/>
     <text x="80" y="96" fill="#a86b00" font-size="14" font-weight="700">z2</text>
     <line x1="67" y1="122" x2="97" y2="92" stroke="#1f7a4d" stroke-width="2" stroke-dasharray="5 4"/>
-    <text x="98" y="88" fill="#1f7a4d" font-size="14" font-weight="700">aA</text>
+    <text x="98" y="88" fill="#1f7a4d" font-size="14" font-weight="700">m</text>
   </svg>`;
 }
 
@@ -78,6 +78,8 @@ function updateJointVisuals() {
   const type = jointType();
   $('#joint-illustration').innerHTML = jointSvg(type);
   $('#geometry-schematic').innerHTML = geometrySvg(type);
+  $('#general-a-field')?.classList.toggle('hidden', type !== 'fillet');
+  $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
   renderGeometryFields();
   renderCriteria();
 }
@@ -89,20 +91,36 @@ function geometryValue(id) {
 
 function updateThroat() {
   if (jointType() !== 'fillet') return;
-  const auto = $('#auto_throat')?.checked;
-  const aA = $('#geo-aA');
-  if (!auto || !aA) return;
   const z1 = parseFloat(geometryValue('z1'));
   const z2 = parseFloat(geometryValue('z2'));
+  const measuredHeight = parseFloat(geometryValue('m'));
+  const notch1 = parseFloat(geometryValue('notch1'));
+  const notch2 = parseFloat(geometryValue('notch2'));
   const angle = parseFloat(geometryValue('angle')) || 90;
+  const aA = $('#geo-aA');
   if (Number.isFinite(z1) && Number.isFinite(z2)) {
-    const calculated = Math.min(z1, z2) * Math.sin((angle / 2) * Math.PI / 180);
-    aA.value = calculated.toFixed(1);
-    aA.readOnly = true;
-    $('#geometry-formula').innerHTML = `<strong>Automatische Geometrie:</strong><br>aA = min(z1, z2) × sin(α/2) = <strong>${calculated.toFixed(2)} mm</strong><br>h<sub>Ungleichschenkligkeit</sub> = |z1 - z2| = <strong>${Math.abs(z1-z2).toFixed(2)} mm</strong>`;
+    const halfAngle = (angle / 2) * Math.PI / 180;
+    const calculated = Math.min(z1, z2) * Math.sin(halfAngle);
+    if (aA) aA.value = calculated.toFixed(3);
+    const theoreticalHeight = (2 * z1 * z2 * Math.cos(halfAngle)) / (z1 + z2);
+    const profileDifference = Number.isFinite(measuredHeight) ? measuredHeight - theoreticalHeight : null;
+    const profileText = profileDifference === null
+      ? 'Mittleren Höhenmesswert m eingeben.'
+      : Math.abs(profileDifference) < 0.005
+        ? 'gerades Nahtprofil (Δm ≈ 0,00 mm)'
+        : profileDifference > 0
+          ? `Überhöhung ${profileDifference.toFixed(2)} mm`
+          : `Unterwölbung ${Math.abs(profileDifference).toFixed(2)} mm`;
+    const validNotches = [notch1, notch2].filter(Number.isFinite);
+    const maxNotch = validNotches.length ? Math.max(...validNotches) : null;
+    $('#geometry-formula').innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
+      aA = min(z1, z2) × sin(α/2) = <strong>${calculated.toFixed(2)} mm</strong><br>
+      Ungleichschenkligkeit = |z1 − z2| = <strong>${Math.abs(z1-z2).toFixed(2)} mm</strong><br>
+      theoretischer Höhenwert m0 = <strong>${theoreticalHeight.toFixed(2)} mm</strong><br>
+      Profil: <strong>${profileText}</strong>${maxNotch === null ? '' : `<br>größte Kerbentiefe = <strong>${maxNotch.toFixed(2)} mm</strong>`}`;
   } else {
-    aA.value = '';
-    $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2 eingeben, um aA und die Ungleichschenkligkeit automatisch zu berechnen.';
+    if (aA) aA.value = '';
+    $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2 eingeben, um Kehlnahtdicke, Vergleichshöhe und Profilabweichung automatisch zu berechnen.';
   }
   updateConditionalFields();
 }
@@ -112,31 +130,24 @@ function renderGeometryFields() {
   const container = $('#geometry-fields');
   const existing = {};
   $$('[id^="geo-"]').forEach(input => existing[input.id.replace('geo-','')] = input.value);
-  const common = [{id:'t', label:'Bauteildicke t', unit:'mm', value:existing.t || '8.0', min:.5, step:.1}];
   const fields = type === 'butt' ? [
-    ...common,
-    {id:'s', label:'Nahtdicke s', unit:'mm', value:existing.s || '8.0', min:.1, step:.1},
+    {id:'s', label:'Gemessene Nahtdicke s', unit:'mm', value:existing.s || '8.0', min:.1, step:.1},
   ] : [
-    ...common,
-    {id:'a', label:'Nenn-Kehlnahtdicke a', unit:'mm', value:existing.a || '5.0', min:.1, step:.1},
     {id:'z1', label:'Schenkellänge z1', unit:'mm', value:existing.z1 || '7.0', min:.1, step:.1},
     {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.5', min:.1, step:.1},
-    {id:'angle', label:'Öffnungswinkel α', unit:'°', value:existing.angle || '90', min:45, max:135, step:1},
-    {id:'aA', label:'Tatsächliche Kehlnahtdicke aA', unit:'mm', value:existing.aA || '', min:.1, step:.1},
+    {id:'m', label:'Mittlerer Höhenmesswert m', unit:'mm', value:existing.m || '', min:0, step:.01},
+    {id:'notch1', label:'Kerbentiefe Seite 1', unit:'mm', value:existing.notch1 || '', min:0, step:.01},
+    {id:'notch2', label:'Kerbentiefe Seite 2', unit:'mm', value:existing.notch2 || '', min:0, step:.01},
+    {id:'aA', label:'Berechnete Kehlnahtdicke aA', unit:'mm', value:existing.aA || '', min:0, step:.001, readonly:true},
   ];
   container.innerHTML = fields.map(field => `<label>${escapeHtml(field.label)}
-    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" ${field.max ? `max="${field.max}"` : ''} step="${field.step}" value="${field.value}"><span>${field.unit}</span></div>
+    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" ${field.max ? `max="${field.max}"` : ''} step="${field.step}" value="${field.value}" ${field.readonly ? 'readonly' : ''}><span>${field.unit}</span></div>
   </label>`).join('');
-  $('#auto-throat-row').classList.toggle('hidden', type !== 'fillet');
-  $$('[id^="geo-"]').forEach(input => input.addEventListener('input', () => { updateThroat(); updateConditionalFields(); }));
+  $$('[id^="geo-"]', container).forEach(input => input.addEventListener('input', () => { updateThroat(); updateConditionalFields(); }));
   if (type === 'fillet') {
-    $('#auto_throat').addEventListener('change', () => {
-      $('#geo-aA').readOnly = $('#auto_throat').checked;
-      if ($('#auto_throat').checked) updateThroat();
-    }, {once:true});
     updateThroat();
   } else {
-    $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>t beschreibt die Bauteildicke; s ist die für die Regel verwendete Nahtdicke. Deck- und Wurzelseite werden getrennt über die Zugänglichkeit geführt.';
+    $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>t beschreibt die allgemeine Bauteildicke; s ist die am Nahtabschnitt gemessene und für die Regel verwendete Nahtdicke. Deck- und Wurzelseite werden getrennt über die Zugänglichkeit geführt.';
   }
 }
 
@@ -207,7 +218,7 @@ function renderCriteria() {
           </summary>
           <div class="criterion-body">
             <div class="criterion-tools">
-              <div class="criterion-fields">${item.fields.length ? item.fields.map(field => fieldHtml(item.rule_id, field)).join('') : '<div class="calculated-note">Die Bewertung wird vollständig aus der Grundgeometrie berechnet.</div>'}</div>
+              <div class="criterion-fields">${item.fields.length ? item.fields.map(field => fieldHtml(item.rule_id, field)).join('') : '<div class="calculated-note">Die Bewertung wird vollständig aus den allgemeinen Vorgaben und den erfassten Messwerten berechnet.</div>'}</div>
               <label class="quality-override">Sollgruppe dieses Kriteriums<select data-quality-override>
                 <option value="">wie Gesamt (${overallQuality})</option><option>B</option><option>C</option><option>D</option>
               </select></label>
@@ -287,7 +298,7 @@ function collectPayload() {
   return {
     report: {
       report_id: $('#report_id').value.trim(), inspection_date: $('#inspection_date').value,
-      component: $('#component').value.trim(), weld_id: $('#weld_id').value.trim(),
+      wps: $('#wps').value.trim(), component: $('#component').value.trim(), weld_id: $('#weld_id').value.trim(),
       inspector: $('#inspector').value.trim(), location: $('#location').value.trim(), notes: $('#notes').value.trim()
     },
     joint_type: jointType(), required_quality: requiredQuality(),
@@ -296,7 +307,8 @@ function collectPayload() {
       t: numberOrNull(geometryValue('t')), s: numberOrNull(geometryValue('s')),
       a: numberOrNull(geometryValue('a')), aA: numberOrNull(geometryValue('aA')),
       z1: numberOrNull(geometryValue('z1')), z2: numberOrNull(geometryValue('z2')),
-      angle: numberOrNull(geometryValue('angle'))
+      angle: numberOrNull(geometryValue('angle')), m: numberOrNull(geometryValue('m')),
+      notch1: numberOrNull(geometryValue('notch1')), notch2: numberOrNull(geometryValue('notch2'))
     },
     criteria, compare_2014: $('#compare_2014').checked
   };
@@ -314,6 +326,8 @@ function frontendValidation(step) {
       const s = numberOrNull(geometryValue('s')); if (s === null || s <= 0) errors.push('Nahtdicke s ist erforderlich.');
     } else {
       ['a','aA','z1','z2'].forEach(key => { const value = numberOrNull(geometryValue(key)); if (value === null || value <= 0) errors.push(`${key} muss größer als 0 sein.`); });
+      const m = numberOrNull(geometryValue('m')); if (m === null || m < 0) errors.push('Der mittlere Höhenmesswert m ist erforderlich.');
+      ['notch1','notch2'].forEach(key => { const value = numberOrNull(geometryValue(key)); if (value !== null && value < 0) errors.push(`${key} darf nicht negativ sein.`); });
     }
   }
   return errors;

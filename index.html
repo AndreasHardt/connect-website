@@ -34,7 +34,7 @@
 
   <nav class="stepper panel" aria-label="Sprungnavigation">
     <button class="step active" type="button" data-target="inspection-header"><span>1</span><strong>Allgemeine Prüfdaten und Anforderung</strong></button>
-    <button class="step" type="button" data-target="base-geometry"><span>2</span><strong>Grundgeometrie</strong></button>
+    <button class="step" type="button" data-target="base-geometry"><span>2</span><strong>Messdatenerfassung</strong></button>
     <button class="step" type="button" data-target="inspection-criteria"><span>3</span><strong>Prüfkriterien</strong></button>
     <button class="step" type="button" data-target="evaluation-result"><span>4</span><strong>Ergebnis</strong></button>
   </nav>
@@ -42,21 +42,13 @@
   <div id="alert" class="alert hidden" role="alert"></div>
 
   <section class="panel step-panel" id="inspection-header" data-panel="1">
-    <div class="section-heading"><div><span class="eyebrow">Bereich 1</span><h2>Allgemeine Prüfdaten und Anforderung</h2></div><p>Die Angaben erscheinen später im PDF-Bericht.</p></div>
-    <div class="form-grid report-grid">
-      <label>Berichtsnummer<input id="report_id" value="EMP-2026-001"></label>
-      <label>Prüfdatum<input id="inspection_date" type="date"></label>
-      <label>Bauteil<input id="component" placeholder="z. B. Konsole K-17"></label>
-      <label>Nahtbezeichnung<input id="weld_id" placeholder="z. B. FW-01"></label>
-      <label>Prüfer<input id="inspector" placeholder="Name"></label>
-      <label>Prüfort<input id="location" placeholder="Werkstatt / Baustelle"></label>
-    </div>
+    <div class="section-heading"><div><span class="eyebrow">Bereich 1</span><h2>Allgemeine Prüfdaten und Anforderung</h2></div><p>Die Angaben werden vom Allgemeinen zum Speziellen erfasst und erscheinen später im PDF-Bericht.</p></div>
 
-    <div class="choice-grid">
+    <div class="choice-grid compact">
       <fieldset>
-        <legend>Nahtart</legend>
-        <label class="choice-card"><input type="radio" name="joint_type" value="fillet" checked><span class="choice-icon fillet-icon"></span><span><strong>Kehlnaht</strong><small>Geometrie mit a, aA, z1 und z2</small></span></label>
-        <label class="choice-card"><input type="radio" name="joint_type" value="butt"><span class="choice-icon butt-icon"></span><span><strong>Stumpfnaht</strong><small>Geometrie mit t und s</small></span></label>
+        <legend>Normvergleich</legend>
+        <label class="switch-row"><input id="compare_2014" type="checkbox"><span>Ausgabe 2014 zusätzlich auswerten</span></label>
+        <p class="field-help">Die Ausgabe 2023 bleibt im Bericht maßgebend.</p>
       </fieldset>
       <fieldset>
         <legend>Geforderte Bewertungsgruppe</legend>
@@ -69,23 +61,36 @@
       </fieldset>
     </div>
 
-    <div class="choice-grid compact">
+    <div class="choice-grid">
+      <fieldset>
+        <legend>Nahtart</legend>
+        <label class="choice-card"><input type="radio" name="joint_type" value="fillet" checked><span class="choice-icon fillet-icon"></span><span><strong>Kehlnaht</strong><small>Geometrie mit a, aA, z1 und z2</small></span></label>
+        <label class="choice-card"><input type="radio" name="joint_type" value="butt"><span class="choice-icon butt-icon"></span><span><strong>Stumpfnaht</strong><small>Geometrie mit t und s</small></span></label>
+      </fieldset>
       <fieldset>
         <legend>Zugänglichkeit</legend>
         <label class="switch-row"><input id="access_face" type="checkbox" checked><span>Deckseite zugänglich</span></label>
         <label class="switch-row"><input id="access_root" type="checkbox"><span>Wurzelseite zugänglich</span></label>
       </fieldset>
-      <fieldset>
-        <legend>Normvergleich</legend>
-        <label class="switch-row"><input id="compare_2014" type="checkbox"><span>Ausgabe 2014 zusätzlich auswerten</span></label>
-        <p class="field-help">Die Ausgabe 2023 bleibt im Bericht maßgebend.</p>
-      </fieldset>
+    </div>
+
+    <div class="form-grid report-grid">
+      <label>WPS<input id="wps" placeholder="z. B. WPS-135-FW-S355-08 Rev. 03"></label>
+      <label>Berichtsnummer<input id="report_id" value="EMP-2026-001"></label>
+      <label>Prüfdatum<input id="inspection_date" type="date"></label>
+      <label>Bauteil<input id="component" placeholder="z. B. Konsole K-17"></label>
+      <label>Nahtbezeichnung<input id="weld_id" placeholder="z. B. FW-01"></label>
+      <label>Prüfer<input id="inspector" placeholder="Name"></label>
+      <label>Prüfort<input id="location" placeholder="Werkstatt / Baustelle"></label>
+      <label>Bauteildicke t<div class="input-unit"><input id="geo-t" type="number" min="0.5" step="0.1" value="8.0"><span>mm</span></div></label>
+      <label id="general-a-field">Nenn-Kehlnahtdicke a<div class="input-unit"><input id="geo-a" type="number" min="0.1" step="0.1" value="5.0"><span>mm</span></div></label>
+      <label id="general-angle-field">Öffnungswinkel α<div class="input-unit"><input id="geo-angle" type="number" min="45" max="135" step="1" value="90"><span>°</span></div></label>
     </div>
     <label class="full-width">Bemerkungen<textarea id="notes" rows="3" placeholder="Optionaler Kommentar zum Nahtabschnitt"></textarea></label>
   </section>
 
   <section class="panel step-panel" id="base-geometry" data-panel="2">
-    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Grundgeometrie</h2></div><p>Systemwerte werden an alle passenden Kriterien weitergereicht.</p></div>
+    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Messdatenerfassung</h2></div><p>Hier werden nur tatsächlich am Nahtabschnitt gemessene Werte eingegeben. Abgeleitete Geometriewerte berechnet die Anwendung automatisch.</p></div>
     <div class="geometry-layout">
       <div class="geometry-card">
         <div class="schematic" id="geometry-schematic"></div>
@@ -93,7 +98,6 @@
       </div>
       <div>
         <div class="form-grid" id="geometry-fields"></div>
-        <label class="switch-row auto-throat-row" id="auto-throat-row"><input id="auto_throat" type="checkbox" checked><span>aA automatisch aus kleinerem Schenkel und Öffnungswinkel berechnen</span></label>
       </div>
     </div>
   </section>
