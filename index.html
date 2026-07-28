@@ -8,7 +8,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Schweißnaht mit Qualität | Hardt-Wiehl Connect</title>
-  <link rel="stylesheet" href="./assets/styles.css?v=8a5364742c73">
+  <link rel="stylesheet" href="./assets/styles.css?v=62dedfecf5a4">
 </head>
 <body>
 <div class="test-system-banner" id="test-system-banner"><strong>TESTSYSTEM</strong><span>Bewertungen und Berichte sind noch nicht zur produktiven Verwendung freigegeben.</span></div>
@@ -27,7 +27,7 @@
     <div>
       <span class="eyebrow">Vollständiger V1-Web-Assistent</span>
       <h1>Alle 26 V1-Kriterien an einem Nahtabschnitt bewerten</h1>
-      <p>Alle Eingaben, Prüfkriterien und Ergebnisse stehen auf einer Seite. Maßgebend ist die Ausgabe 2023; die Ausgabe 2014 kann vergleichend zugeschaltet werden.</p>
+      <p>Alle Eingaben, Prüfkriterien und Ergebnisse stehen auf einer Seite. Maßgebend ist die Ausgabe 2023; die Ausgabe 2014 wird standardmäßig vergleichend ausgewertet.</p>
     </div>
     <div class="joint-illustration" id="joint-illustration" aria-label="Schematische Nahtdarstellung"></div>
   </section>
@@ -41,14 +41,14 @@
 
   <div id="alert" class="alert hidden" role="alert"></div>
 
-  <section class="panel step-panel" id="inspection-header" data-panel="1">
+  <section class="panel step-panel area-1" id="inspection-header" data-panel="1">
     <div class="section-heading"><div><span class="eyebrow">Bereich 1</span><h2>Allgemeine Prüfdaten und Anforderung</h2></div><p>Die Angaben werden vom Allgemeinen zum Speziellen erfasst und erscheinen später im PDF-Bericht.</p></div>
 
     <div class="choice-grid compact">
       <fieldset>
         <legend>Normvergleich</legend>
-        <label class="switch-row"><input id="compare_2014" type="checkbox"><span>Ausgabe 2014 zusätzlich auswerten</span></label>
-        <p class="field-help">Die Ausgabe 2023 bleibt im Bericht maßgebend.</p>
+        <label class="switch-row"><input id="compare_2014" type="checkbox" checked><span>Ausgabe 2014 zusätzlich auswerten</span></label>
+        <p class="field-help">Die Ausgabe 2023 bleibt maßgebend; 2014 wird vergleichend dargestellt.</p>
       </fieldset>
       <fieldset>
         <legend>SOLL-Bewertungsgruppe</legend>
@@ -89,39 +89,35 @@
     <label class="full-width">Bemerkungen<textarea id="notes" rows="3" placeholder="Optionaler Kommentar zum Nahtabschnitt"></textarea></label>
   </section>
 
-  <section class="panel step-panel" id="base-geometry" data-panel="2">
-    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Messdatenerfassung</h2></div><p>Gemessene Werte werden hier einmalig erfasst. Breite, Vergleichsgeometrie, Profilabweichung und tatsächliche Kehlnahtdicke werden automatisch bestimmt; bei nicht eindeutigen Mischkonturen fordert die Anwendung gezielt eine direkte Zusatzmessung an.</p></div>
+  <section class="panel step-panel area-2" id="base-geometry" data-panel="2">
+    <div class="section-heading"><div><span class="eyebrow">Bereich 2</span><h2>Messdatenerfassung</h2></div><p>Gemessene Werte werden einmalig erfasst. Breite, Vergleichsgeometrie, Profilabweichung und tatsächliche Kehlnahtdicke werden automatisch bestimmt.</p></div>
     <div class="geometry-layout">
       <div class="geometry-card">
         <div class="schematic" id="geometry-schematic"></div>
         <div class="formula-box" id="geometry-formula"></div>
       </div>
-      <div>
-        <div class="form-grid" id="geometry-fields"></div>
-      </div>
+      <div><div class="form-grid" id="geometry-fields"></div></div>
     </div>
   </section>
 
-  <section class="step-panel" id="inspection-criteria" data-panel="3">    <div class="section-heading panel"><div><span class="eyebrow">Bereich 3</span><h2>Prüfkriterien</h2></div><p>Alle 26 aktiven Kriterien werden aus derselben Regelbibliothek und mit demselben Rechenkern bewertet.</p></div>
-    <div class="criteria-toolbar panel"><div><strong>Arbeitsweise:</strong> Alle Kriterien starten mit „nicht vorhanden“ bzw. 0 mm. Öffnen Sie nur die Karten, an denen ein Befund oder Messwert vorliegt.</div><div class="toolbar-actions"><button type="button" class="secondary" id="expand-all">Alle öffnen</button><button type="button" class="secondary" id="collapse-all">Alle schließen</button></div></div><div id="criteria-list" class="criteria-list"></div>
+  <section class="panel step-panel area-3" id="inspection-criteria" data-panel="3">
+    <div class="section-heading"><div><span class="eyebrow">Bereich 3</span><h2>Prüfkriterien</h2></div><p>Alle 26 aktiven Kriterien werden aus derselben Regelbibliothek und mit demselben Rechenkern bewertet.</p></div>
+    <div class="criteria-toolbar"><div><strong>Arbeitsweise:</strong> Alle Kriterien starten mit „nicht vorhanden“ beziehungsweise 0 mm. Die Bewertung wird nach jeder Eingabe automatisch aktualisiert.</div><div class="toolbar-actions"></div></div>
+    <div id="criteria-list" class="criteria-list"></div>
   </section>
 
-  <div class="navigation-bar panel">
-    <button class="primary" id="evaluate-button" type="button">Bewertung berechnen</button>
-  </div>
-
-  <section class="step-panel" id="evaluation-result" data-panel="4">
-    <div class="result-hero panel" id="result-summary">
-      <div><span class="eyebrow">Bereich 4</span><h2>Ergebnis</h2><p>Die Bewertung wurde noch nicht ausgeführt.</p></div>
-      <div class="result-actions"><button class="primary" id="download-pdf" disabled>Bericht / PDF</button></div>
+  <section class="panel step-panel area-4 evaluation-neutral" id="evaluation-result" data-panel="4">
+    <div class="result-hero" id="result-summary">
+      <div><span class="eyebrow">Bereich 4</span><h2>Bewertung noch nicht vollständig</h2><p>Die Bewertung aktualisiert sich automatisch nach jeder Eingabe.</p></div>
     </div>
     <div id="results-list" class="results-list"></div>
+    <div class="result-actions result-actions-bottom"><button class="primary" id="download-pdf" disabled>pdf-Bericht</button></div>
   </section>
 </main>
 
 <footer class="site-footer"><span id="footer-library">Regelbibliothek wird geladen...</span><span>connect.hardt-wiehl.de</span></footer>
 <noscript><div class="alert">JavaScript ist für die lokale Bewertung erforderlich.</div></noscript>
-<script type="module" src="./assets/app.js?v=adb6de6f1784"></script>
-<script type="module" src="./assets/criterion-filter.js?v=fbd12e5c77e3"></script>
+<script type="module" src="./assets/app.js?v=3a26b4a28adc"></script>
+<script type="module" src="./assets/criterion-filter.js?v=4a01de6ecc5f"></script>
 </body>
 </html>

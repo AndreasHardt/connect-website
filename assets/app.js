@@ -1,5 +1,5 @@
 import { createEvaluationService } from './evaluation.js?v=adb22d1bde14';
-import { openReport } from './report.js?v=f4b75c027bb4';
+import { openReport } from './report.js?v=6ddf7303a525';
 import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=9081e0752fa6';
 
 const state = {
@@ -8,6 +8,9 @@ const state = {
   lastResult: null,
   service: null,
   geometry: null,
+  liveTimer: null,
+  liveBusy: false,
+  initialized: false,
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -38,8 +41,13 @@ function numberOrNull(value) {
   const parsed = Number(value);
   return value !== '' && Number.isFinite(parsed) ? parsed : null;
 }
-function formatMm(value, digits = 2) {
-  return Number.isFinite(value) ? `${value.toLocaleString('de-DE', {minimumFractionDigits: digits, maximumFractionDigits: digits})} mm` : '-';
+function formatNumber(value) {
+  return Number.isFinite(Number(value))
+    ? Number(value).toLocaleString('de-DE', {minimumFractionDigits: 1, maximumFractionDigits: 1})
+    : '—';
+}
+function formatMm(value) {
+  return Number.isFinite(Number(value)) ? `${formatNumber(value)} mm` : '—';
 }
 
 function jointSvg(type) {
@@ -79,7 +87,6 @@ function showAlert(messages) {
   }
   alert.innerHTML = `<strong>Bitte prüfen:</strong><ul>${messages.map(message => `<li>${escapeHtml(message)}</li>`).join('')}</ul>`;
   alert.classList.remove('hidden');
-  alert.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
 function geometryValue(id) {
@@ -104,7 +111,8 @@ function renderGeometrySummary(result) {
     $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2, den Bauteilwinkel γ und den Höhenmesswert m eingeben.';
     return;
   }
-  const profileText = `${profileLabels[result.profileClass]} (${result.profileH >= 0 ? '+' : '−'}${formatMm(Math.abs(result.profileH))})`;
+  const sign = result.profileH >= 0 ? '+' : '−';
+  const profileText = `${profileLabels[result.profileClass]} (${sign}${formatMm(Math.abs(result.profileH))})`;
   const requirements = [];
   if (result.needsDirectH) requirements.push('Maximale Nahtüberhöhung h direkt messen.');
   if (result.needsDirectAA) requirements.push('Kleinste tatsächliche Kehlnahtdicke aA direkt messen.');
@@ -119,27 +127,29 @@ function renderGeometrySummary(result) {
     Ungleichschenkligkeit hz = <strong>${formatMm(result.asymmetryH)}</strong><br>
     Profilabweichung senkrecht zu b = <strong>${profileText}</strong><br>
     tatsächliche Kehlnahtdicke aA = <strong>${formatMm(result.aA)}</strong>${result.aASource ? ` (${escapeHtml(aASourceLabels[result.aASource])})` : ''}
-    ${warnings.length ? `<div class="alert">${warnings.map(item => escapeHtml(item)).join('<br>')}</div>` : ''}${combined}<br>
-    <small>Symmetrie- und Profiltoleranz: ${formatMm(result.tolerance, 1)}; messtechnische, nicht normative Toleranz.</small>`;
+    ${warnings.length ? `<div class="alert geometry-alert">${warnings.map(item => escapeHtml(item)).join('<br>')}</div>` : ''}${combined}<br>
+    <small>Symmetrie- und Profiltoleranz: ${formatMm(result.tolerance)}; messtechnische, nicht normative Toleranz.</small>`;
 }
 
-function refreshGeometry() {
+function refreshGeometry({schedule = true} = {}) {
   if (jointType() !== 'fillet') {
     state.geometry = null;
     $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>Nahtdicke s und Breite b werden am Nahtabschnitt gemessen. Die Breite b wird für die Bewertung der Decklagenüberhöhung verwendet.';
     updateConditionalFields();
+    if (schedule) scheduleLiveEvaluation();
     return;
   }
   const result = computeFilletGeometry(filletGeometryInput());
   state.geometry = result;
   const bField = $('#geo-b');
   const aAField = $('#geo-aA');
-  if (bField) bField.value = Number.isFinite(result.b) ? result.b.toFixed(3) : '';
-  if (aAField) aAField.value = Number.isFinite(result.aA) ? result.aA.toFixed(3) : '';
+  if (bField) bField.value = Number.isFinite(result.b) ? result.b.toFixed(1) : '';
+  if (aAField) aAField.value = Number.isFinite(result.aA) ? result.aA.toFixed(1) : '';
   $('#direct-h-field')?.classList.toggle('hidden', !result.needsDirectH);
   $('#direct-aA-field')?.classList.toggle('hidden', !result.needsDirectAA);
   renderGeometrySummary(result);
   updateConditionalFields();
+  if (schedule) scheduleLiveEvaluation();
 }
 
 function renderGeometryFields() {
@@ -153,21 +163,21 @@ function renderGeometryFields() {
   ] : [
     {id:'z1', label:'Schenkellänge z1', unit:'mm', value:existing.z1 || '7.0', min:.1, step:.1},
     {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.0', min:.1, step:.1},
-    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:existing.m || '', min:0, step:.01},
-    {id:'notch1', label:'Kerbentiefe Übergang 1', unit:'mm', value:existing.notch1 || '0', min:0, step:.01},
-    {id:'notch2', label:'Kerbentiefe Übergang 2', unit:'mm', value:existing.notch2 || '0', min:0, step:.01},
-    {id:'direct-h', wrapperId:'direct-h-field', hidden:true, label:'Maximale Nahtüberhöhung h direkt gemessen', unit:'mm', value:existing['direct-h'] || '', min:0, step:.01},
-    {id:'direct-aA', wrapperId:'direct-aA-field', hidden:true, label:'Kleinste tatsächliche Kehlnahtdicke aA direkt gemessen', unit:'mm', value:existing['direct-aA'] || '', min:.01, step:.01},
-    {id:'b', label:'Berechnete Nahtbreite b', unit:'mm', value:'', min:0, step:.001, readonly:true},
-    {id:'aA', label:'Verwendete tatsächliche Kehlnahtdicke aA', unit:'mm', value:'', min:0, step:.001, readonly:true},
+    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:existing.m || '', min:0, step:.1},
+    {id:'notch1', label:'Kerbentiefe Übergang 1', unit:'mm', value:existing.notch1 || '0', min:0, step:.1},
+    {id:'notch2', label:'Kerbentiefe Übergang 2', unit:'mm', value:existing.notch2 || '0', min:0, step:.1},
+    {id:'direct-h', wrapperId:'direct-h-field', hidden:true, label:'Maximale Nahtüberhöhung h direkt gemessen', unit:'mm', value:existing['direct-h'] || '', min:0, step:.1},
+    {id:'direct-aA', wrapperId:'direct-aA-field', hidden:true, label:'Kleinste tatsächliche Kehlnahtdicke aA direkt gemessen', unit:'mm', value:existing['direct-aA'] || '', min:.1, step:.1},
+    {id:'b', label:'Berechnete Nahtbreite b', unit:'mm', value:'', min:0, step:.1, readonly:true},
+    {id:'aA', label:'Verwendete tatsächliche Kehlnahtdicke aA', unit:'mm', value:'', min:0, step:.1, readonly:true},
   ];
   container.innerHTML = fields.map(field => `<label ${field.wrapperId ? `id="${field.wrapperId}"` : ''} class="${field.hidden ? 'hidden' : ''}">${escapeHtml(field.label)}
     <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
   </label>`).join('');
   $$('[id^="geo-"]', container).forEach(input => {
-    if (!input.readOnly) input.addEventListener('input', refreshGeometry);
+    if (!input.readOnly) input.addEventListener('input', () => refreshGeometry());
   });
-  refreshGeometry();
+  refreshGeometry({schedule:false});
 }
 
 function updateJointVisuals() {
@@ -178,6 +188,7 @@ function updateJointVisuals() {
   $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
   renderGeometryFields();
   renderCriteria();
+  scheduleLiveEvaluation();
 }
 
 function hiddenSystemField(ruleId, fieldId) {
@@ -193,8 +204,9 @@ function criterionSystemNote(ruleId) {
   return '';
 }
 
-function fieldHtml(ruleId, field) {
+function fieldHtml(ruleId, field, quality = requiredQuality()) {
   if (field.joint_types && !field.joint_types.includes(jointType())) return '';
+  if (ruleId === 'IMP-000013' && quality !== 'D' && ['overlap_height_h','overlap_width_b'].includes(field.id)) return '';
   if (hiddenSystemField(ruleId, field.id)) return '';
   const id = `${ruleId}-${field.id}`;
   const condition = field.show_if ? `data-show-field="${field.show_if.field}" data-show-equals="${field.show_if.equals}"` : '';
@@ -207,7 +219,7 @@ function fieldHtml(ruleId, field) {
     return `<label class="switch-row" ${wrapper}><input id="${id}" data-input-id="${field.id}" type="checkbox" ${field.default ? 'checked' : ''}><span>${escapeHtml(field.label)}</span>${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</label>`;
   }
   if (field.type === 'select') {
-    return `<label ${wrapper}>${escapeHtml(field.label)}<select id="${id}" data-input-id="${field.id}">${field.options.map(option => `<option value="${option.value}" ${option.value === field.default ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}</select>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
+    return `<label ${wrapper}>${escapeHtml(field.label)}<select id="${id}" data-input-id="${field.id}">${field.options.map(option => `<option value="${escapeHtml(option.value)}" ${option.value === field.default ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}</select>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
   }
   return `<label ${wrapper}>${escapeHtml(field.label)}<div class="input-unit"><input id="${id}" data-input-id="${field.id}" type="number" min="${field.min ?? ''}" ${field.max !== undefined ? `max="${field.max}"` : ''} step="${field.step ?? .1}" value="${field.default ?? ''}"><span>${escapeHtml(field.unit || '')}</span></div>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
 }
@@ -251,18 +263,24 @@ function renderCriteria() {
       <div class="criterion-group-list">${items.map(item => {
         const available = criterionAvailable(item);
         const sideLabel = item.side === 'root' ? 'Wurzelseite' : item.side === 'face' ? 'Deckseite' : 'zugänglicher Prüfbereich';
-        const fields = item.fields.map(field => fieldHtml(item.rule_id, field)).filter(Boolean).join('');
+        const effectiveQuality = snapshot[item.rule_id]?.quality || overallQuality;
+        const overlapPresenceOnly = item.rule_id === 'IMP-000013' && effectiveQuality !== 'D';
+        const roleText = overlapPresenceOnly ? 'Verbotsregel' : item.prototype_role;
+        const shortInfo = overlapPresenceOnly
+          ? `Schweißgutüberlauf ist bei Bewertungsgruppe ${effectiveQuality} nicht zulässig; das Vorhandensein allein entscheidet.`
+          : item.ui.short_info;
+        const fields = item.fields.map(field => fieldHtml(item.rule_id, field, effectiveQuality)).filter(Boolean).join('');
         const systemNote = criterionSystemNote(item.rule_id);
         return `<details class="criterion-card panel ${available ? '' : 'criterion-unavailable'}" data-criterion="${item.rule_id}" data-side="${item.side}">
           <summary class="criterion-header">
             <div class="rule-number">${item.table_no}</div>
-            <div><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.ui.short_info)}</p></div>
-            <div class="summary-tags"><span class="role-tag">${escapeHtml(item.prototype_role)}</span><span class="side-tag">${sideLabel}</span>${available ? '' : '<span class="badge not_assessable">nicht zugänglich</span>'}</div>
+            <div><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(shortInfo)}</p></div>
+            <div class="summary-tags"><span class="role-tag">${escapeHtml(roleText)}</span><span class="side-tag">${sideLabel}</span>${available ? '' : '<span class="badge not_assessable">nicht zugänglich</span>'}</div>
           </summary>
           <div class="criterion-body">
             <div class="criterion-tools">
               <div class="criterion-fields">${systemNote ? `<div class="calculated-note">${escapeHtml(systemNote)}</div>` : ''}${fields || (!systemNote ? '<div class="calculated-note">Die Bewertung wird vollständig aus den allgemeinen Vorgaben und den erfassten Messwerten berechnet.</div>' : '')}</div>
-              <label class="quality-override">Sollgruppe dieses Kriteriums<select data-quality-override>
+              <label class="quality-override">SOLL-Gruppe dieses Kriteriums<select data-quality-override>
                 <option value="">wie Gesamt (${overallQuality})</option><option>B</option><option>C</option><option>D</option>
               </select></label>
             </div>
@@ -285,8 +303,14 @@ function renderCriteria() {
     }
     if (card.classList.contains('criterion-unavailable')) $$('input,select', card).forEach(input => { input.disabled = true; });
   });
-  $$('[data-input-id]').forEach(input => input.addEventListener('input', updateConditionalFields));
-  $$('[data-input-id]').forEach(input => input.addEventListener('change', updateConditionalFields));
+  $$('[data-input-id]').forEach(input => {
+    input.addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
+    input.addEventListener('change', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
+  });
+  $$('[data-quality-override]').forEach(select => select.addEventListener('change', () => {
+    renderCriteria();
+    scheduleLiveEvaluation();
+  }));
   updateConditionalFields();
 }
 
@@ -316,9 +340,7 @@ function updateConditionalFields() {
       const value = parseFloat(geometryValue(wrapper.dataset.showGeometry));
       visible = visible && Number.isFinite(value) && value <= parseFloat(wrapper.dataset.showLte);
     }
-    if (wrapper.dataset.showPositive) {
-      visible = visible && Number(criterionInputValue(ruleId, wrapper.dataset.showPositive)) > 0;
-    }
+    if (wrapper.dataset.showPositive) visible = visible && Number(criterionInputValue(ruleId, wrapper.dataset.showPositive)) > 0;
     if (wrapper.dataset.showAnyPositive) {
       visible = visible && wrapper.dataset.showAnyPositive.split(',').some(field => Number(criterionInputValue(ruleId, field)) > 0);
     }
@@ -345,14 +367,12 @@ function systemValuesForCriterion(ruleId) {
       fillet_reinforcement_width_b: state.geometry?.b,
     };
   }
-  if (ruleId === 'IMP-000009') {
-    return {butt_reinforcement_width_b: numberOrNull(geometryValue('b'))};
-  }
+  if (ruleId === 'IMP-000009') return {butt_reinforcement_width_b: numberOrNull(geometryValue('b'))};
   return {};
 }
 
 function collectPayload() {
-  refreshGeometry();
+  refreshGeometry({schedule:false});
   const criteria = {};
   $$('[data-criterion]').forEach(card => {
     const ruleId = card.dataset.criterion;
@@ -364,7 +384,7 @@ function collectPayload() {
       else values[input.dataset.inputId] = input.value;
     });
     Object.assign(values, systemValuesForCriterion(ruleId));
-    const override = $('[data-quality-override]', card).value;
+    const override = $('[data-quality-override]', card)?.value || '';
     criteria[ruleId] = {values, required_quality: override || null};
   });
   const g = state.geometry;
@@ -407,7 +427,7 @@ function collectPayload() {
 }
 
 function frontendValidation() {
-  refreshGeometry();
+  refreshGeometry({schedule:false});
   const errors = [];
   if (!$('#access_face').checked && !$('#access_root').checked) errors.push('Mindestens eine Prüfseite muss zugänglich sein.');
   const t = numberOrNull(geometryValue('t'));
@@ -428,10 +448,6 @@ function frontendValidation() {
       errors.push('Bei ungleichschenkliger und unterwölbter Naht ist die kleinste tatsächliche Kehlnahtdicke aA direkt zu messen.');
     }
     if (!Number.isFinite(state.geometry?.aA) || state.geometry.aA <= 0) errors.push('Die tatsächliche Kehlnahtdicke aA konnte nicht bestimmt werden.');
-    ['notch1','notch2'].forEach(key => {
-      const value = numberOrNull(geometryValue(key));
-      if (value !== null && value < 0) errors.push(`${key} darf nicht negativ sein.`);
-    });
   }
   return [...new Set(errors)];
 }
@@ -441,75 +457,146 @@ function valueText(item) {
   const limit = item.governing_limit;
   if (measured === null && limit === null) return 'keine Maßgrenze';
   if (typeof measured === 'boolean') return measured ? 'vorhanden / ja' : 'nicht vorhanden / nein';
-  const left = measured !== null ? `${Number(measured).toLocaleString('de-DE',{maximumFractionDigits:2})} mm` : '-';
-  const right = limit !== null ? `Grenze ${Number(limit).toLocaleString('de-DE',{maximumFractionDigits:2})} mm` : '';
-  return [left,right].filter(Boolean).join(' · ');
+  const left = measured !== null ? `${formatNumber(measured)} mm` : '—';
+  const right = limit !== null ? `Grenze ${formatNumber(limit)} mm` : '';
+  return [left, right].filter(Boolean).join(' · ');
+}
+
+function statusText(item, edition) {
+  const soll = `SOLL: ${item.required_quality}`;
+  const status = statusLabels[item.status] || item.status;
+  const ist = `IST: ${item.achieved_quality || '—'}`;
+  return `${edition} · ${soll} ${status} · ${ist}`;
+}
+
+function resultSectionState(status) {
+  if (status === 'pass') return 'evaluation-pass';
+  if (status === 'fail') return 'evaluation-fail';
+  if (status === 'manual_review' || status === 'incomplete') return 'evaluation-warning';
+  return 'evaluation-neutral';
+}
+
+function setEvaluationState(status) {
+  const section = $('#evaluation-result');
+  section.classList.remove('evaluation-pass','evaluation-fail','evaluation-warning','evaluation-neutral');
+  section.classList.add(resultSectionState(status));
+}
+
+function renderIncompleteState(errors = []) {
+  state.lastPayload = null;
+  state.lastResult = null;
+  setEvaluationState('incomplete');
+  const summary = $('#result-summary');
+  summary.querySelector('h2').textContent = 'Bewertung noch nicht vollständig';
+  summary.querySelector('p').textContent = 'Erforderliche Eingaben fehlen. Die Bewertung aktualisiert sich automatisch, sobald alle notwendigen Angaben vorliegen.';
+  $('#results-list').innerHTML = errors.length
+    ? `<div class="live-incomplete-note"><strong>Noch erforderlich:</strong><ul>${errors.map(error => `<li>${escapeHtml(error)}</li>`).join('')}</ul></div>`
+    : '';
+  $('#download-pdf').disabled = true;
 }
 
 function renderResults(data) {
   const primary = data.primary;
+  setEvaluationState(primary.status);
   const summary = $('#result-summary');
-  summary.querySelector('h2').textContent = primary.status === 'pass' ? 'Anforderung erfüllt' : primary.status === 'fail' ? 'Anforderung nicht erfüllt' : 'Bewertung noch nicht abschließend';
+  summary.querySelector('h2').textContent = primary.status === 'pass'
+    ? 'Anforderung erfüllt'
+    : primary.status === 'fail'
+      ? 'Anforderung nicht erfüllt'
+      : 'Bewertung noch nicht abschließend';
   const combined = data.geometry?.combined_features ? ' · mehrere geometrische Merkmale getrennt bewertet' : '';
-  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · gefordert <strong>${primary.required_quality}</strong> · erreicht <strong>${primary.achieved_quality || '-'}</strong>${combined}`;
+  summary.querySelector('p').innerHTML = `Prüfstatus: <strong>${inspectionLabels[primary.inspection_status] || primary.inspection_status}</strong> · 2023 SOLL: <strong>${primary.required_quality}</strong> · IST: <strong>${primary.achieved_quality || '—'}</strong>${combined}`;
   const comparisonById = Object.fromEntries((data.comparison?.results || []).map(item => [item.rule_id,item]));
   $('#results-list').innerHTML = primary.results.map(item => {
     const comp = comparisonById[item.rule_id];
     const messages = item.messages.map(message => `<span>${escapeHtml(message)}</span>`).join(' ');
-    return `<article class="result-card panel">
+    return `<article class="result-card panel result-status-${item.status}">
       <div class="rule-number">${item.table_no}</div>
-      <div><h3>${escapeHtml(item.name)}</h3><div class="result-meta">
-        <span class="badge ${item.status}">${statusLabels[item.status] || item.status}</span>
-        <span class="badge not_applicable">Soll ${item.required_quality}</span>
-        <span class="badge ${item.achieved_quality ? 'pass' : 'not_applicable'}">Erreicht ${item.achieved_quality || '-'}</span>
-      </div><p class="field-help">${messages}</p>${item.formula ? `<p class="field-help"><strong>Formel:</strong> ${escapeHtml(item.formula)}</p>` : ''}
-      ${comp ? `<div class="comparison-row"><strong>2014:</strong> ${statusLabels[comp.status] || comp.status}, erreicht ${comp.achieved_quality || '-'}, Grenze ${comp.governing_limit ?? '-'}</div>` : ''}</div>
-      <div class="metric"><small>Messwert / maßgebende Grenze</small><strong>${valueText(item)}</strong></div>
+      <div><h3>${escapeHtml(item.name)}</h3>
+        <div class="result-editions">
+          <div class="result-edition-row edition-2023"><span class="edition-label">2023</span><span class="badge ${item.status}">${escapeHtml(statusText(item, '2023'))}</span></div>
+          ${comp ? `<div class="result-edition-row edition-2014"><span class="edition-label">2014</span><span class="badge ${comp.status}">${escapeHtml(statusText(comp, '2014'))}</span></div>` : ''}
+        </div>
+        <p class="field-help">${messages}</p>${item.formula ? `<p class="field-help"><strong>Formel 2023:</strong> ${escapeHtml(item.formula)}</p>` : ''}
+        ${comp?.formula ? `<p class="field-help comparison-formula"><strong>Formel 2014:</strong> ${escapeHtml(comp.formula)}</p>` : ''}
+      </div>
+      <div class="metric"><small>Messwert / maßgebende Grenze 2023</small><strong>${valueText(item)}</strong>${comp ? `<small class="comparison-metric">2014: ${valueText(comp)}</small>` : ''}</div>
     </article>`;
   }).join('');
+  $('#download-pdf').disabled = false;
 }
 
-async function evaluateAndShowResult() {
-  const button = $('#evaluate-button');
+async function evaluateLive() {
+  if (!state.initialized || !state.service || state.liveBusy) return;
   const errors = frontendValidation();
-  if (errors.length) { showAlert(errors); return; }
-  showAlert([]);
-  const payload = collectPayload();
-  button.disabled = true;
-  button.textContent = 'Bewertung läuft...';
+  if (errors.length) {
+    showAlert([]);
+    renderIncompleteState(errors);
+    return;
+  }
+  state.liveBusy = true;
   try {
-    await new Promise(resolve => setTimeout(resolve, 0));
+    const payload = collectPayload();
     const data = state.service.evaluatePayload(payload);
     state.lastPayload = payload;
     state.lastResult = data;
     renderResults(data);
-    $('#download-pdf').disabled = false;
-    document.getElementById('evaluation-result')?.scrollIntoView({behavior:'smooth', block:'start'});
+    showAlert([]);
   } catch (error) {
+    state.lastPayload = null;
+    state.lastResult = null;
+    renderIncompleteState([]);
     showAlert(String(error.message || error).split('\n'));
   } finally {
-    button.disabled = false;
-    button.textContent = 'Bewertung berechnen';
+    state.liveBusy = false;
   }
+}
+
+function scheduleLiveEvaluation(delay = 300) {
+  if (!state.initialized) return;
+  window.clearTimeout(state.liveTimer);
+  state.liveTimer = window.setTimeout(evaluateLive, delay);
 }
 
 function downloadPdf() {
   if (!state.lastResult) return;
   const button = $('#download-pdf');
   button.disabled = true;
-  button.textContent = 'Bericht wird geöffnet...';
+  button.textContent = 'Bericht wird geöffnet …';
   try {
     openReport(state.lastResult, state.config);
   } catch (error) {
     showAlert(String(error.message || error).split('\n'));
   } finally {
     button.disabled = false;
-    button.textContent = 'Bericht / PDF';
+    button.textContent = 'pdf-Bericht';
   }
+}
+
+function bindStaticInputs() {
+  $$('input[name="joint_type"]').forEach(input => input.addEventListener('change', updateJointVisuals));
+  $$('input[name="required_quality"]').forEach(input => input.addEventListener('change', () => {
+    renderCriteria();
+    scheduleLiveEvaluation();
+  }));
+  $('#geo-angle').addEventListener('input', () => refreshGeometry());
+  $('#geo-a').addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
+  $('#geo-t').addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
+  $('#compare_2014').addEventListener('change', () => scheduleLiveEvaluation());
+  $('#access_face').addEventListener('change', () => { renderCriteria(); scheduleLiveEvaluation(); });
+  $('#access_root').addEventListener('change', () => { renderCriteria(); scheduleLiveEvaluation(); });
+  $('#download-pdf').addEventListener('click', downloadPdf);
+  $$('.step[data-target]').forEach(step => step.addEventListener('click', () => document.getElementById(step.dataset.target)?.scrollIntoView({behavior:'smooth', block:'start'})));
+  ['#report_id','#inspection_date','#wps','#component','#weld_id','#inspector','#location','#notes'].forEach(selector => {
+    $(selector)?.addEventListener('input', () => {
+      if (state.lastResult) scheduleLiveEvaluation(450);
+    });
+  });
 }
 
 async function init() {
   $('#inspection_date').value = new Date().toISOString().slice(0,10);
+  $('#compare_2014').checked = true;
   try {
     const [configResponse, libraryResponse] = await Promise.all([
       fetch('./data/ui-config.json', {cache: 'no-store'}),
@@ -521,24 +608,17 @@ async function init() {
     state.config = state.service.config;
   } catch (error) {
     showAlert([String(error.message || error)]);
-    $('#evaluate-button').disabled = true;
+    $('#download-pdf').disabled = true;
     return;
   }
   $('#version-pill').textContent = `Assistent ${state.config.prototype_version}`;
   $('#footer-library').textContent = `Regelbibliothek ${state.config.library.version} · ${state.config.criteria.length} aktive V1-Kriterien · Berechnung lokal im Browser`;
   document.body.classList.add((state.config.app_mode || 'test') !== 'production' ? 'test-mode' : 'production-mode');
   updateJointVisuals();
-  $$('input[name="joint_type"]').forEach(input => input.addEventListener('change', updateJointVisuals));
-  $$('input[name="required_quality"]').forEach(input => input.addEventListener('change', renderCriteria));
-  $('#geo-angle').addEventListener('input', refreshGeometry);
-  $('#geo-a').addEventListener('input', updateConditionalFields);
-  $('#evaluate-button').addEventListener('click', evaluateAndShowResult);
-  $('#download-pdf').addEventListener('click', downloadPdf);
-  $('#access_face').addEventListener('change', renderCriteria);
-  $('#access_root').addEventListener('change', renderCriteria);
-  $('#expand-all').addEventListener('click', () => $$('[data-criterion]:not(.criterion-unavailable)').forEach(card => { card.open = true; }));
-  $('#collapse-all').addEventListener('click', () => $$('[data-criterion]').forEach(card => { card.open = false; }));
-  $$('.step[data-target]').forEach(step => step.addEventListener('click', () => document.getElementById(step.dataset.target)?.scrollIntoView({behavior:'smooth', block:'start'})));
+  bindStaticInputs();
+  state.initialized = true;
+  renderIncompleteState(frontendValidation());
+  scheduleLiveEvaluation(0);
 }
 
 document.addEventListener('DOMContentLoaded', init);
