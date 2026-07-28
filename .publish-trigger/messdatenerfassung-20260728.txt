@@ -1,0 +1,1 @@
+Aktuellen geprüften Teststand mit WPS, Messdatenerfassung und mittlerem Höhenmesswert veröffentlichen.
