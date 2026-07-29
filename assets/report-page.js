@@ -5,6 +5,7 @@ import {
   assessmentText,
   statusLabel,
 } from './result-format.js?v=044d1e9cde1f';
+import { filletGeometrySvg } from './fillet-geometry-svg.js?v=ab8ab806d448';
 
 const inspectionLabels = {
   complete: 'vollständig',
@@ -62,6 +63,20 @@ function geometryRows(geometry, jointType) {
     <tr><td>Einbrandkerbe 1 an Bauteil 1 (horizontal, z1)</td><td>${mm(geometry.notch1)}</td><td>Einbrandkerbe 2 an Bauteil 2 (senkrecht/abgewinkelt, z2)</td><td>${mm(geometry.notch2)}</td></tr>`;
 }
 
+
+function geometryFigure(geometry, jointType) {
+  if (jointType !== 'Kehlnaht') return '';
+  const svg = filletGeometrySvg(
+    geometry,
+    geometry.a,
+    geometry.geometry_status?.status,
+  );
+  if (!svg) return '';
+  return `<figure class="report-geometry-figure">
+    ${svg}
+    <figcaption class="report-geometry-caption">Grau: Sollkontur | Schwarz: modellierte Istkontur | Grün/Rot/Grau: maßlicher Geometriestatus nach RGL-01</figcaption>
+  </figure>`;
+}
 function messagesText(item) {
   return (item?.messages || []).map(message => `<div>${escapeHtml(message)}</div>`).join('') || '—';
 }
@@ -114,6 +129,7 @@ function reportSection({ edition, result, otherResult, report, geometry, access,
     ${testNotice}${reportHeader(report, access, result, edition, config, today)}
     <div class="traceability">Regelbibliothek ${escapeHtml(result.library_version)} | Inhaltshash ${escapeHtml(result.library_content_sha256.slice(0, 16))}… | Assistentversion ${escapeHtml(config.prototype_version)}. Die Bewertung gilt nur für den dokumentierten, zugänglichen Prüfbereich.</div>
     <h2>Vorgaben, Messung und Berechnung</h2><table class="info">${geometryRows(geometry, result.joint_type)}</table>
+    ${geometryFigure(geometry, result.joint_type)}
     ${combinedNotice}
     <h2>Einzelergebnisse – Ausgabe ${edition}</h2>
     <div class="table-context">SOLL bezeichnet die Anforderung, IST den festgestellten Befund oder Messwert. Die letzte Spalte zeigt den direkten Vergleich zur Ausgabe ${edition === 2023 ? 2014 : 2023}.</div>
