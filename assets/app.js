@@ -307,7 +307,7 @@ function renderGeometryFields() {
   ] : [
     {id:'z1', label:'Schenkellänge z1', unit:'mm', value:state.filletMeasurements.values.z1, min:.1, step:.1, valueMode:state.filletMeasurements.automatic.z1 ? 'automatic' : 'manual'},
     {id:'z2', label:'Schenkellänge z2', unit:'mm', value:state.filletMeasurements.values.z2, min:.1, step:.1, valueMode:state.filletMeasurements.automatic.z2 ? 'automatic' : 'manual'},
-    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:state.filletMeasurements.values.m, min:0, step:.1, valueMode:state.filletMeasurements.automatic.m ? 'automatic' : 'manual'},
+    {id:'m', label:'Höhenmesswert m bei γ/2', unit:'mm', value:state.filletMeasurements.values.m, min:0, step:.1, valueMode:state.filletMeasurements.automatic.m ? 'automatic' : 'manual'},
   ];
   container.innerHTML = fields.map(field => `<label ${field.wrapperId ? `id="${field.wrapperId}"` : ''} class="${field.hidden ? 'hidden' : ''}">${escapeHtml(field.label)}
     <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.valueMode ? `data-value-mode="${field.valueMode}"` : ''} ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
