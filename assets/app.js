@@ -107,8 +107,10 @@ function filletGeometryInput() {
 }
 
 function renderGeometrySummary(result) {
+  const summary = $('#geometry-formula');
+  if (!summary) return;
   if (!result?.b) {
-    $('#geometry-formula').innerHTML = 'Schenkellängen z1 und z2, den Bauteilwinkel γ und den Höhenmesswert m eingeben.';
+    summary.innerHTML = 'Schenkellängen z1 und z2, den Bauteilwinkel γ und den Höhenmesswert m eingeben.';
     return;
   }
   const sign = result.profileH >= 0 ? '+' : '−';
@@ -120,7 +122,7 @@ function renderGeometrySummary(result) {
   const combined = result.combinedFeatures
     ? '<br><strong>Hinweis:</strong> Ungleichschenkligkeit und Profilabweichung treten gemeinsam auf und werden getrennt bewertet.'
     : '';
-  $('#geometry-formula').innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
+  summary.innerHTML = `<strong>Automatisch berechnete Geometrie:</strong><br>
     Nahtbreite b = <strong>${formatMm(result.b)}</strong><br>
     Schenkelbezogene Kehlnahtdicke az = <strong>${formatMm(result.az)}</strong><br>
     Vergleichshöhe m0 = <strong>${formatMm(result.m0)}</strong><br>
@@ -134,7 +136,8 @@ function renderGeometrySummary(result) {
 function refreshGeometry({schedule = true} = {}) {
   if (jointType() !== 'fillet') {
     state.geometry = null;
-    $('#geometry-formula').innerHTML = '<strong>Stumpfnaht:</strong><br>Nahtdicke s und Breite b werden am Nahtabschnitt gemessen. Die Breite b wird für die Bewertung der Decklagenüberhöhung verwendet.';
+    const summary = $('#geometry-formula');
+    if (summary) summary.innerHTML = '<strong>Stumpfnaht:</strong><br>Nahtdicke s und Breite b werden am Nahtabschnitt gemessen. Die Breite b wird für die Bewertung der Decklagenüberhöhung verwendet.';
     updateConditionalFields();
     if (schedule) scheduleLiveEvaluation();
     return;
@@ -164,12 +167,6 @@ function renderGeometryFields() {
     {id:'z1', label:'Schenkellänge z1', unit:'mm', value:existing.z1 || '7.0', min:.1, step:.1},
     {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.0', min:.1, step:.1},
     {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:existing.m || '', min:0, step:.1},
-    {id:'notch1', label:'Kerbentiefe Übergang 1', unit:'mm', value:existing.notch1 || '0', min:0, step:.1},
-    {id:'notch2', label:'Kerbentiefe Übergang 2', unit:'mm', value:existing.notch2 || '0', min:0, step:.1},
-    {id:'direct-h', wrapperId:'direct-h-field', hidden:true, label:'Maximale Nahtüberhöhung h direkt gemessen', unit:'mm', value:existing['direct-h'] || '', min:0, step:.1},
-    {id:'direct-aA', wrapperId:'direct-aA-field', hidden:true, label:'Kleinste tatsächliche Kehlnahtdicke aA direkt gemessen', unit:'mm', value:existing['direct-aA'] || '', min:.1, step:.1},
-    {id:'b', label:'Berechnete Nahtbreite b', unit:'mm', value:'', min:0, step:.1, readonly:true},
-    {id:'aA', label:'Verwendete tatsächliche Kehlnahtdicke aA', unit:'mm', value:'', min:0, step:.1, readonly:true},
   ];
   container.innerHTML = fields.map(field => `<label ${field.wrapperId ? `id="${field.wrapperId}"` : ''} class="${field.hidden ? 'hidden' : ''}">${escapeHtml(field.label)}
     <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
@@ -416,8 +413,8 @@ function collectPayload() {
       aA_source: g?.aASource ?? null,
       direct_aA: numberOrNull(geometryValue('direct-aA')),
       direct_h: numberOrNull(geometryValue('direct-h')),
-      notch1: numberOrNull(geometryValue('notch1')),
-      notch2: numberOrNull(geometryValue('notch2')),
+      notch1: numberOrNull(geometryValue('notch1')) ?? 0,
+      notch2: numberOrNull(geometryValue('notch2')) ?? 0,
       combined_features: Boolean(g?.combinedFeatures),
       tolerance_mm: GEOMETRY_TOLERANCE_MM,
     },

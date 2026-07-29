@@ -437,3 +437,35 @@ button.primary,button.secondary { padding:9px 14px; }
   .result-card .metric { grid-column:1 / -1; text-align:left; }
   input,select,textarea,button.primary,button.secondary { min-height:42px; }
 }
+
+/* Paket 1: kompakte Messdatenerfassung mit hervorgehobener Geometrievorschau */
+.area-2 { padding:18px 22px; }
+.area-2 .section-heading { margin-bottom:12px; }
+.area-2 .geometry-layout {
+  grid-template-columns:minmax(300px,430px) minmax(260px,340px);
+  gap:18px;
+  max-width:790px;
+  margin:0 auto;
+  align-items:center;
+}
+.area-2 .geometry-card { padding:10px; border-radius:13px; }
+.area-2 .schematic { min-height:209px; }
+.area-2 .schematic svg { max-width:286px; }
+.area-2 #geometry-fields { grid-template-columns:1fr; gap:10px; }
+.area-2 #geometry-fields label { gap:4px; max-width:none; }
+.area-2 #geometry-fields input { padding-top:8px; padding-bottom:8px; }
+
+@media (max-width:860px) {
+  .area-2 .geometry-layout {
+    grid-template-columns:1fr;
+    gap:12px;
+    max-width:520px;
+  }
+}
+
+@media (max-width:620px) {
+  .area-2 { padding:16px; }
+  .area-2 .section-heading { margin-bottom:9px; }
+  .area-2 .geometry-card { padding:7px; }
+  .area-2 #geometry-fields { gap:8px; }
+}
