@@ -10,6 +10,20 @@ function finiteNonNegative(value) {
   return Number.isFinite(value) && value >= 0;
 }
 
+export function computeFilletNominalMeasurements(nominalA, gamma) {
+  const a = Number(nominalA);
+  const angle = Number(gamma);
+  if (!finitePositive(a)
+      || !Number.isFinite(angle)
+      || angle < FILLET_MIN_ANGLE_DEG
+      || angle > FILLET_MAX_ANGLE_DEG) {
+    return {valid:false, a:null, gamma:null, z1:null, z2:null, m:null};
+  }
+
+  const targetLeg = 2 * a * Math.sin(angle * Math.PI / 360);
+  return {valid:true, a, gamma:angle, z1:targetLeg, z2:targetLeg, m:a};
+}
+
 function point(x, y) {
   return {x, y};
 }

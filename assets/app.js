@@ -1,6 +1,6 @@
 import { createEvaluationService } from './evaluation.js?v=fcaf9265f805';
 import { openReport } from './report.js?v=7e2eaafd8c9f';
-import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=53089ceea123';
+import { computeFilletGeometry, computeFilletNominalMeasurements, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=31dcb30ff6a5';
 
 const state = {
   config: null,
@@ -11,6 +11,10 @@ const state = {
   liveTimer: null,
   liveBusy: false,
   initialized: false,
+  filletMeasurements: {
+    values: {z1:'', z2:'', m:''},
+    automatic: {z1:true, z2:true, m:true},
+  },
 };
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -83,11 +87,8 @@ function filletGeometrySvg(geometry, nominalA) {
 
   const {root, transition1, transition2, middle, control} = geometry.points;
   const gammaRad = geometry.gammaRad;
-  const halfGamma = gammaRad / 2;
-  const nominal = Number(nominalA);
-  const targetLeg = Number.isFinite(nominal) && nominal > 0
-    ? 2 * nominal * Math.sin(halfGamma)
-    : null;
+  const nominalGeometry = computeFilletNominalMeasurements(nominalA, geometry.gamma);
+  const targetLeg = nominalGeometry.valid ? nominalGeometry.z1 : null;
   const target1 = targetLeg === null ? null : {x: targetLeg / Math.sin(gammaRad), y: 0};
   const target2 = targetLeg === null ? null : {x: targetLeg / Math.tan(gammaRad), y: targetLeg};
 
@@ -228,24 +229,75 @@ function refreshGeometry({schedule = true} = {}) {
   if (schedule) scheduleLiveEvaluation();
 }
 
+const FILLET_MEASUREMENT_IDS = ['z1', 'z2', 'm'];
+
+function nominalFilletMeasurementValues() {
+  const target = computeFilletNominalMeasurements(
+    numberOrNull(geometryValue('a')),
+    numberOrNull(geometryValue('angle')),
+  );
+  if (!target.valid) return null;
+  return {
+    z1: target.z1.toFixed(1),
+    z2: target.z2.toFixed(1),
+    m: target.m.toFixed(1),
+  };
+}
+
+function captureFilletMeasurementValues(container = $('#geometry-fields')) {
+  FILLET_MEASUREMENT_IDS.forEach(id => {
+    const input = `#geo-${id}`;
+    const field = $(input, container);
+    if (field) state.filletMeasurements.values[id] = field.value;
+  });
+}
+
+function syncAutomaticFilletMeasurements({refresh = true} = {}) {
+  const target = nominalFilletMeasurementValues();
+  if (target) {
+    FILLET_MEASUREMENT_IDS.forEach(id => {
+      if (!state.filletMeasurements.automatic[id]) return;
+      state.filletMeasurements.values[id] = target[id];
+      const field = `#geo-${id}`;
+      const input = $(field);
+      if (input) {
+        input.value = target[id];
+        input.dataset.valueMode = 'automatic';
+      }
+    });
+  }
+  if (refresh) refreshGeometry();
+}
+
 function renderGeometryFields() {
   const type = jointType();
   const container = $('#geometry-fields');
   const existing = {};
   $$('[id^="geo-"]', container).forEach(input => { existing[input.id.replace('geo-', '')] = input.value; });
+  captureFilletMeasurementValues(container);
+  syncAutomaticFilletMeasurements({refresh:false});
   const fields = type === 'butt' ? [
     {id:'s', label:'Gemessene Nahtdicke s', unit:'mm', value:existing.s || '8.0', min:.1, step:.1},
     {id:'b', label:'Gemessene Nahtbreite b', unit:'mm', value:existing.b || '', min:.1, step:.1},
   ] : [
-    {id:'z1', label:'Schenkellänge z1', unit:'mm', value:existing.z1 || '7.0', min:.1, step:.1},
-    {id:'z2', label:'Schenkellänge z2', unit:'mm', value:existing.z2 || '7.0', min:.1, step:.1},
-    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:existing.m || '', min:0, step:.1},
+    {id:'z1', label:'Schenkellänge z1', unit:'mm', value:state.filletMeasurements.values.z1, min:.1, step:.1, valueMode:state.filletMeasurements.automatic.z1 ? 'automatic' : 'manual'},
+    {id:'z2', label:'Schenkellänge z2', unit:'mm', value:state.filletMeasurements.values.z2, min:.1, step:.1, valueMode:state.filletMeasurements.automatic.z2 ? 'automatic' : 'manual'},
+    {id:'m', label:'Höhenmesswert m auf der Winkelhalbierenden', unit:'mm', value:state.filletMeasurements.values.m, min:0, step:.1, valueMode:state.filletMeasurements.automatic.m ? 'automatic' : 'manual'},
   ];
   container.innerHTML = fields.map(field => `<label ${field.wrapperId ? `id="${field.wrapperId}"` : ''} class="${field.hidden ? 'hidden' : ''}">${escapeHtml(field.label)}
-    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
+    <div class="input-unit"><input id="geo-${field.id}" type="number" min="${field.min}" step="${field.step}" value="${escapeHtml(field.value)}" ${field.valueMode ? `data-value-mode="${field.valueMode}"` : ''} ${field.readonly ? 'readonly' : ''}><span>${escapeHtml(field.unit)}</span></div>
   </label>`).join('');
   $$('[id^="geo-"]', container).forEach(input => {
-    if (!input.readOnly) input.addEventListener('input', () => refreshGeometry());
+    if (input.readOnly) return;
+    input.addEventListener('input', () => {
+      const id = input.id.replace('geo-', '');
+      if (type === 'fillet' && FILLET_MEASUREMENT_IDS.includes(id)) {
+        state.filletMeasurements.automatic[id] = false;
+        state.filletMeasurements.values[id] = input.value;
+        input.dataset.valueMode = 'manual';
+      }
+      refreshGeometry();
+    });
   });
   refreshGeometry({schedule:false});
 }
@@ -650,8 +702,8 @@ function bindStaticInputs() {
     renderCriteria();
     scheduleLiveEvaluation();
   }));
-  $('#geo-angle').addEventListener('input', () => refreshGeometry());
-  $('#geo-a').addEventListener('input', () => refreshGeometry());
+  $('#geo-angle').addEventListener('input', () => syncAutomaticFilletMeasurements());
+  $('#geo-a').addEventListener('input', () => syncAutomaticFilletMeasurements());
   $('#geo-t').addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
   $('#compare_2014').addEventListener('change', () => scheduleLiveEvaluation());
   $('#access_face').addEventListener('change', () => { renderCriteria(); scheduleLiveEvaluation(); });
