@@ -329,7 +329,6 @@ function renderGeometryFields() {
 
 function updateJointVisuals() {
   const type = jointType();
-  $('#joint-illustration').innerHTML = jointSvg(type);
   $('#geometry-schematic').innerHTML = type === 'butt' ? jointSvg(type) : '';
   $('#general-a-field')?.classList.toggle('hidden', type !== 'fillet');
   $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
@@ -761,7 +760,6 @@ async function init() {
     $('#download-pdf').disabled = true;
     return;
   }
-  $('#version-pill').textContent = `Assistent ${state.config.prototype_version}`;
   $('#footer-library').textContent = `Regelbibliothek ${state.config.library.version} · ${state.config.criteria.length} aktive V1-Kriterien · Berechnung lokal im Browser`;
   document.body.classList.add((state.config.app_mode || 'test') !== 'production' ? 'test-mode' : 'production-mode');
   updateJointVisuals();
