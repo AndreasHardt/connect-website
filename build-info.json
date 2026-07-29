@@ -5,7 +5,7 @@
   "domain": "connect.hardt-wiehl.de",
   "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
   "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-29T13:08:13.031Z",
+  "built_at": "2026-07-29T13:21:22.459Z",
   "files": {
     "assets/app.js": "44c8130730dcf199e9c13d67d14514bb0e775e423008ec4d3ecec383cfc71144",
     "assets/criterion-filter.js": "4a01de6ecc5f68246680f9986130f2364d5b4cf7eed43da211a08dac1574c649",
