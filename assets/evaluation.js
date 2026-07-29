@@ -1,8 +1,20 @@
 import { RuleEngine, EngineError, RequestError } from './engine.js?v=bc918a37258f';
+import { normalizeFilletGeometryPayload } from './geometry.js';
 
 export function createEvaluationService(library, config) {
   const engine = new RuleEngine(library);
   const rulesById = Object.fromEntries(library.rules.map((rule) => [rule.rule_id, rule]));
+
+  function normalizePayload(payload = {}) {
+    const normalized = {
+      ...payload,
+      geometry: { ...(payload.geometry ?? {}) },
+    };
+    if (payload.joint_type === 'fillet') {
+      normalized.geometry = normalizeFilletGeometryPayload(normalized.geometry);
+    }
+    return normalized;
+  }
 
   function editionConfig(ruleId, edition) {
     return rulesById[ruleId].editions[String(edition)];
@@ -70,7 +82,8 @@ export function createEvaluationService(library, config) {
     if (!payload.accessibility?.face && !payload.accessibility?.root) {
       errors.push('Mindestens eine Prüfseite muss zugänglich sein.');
     }
-    return errors;
+    for (const message of payload.geometry?.calculation_errors ?? []) errors.push(message);
+    return [...new Set(errors)];
   }
 
   function inspectionSide(criterion, payload, edition) {
@@ -156,10 +169,21 @@ export function createEvaluationService(library, config) {
       if (!criterion.joint_types.includes(payload.joint_type)) continue;
       const ruleId = criterion.rule_id;
       const submitted = payload.criteria?.[ruleId] ?? {};
-      const values = { ...commonValues };
+      const values = {};
       const submittedValues = submitted.values ?? submitted;
       for (const [key, value] of Object.entries(submittedValues)) {
         if (value !== null && value !== undefined) values[key] = value;
+      }
+
+      // Allgemeine und berechnete Geometriewerte sind systemgeführt und dürfen
+      // nicht durch kriterienspezifisch übergebene Werte auseinanderlaufen.
+      Object.assign(values, commonValues);
+      if (payload.joint_type === 'fillet' && ruleId === 'IMP-000010') {
+        values.fillet_reinforcement_h = payload.geometry.reinforcement_h;
+        values.fillet_reinforcement_width_b = payload.geometry.b;
+      }
+      if (payload.joint_type === 'butt' && ruleId === 'IMP-000009') {
+        values.butt_reinforcement_width_b = payload.geometry.b;
       }
       normalizeRuleValues(ruleId, values, payload);
 
@@ -198,16 +222,17 @@ export function createEvaluationService(library, config) {
   }
 
   function evaluatePayload(payload) {
-    const errors = validatePayload(payload);
+    const normalizedPayload = normalizePayload(payload);
+    const errors = validatePayload(normalizedPayload);
     if (errors.length) throw new RequestError(errors.join('\n'));
-    const primary = decorateResults(evaluateEdition(payload, 2023));
-    const comparison = payload.compare_2014 ? decorateResults(evaluateEdition(payload, 2014)) : null;
+    const primary = decorateResults(evaluateEdition(normalizedPayload, 2023));
+    const comparison = normalizedPayload.compare_2014 ? decorateResults(evaluateEdition(normalizedPayload, 2014)) : null;
     return {
       assistant_version: config.prototype_version,
       app_mode: config.app_mode ?? 'test',
-      report: payload.report ?? {},
-      geometry: payload.geometry ?? {},
-      accessibility: payload.accessibility ?? {},
+      report: normalizedPayload.report ?? {},
+      geometry: normalizedPayload.geometry ?? {},
+      accessibility: normalizedPayload.accessibility ?? {},
       primary,
       comparison,
       generated_at: new Date().toISOString(),
@@ -225,8 +250,8 @@ export function createEvaluationService(library, config) {
       },
     },
     evaluatePayload,
-    validatePayload,
-    buildRuleRequests,
+    validatePayload: payload => validatePayload(normalizePayload(payload)),
+    buildRuleRequests: (payload, edition) => buildRuleRequests(normalizePayload(payload), edition),
   };
 }
 

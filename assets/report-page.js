@@ -15,6 +15,7 @@ const aASourceLabels = {
   legs: 'aus dem kleineren Schenkel',
   middle: 'aus dem mittleren Messwert',
   direct: 'direkt gemessen',
+  model: 'aus der interpolierten Modellkontur',
 };
 const profileLabels = {
   straight: 'gerades Profil',

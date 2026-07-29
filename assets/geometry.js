@@ -217,3 +217,53 @@ export function computeFilletGeometry(input = {}) {
     minimumT: minimum.t,
   };
 }
+
+
+function nullableGeometryNumber(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function calculatedGeometryNumber(value) {
+  return Number.isFinite(value) ? value : null;
+}
+
+export function normalizeFilletGeometryPayload(source = {}) {
+  const tolerance = nullableGeometryNumber(source.tolerance_mm);
+  const computed = computeFilletGeometry({
+    z1: nullableGeometryNumber(source.z1),
+    z2: nullableGeometryNumber(source.z2),
+    m: nullableGeometryNumber(source.m),
+    gamma: nullableGeometryNumber(source.gamma),
+    tolerance: tolerance ?? GEOMETRY_TOLERANCE_MM,
+  });
+
+  return {
+    ...source,
+    z1: nullableGeometryNumber(source.z1),
+    z2: nullableGeometryNumber(source.z2),
+    m: nullableGeometryNumber(source.m),
+    gamma: nullableGeometryNumber(source.gamma),
+    aA: calculatedGeometryNumber(computed.aA),
+    b: calculatedGeometryNumber(computed.b),
+    az: calculatedGeometryNumber(computed.az),
+    reference_aA: calculatedGeometryNumber(computed.referenceAA),
+    m0: calculatedGeometryNumber(computed.m0),
+    delta_m: calculatedGeometryNumber(computed.deltaM),
+    profile_h: calculatedGeometryNumber(computed.profileH),
+    reinforcement_h: calculatedGeometryNumber(computed.reinforcementH),
+    underfill_h: calculatedGeometryNumber(computed.underfillH),
+    asymmetry_h: calculatedGeometryNumber(computed.asymmetryH),
+    profile_class: computed.profileClass ?? null,
+    aA_source: computed.aASource ?? null,
+    combined_features: Boolean(computed.combinedFeatures),
+    tolerance_mm: computed.tolerance,
+    model_stable: Boolean(computed.modelStable),
+    points: computed.points ?? null,
+    interpolation_t: calculatedGeometryNumber(computed.interpolationT),
+    minimum_t: calculatedGeometryNumber(computed.minimumT),
+    calculation_valid: Boolean(computed.valid),
+    calculation_errors: [...(computed.errors || [])],
+  };
+}
