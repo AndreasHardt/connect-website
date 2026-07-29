@@ -1,6 +1,6 @@
 import { createEvaluationService } from './evaluation.js?v=fcaf9265f805';
 import { openReport } from './report.js?v=7e2eaafd8c9f';
-import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=05cf7c0d2bde';
+import { computeFilletGeometry, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=53089ceea123';
 
 const state = {
   config: null,
@@ -78,6 +78,77 @@ function jointSvg(type) {
   </svg>`;
 }
 
+function filletGeometrySvg(geometry, nominalA) {
+  if (!geometry?.valid || !geometry.points) return '';
+
+  const {root, transition1, transition2, middle, control} = geometry.points;
+  const gammaRad = geometry.gammaRad;
+  const halfGamma = gammaRad / 2;
+  const nominal = Number(nominalA);
+  const targetLeg = Number.isFinite(nominal) && nominal > 0
+    ? 2 * nominal * Math.sin(halfGamma)
+    : null;
+  const target1 = targetLeg === null ? null : {x: targetLeg / Math.sin(gammaRad), y: 0};
+  const target2 = targetLeg === null ? null : {x: targetLeg / Math.tan(gammaRad), y: targetLeg};
+
+  const relevantSize = Math.max(geometry.z1, geometry.z2, geometry.m, nominal || 0);
+  const overrun = Math.max(5, relevantSize * 0.2);
+  const component1Length = Math.max(transition1.x, target1?.x || 0) + overrun;
+  const component2Length = Math.max(
+    Math.hypot(transition2.x, transition2.y),
+    target2 ? Math.hypot(target2.x, target2.y) : 0,
+  ) + overrun;
+  const component1End = {x: component1Length, y: 0};
+  const component2End = {
+    x: component2Length * Math.cos(gammaRad),
+    y: component2Length * Math.sin(gammaRad),
+  };
+
+  const fitPoints = [
+    root, transition1, transition2, middle, control,
+    component1End, component2End,
+    ...(target1 && target2 ? [target1, target2] : []),
+  ];
+  const xs = fitPoints.map(point => point.x);
+  const ys = fitPoints.map(point => point.y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const width = Math.max(maxX - minX, 1);
+  const height = Math.max(maxY - minY, 1);
+  const scale = Math.min(260 / width, 140 / height);
+  const offsetX = 20 + (260 - width * scale) / 2 - minX * scale;
+  const offsetY = 20 + (140 - height * scale) / 2 + maxY * scale;
+  const map = point => ({
+    x: offsetX + point.x * scale,
+    y: offsetY - point.y * scale,
+  });
+  const svgPoint = point => {
+    const mapped = map(point);
+    return `${mapped.x.toFixed(1)} ${mapped.y.toFixed(1)}`;
+  };
+
+  const rootSvg = svgPoint(root);
+  const transition1Svg = svgPoint(transition1);
+  const transition2Svg = svgPoint(transition2);
+  const controlSvg = svgPoint(control);
+  const component1EndSvg = svgPoint(component1End);
+  const component2EndSvg = svgPoint(component2End);
+  const targetPath = target1 && target2
+    ? `<path data-contour="target" d="M ${svgPoint(target1)} L ${svgPoint(target2)}" fill="none" stroke="#7f8b93" stroke-width="7" stroke-linecap="round"/>`
+    : '';
+
+  return `<svg viewBox="0 0 300 180" role="img" aria-label="Dynamische Plausibilitätsdarstellung der Kehlnaht">
+    <path data-component="1" d="M ${rootSvg} L ${component1EndSvg}" fill="none" stroke="#173d5f" stroke-width="10" stroke-linecap="square"/>
+    <path data-component="2" d="M ${rootSvg} L ${component2EndSvg}" fill="none" stroke="#173d5f" stroke-width="10" stroke-linecap="square"/>
+    ${targetPath}
+    <path data-weld-fill d="M ${transition1Svg} Q ${controlSvg} ${transition2Svg} L ${rootSvg} Z" fill="#d7e4eb" opacity=".7"/>
+    <path data-contour="measured-upper" d="M ${transition1Svg} Q ${controlSvg} ${transition2Svg}" fill="none" stroke="#101820" stroke-width="3.5" stroke-linecap="round"/>
+    <path data-contour="measured-lower" d="M ${transition1Svg} L ${rootSvg} L ${transition2Svg}" fill="none" stroke="#101820" stroke-width="3.5" stroke-linejoin="round"/>
+  </svg>`;
+}
+
 function showAlert(messages) {
   const alert = $('#alert');
   if (!messages || !messages.length) {
@@ -136,6 +207,7 @@ function renderGeometrySummary(result) {
 function refreshGeometry({schedule = true} = {}) {
   if (jointType() !== 'fillet') {
     state.geometry = null;
+    $('#geometry-schematic').innerHTML = jointSvg('butt');
     const summary = $('#geometry-formula');
     if (summary) summary.innerHTML = '<strong>Stumpfnaht:</strong><br>Nahtdicke s und Breite b werden am Nahtabschnitt gemessen. Die Breite b wird für die Bewertung der Decklagenüberhöhung verwendet.';
     updateConditionalFields();
@@ -144,6 +216,7 @@ function refreshGeometry({schedule = true} = {}) {
   }
   const result = computeFilletGeometry(filletGeometryInput());
   state.geometry = result;
+  $('#geometry-schematic').innerHTML = filletGeometrySvg(result, numberOrNull(geometryValue('a')));
   const bField = $('#geo-b');
   const aAField = $('#geo-aA');
   if (bField) bField.value = Number.isFinite(result.b) ? result.b.toFixed(1) : '';
@@ -180,7 +253,7 @@ function renderGeometryFields() {
 function updateJointVisuals() {
   const type = jointType();
   $('#joint-illustration').innerHTML = jointSvg(type);
-  $('#geometry-schematic').innerHTML = jointSvg(type);
+  $('#geometry-schematic').innerHTML = type === 'butt' ? jointSvg(type) : '';
   $('#general-a-field')?.classList.toggle('hidden', type !== 'fillet');
   $('#general-angle-field')?.classList.toggle('hidden', type !== 'fillet');
   renderGeometryFields();
@@ -578,7 +651,7 @@ function bindStaticInputs() {
     scheduleLiveEvaluation();
   }));
   $('#geo-angle').addEventListener('input', () => refreshGeometry());
-  $('#geo-a').addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
+  $('#geo-a').addEventListener('input', () => refreshGeometry());
   $('#geo-t').addEventListener('input', () => { updateConditionalFields(); scheduleLiveEvaluation(); });
   $('#compare_2014').addEventListener('change', () => scheduleLiveEvaluation());
   $('#access_face').addEventListener('change', () => { renderCriteria(); scheduleLiveEvaluation(); });

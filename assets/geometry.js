@@ -1,4 +1,6 @@
 export const GEOMETRY_TOLERANCE_MM = 0.1;
+export const FILLET_MIN_ANGLE_DEG = 60;
+export const FILLET_MAX_ANGLE_DEG = 120;
 
 function finitePositive(value) {
   return Number.isFinite(value) && value > 0;
@@ -68,8 +70,8 @@ export function computeFilletGeometry(input = {}) {
   if (!finitePositive(z1)) errors.push('Messwert z1 muss größer als 0 mm sein.');
   if (!finitePositive(z2)) errors.push('Messwert z2 muss größer als 0 mm sein.');
   if (!finiteNonNegative(m)) errors.push('Der Höhenmesswert m auf der Winkelhalbierenden ist erforderlich.');
-  if (!Number.isFinite(gamma) || gamma <= 0 || gamma >= 180) {
-    errors.push('Der eingeschlossene Bauteilwinkel γ muss zwischen 0° und 180° liegen.');
+  if (!Number.isFinite(gamma) || gamma < FILLET_MIN_ANGLE_DEG || gamma > FILLET_MAX_ANGLE_DEG) {
+    errors.push(`Der eingeschlossene Bauteilwinkel γ muss zwischen ${FILLET_MIN_ANGLE_DEG}° und ${FILLET_MAX_ANGLE_DEG}° liegen.`);
   }
 
   if (errors.length) {
@@ -112,8 +114,10 @@ export function computeFilletGeometry(input = {}) {
     };
   }
 
-  const p1 = point(z1 / Math.tan(gammaRad), z1);
-  const p2 = point(z2 / sinGamma, 0);
+  // Bauteil 1 liegt horizontal: z1 gehört zu seinem Übergangspunkt.
+  // Bauteil 2 verläuft im Winkel γ: z2 gehört zu seinem Übergangspunkt.
+  const p1 = point(z1 / sinGamma, 0);
+  const p2 = point(z2 / Math.tan(gammaRad), z2);
   const middlePoint = point(m * cosHalfGamma, m * sinHalfGamma);
   const b = Math.hypot(p2.x - p1.x, p2.y - p1.y);
 
