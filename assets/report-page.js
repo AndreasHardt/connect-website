@@ -52,7 +52,7 @@ function geometryRows(geometry, jointType) {
     <tr><td>Profilabweichung</td><td>${escapeHtml(profile)} | ${mm(geometry.profile_h)}</td><td>Ungleichschenkligkeit hz</td><td>${mm(geometry.asymmetry_h)}</td></tr>
     <tr><td>Tatsächliche Kehlnahtdicke aA</td><td>${mm(geometry.aA)}</td><td>Ermittlungsart</td><td>${escapeHtml(source)}</td></tr>
     <tr><td>Direkt gemessenes aA</td><td>${mm(geometry.direct_aA)}</td><td>Direkt gemessene Überhöhung h</td><td>${mm(geometry.direct_h)}</td></tr>
-    <tr><td>Kerbentiefe Übergang 1</td><td>${mm(geometry.notch1)}</td><td>Kerbentiefe Übergang 2</td><td>${mm(geometry.notch2)}</td></tr>`;
+    <tr><td>Einbrandkerbe 1 an Bauteil 1 (horizontal, z1)</td><td>${mm(geometry.notch1)}</td><td>Einbrandkerbe 2 an Bauteil 2 (senkrecht/abgewinkelt, z2)</td><td>${mm(geometry.notch2)}</td></tr>`;
 }
 
 function messagesText(item) {

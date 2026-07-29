@@ -189,22 +189,30 @@ function updateJointVisuals() {
 }
 
 function hiddenSystemField(ruleId, fieldId) {
-  return (ruleId === 'IMP-000007' && ['undercut_left_h','undercut_right_h'].includes(fieldId))
-    || (ruleId === 'IMP-000010' && ['fillet_reinforcement_h','fillet_reinforcement_width_b'].includes(fieldId))
+  return (ruleId === 'IMP-000010' && ['fillet_reinforcement_h','fillet_reinforcement_width_b'].includes(fieldId))
     || (ruleId === 'IMP-000009' && fieldId === 'butt_reinforcement_width_b');
 }
 
 function criterionSystemNote(ruleId) {
-  if (ruleId === 'IMP-000007') return 'Die Kerbtiefen werden aus der Messdatenerfassung übernommen.';
   if (ruleId === 'IMP-000010') return 'Überhöhung h und Breite b werden aus der Kehlnahtgeometrie übernommen.';
   if (ruleId === 'IMP-000009') return 'Die Nahtbreite b wird aus der Messdatenerfassung übernommen.';
   return '';
+}
+
+function criterionFieldLabel(ruleId, field) {
+  if (ruleId !== 'IMP-000007' || jointType() !== 'fillet') return field.label;
+  const labels = {
+    undercut_left_h: 'Einbrandkerbe 1 an Bauteil 1 (horizontal, z1)',
+    undercut_right_h: 'Einbrandkerbe 2 an Bauteil 2 (senkrecht/abgewinkelt, z2)',
+  };
+  return labels[field.id] || field.label;
 }
 
 function fieldHtml(ruleId, field, quality = requiredQuality()) {
   if (field.joint_types && !field.joint_types.includes(jointType())) return '';
   if (ruleId === 'IMP-000013' && quality !== 'D' && ['overlap_height_h','overlap_width_b'].includes(field.id)) return '';
   if (hiddenSystemField(ruleId, field.id)) return '';
+  const label = criterionFieldLabel(ruleId, field);
   const id = `${ruleId}-${field.id}`;
   const condition = field.show_if ? `data-show-field="${field.show_if.field}" data-show-equals="${field.show_if.equals}"` : '';
   const geometryCondition = field.show_if_geometry ? `data-show-geometry="${field.show_if_geometry.field}" data-show-lte="${field.show_if_geometry.lte}"` : '';
@@ -213,12 +221,12 @@ function fieldHtml(ruleId, field, quality = requiredQuality()) {
   const geometryDifference = field.show_if_geometry_difference ? `data-difference-left="${field.show_if_geometry_difference.left}" data-difference-right="${field.show_if_geometry_difference.right}" data-difference-operator="${field.show_if_geometry_difference.operator}"` : '';
   const wrapper = `data-field-wrapper data-rule-id="${ruleId}" ${condition} ${geometryCondition} ${positiveCondition} ${anyPositiveCondition} ${geometryDifference}`;
   if (field.type === 'boolean') {
-    return `<label class="switch-row" ${wrapper}><input id="${id}" data-input-id="${field.id}" type="checkbox" ${field.default ? 'checked' : ''}><span>${escapeHtml(field.label)}</span>${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</label>`;
+    return `<label class="switch-row" ${wrapper}><input id="${id}" data-input-id="${field.id}" type="checkbox" ${field.default ? 'checked' : ''}><span>${escapeHtml(label)}</span>${field.help ? `<small>${escapeHtml(field.help)}</small>` : ''}</label>`;
   }
   if (field.type === 'select') {
-    return `<label ${wrapper}>${escapeHtml(field.label)}<select id="${id}" data-input-id="${field.id}">${field.options.map(option => `<option value="${escapeHtml(option.value)}" ${option.value === field.default ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}</select>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
+    return `<label ${wrapper}>${escapeHtml(label)}<select id="${id}" data-input-id="${field.id}">${field.options.map(option => `<option value="${escapeHtml(option.value)}" ${option.value === field.default ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}</select>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
   }
-  return `<label ${wrapper}>${escapeHtml(field.label)}<div class="input-unit"><input id="${id}" data-input-id="${field.id}" type="number" min="${field.min ?? ''}" ${field.max !== undefined ? `max="${field.max}"` : ''} step="${field.step ?? .1}" value="${field.default ?? ''}"><span>${escapeHtml(field.unit || '')}</span></div>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
+  return `<label ${wrapper}>${escapeHtml(label)}<div class="input-unit"><input id="${id}" data-input-id="${field.id}" type="number" min="${field.min ?? ''}" ${field.max !== undefined ? `max="${field.max}"` : ''} step="${field.step ?? .1}" value="${field.default ?? ''}"><span>${escapeHtml(field.unit || '')}</span></div>${field.help ? `<small class="field-help">${escapeHtml(field.help)}</small>` : ''}</label>`;
 }
 
 function criterionAvailable(item) {
@@ -312,8 +320,6 @@ function renderCriteria() {
 }
 
 function systemCriterionValue(ruleId, fieldId) {
-  if (ruleId === 'IMP-000007' && fieldId === 'undercut_left_h') return numberOrNull(geometryValue('notch1')) ?? 0;
-  if (ruleId === 'IMP-000007' && fieldId === 'undercut_right_h') return numberOrNull(geometryValue('notch2')) ?? 0;
   if (ruleId === 'IMP-000010' && fieldId === 'fillet_reinforcement_h') return state.geometry?.reinforcementH;
   if (ruleId === 'IMP-000010' && fieldId === 'fillet_reinforcement_width_b') return state.geometry?.b;
   if (ruleId === 'IMP-000009' && fieldId === 'butt_reinforcement_width_b') return numberOrNull(geometryValue('b'));
@@ -352,12 +358,6 @@ function updateConditionalFields() {
 }
 
 function systemValuesForCriterion(ruleId) {
-  if (ruleId === 'IMP-000007') {
-    return {
-      undercut_left_h: numberOrNull(geometryValue('notch1')) ?? 0,
-      undercut_right_h: numberOrNull(geometryValue('notch2')) ?? 0,
-    };
-  }
   if (ruleId === 'IMP-000010') {
     return {
       fillet_reinforcement_h: state.geometry?.reinforcementH,
@@ -385,6 +385,7 @@ function collectPayload() {
     criteria[ruleId] = {values, required_quality: override || null};
   });
   const g = state.geometry;
+  const undercutValues = criteria['IMP-000007']?.values ?? {};
   return {
     report: {
       report_id: $('#report_id').value.trim(), inspection_date: $('#inspection_date').value,
@@ -413,8 +414,8 @@ function collectPayload() {
       aA_source: g?.aASource ?? null,
       direct_aA: numberOrNull(geometryValue('direct-aA')),
       direct_h: numberOrNull(geometryValue('direct-h')),
-      notch1: numberOrNull(geometryValue('notch1')) ?? 0,
-      notch2: numberOrNull(geometryValue('notch2')) ?? 0,
+      notch1: numberOrNull(undercutValues.undercut_left_h) ?? 0,
+      notch2: numberOrNull(undercutValues.undercut_right_h) ?? 0,
       combined_features: Boolean(g?.combinedFeatures),
       tolerance_mm: GEOMETRY_TOLERANCE_MM,
     },
