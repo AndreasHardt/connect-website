@@ -1,0 +1,4 @@
+Zweck: Bild-Header mit realem Schweißfoto veröffentlichen
+Privater Freigabe-Commit: f07ba289c2869a41951429bca8f04e1ca3a91e9b
+Privater Build-Commit: 8d0d3ee10e9ce88e81cf2934c3c2b5f6ff4e6fb1
+Dieser Trigger-PR wird nach erfolgreicher Veröffentlichung geschlossen und nicht gemergt.
