@@ -1,0 +1,3 @@
+Triggerdatei für die Kurzbezeichnung des Höhenmesswerts m; wird nicht gemergt.
+Privater Freigabe-Commit: e4e45ae1095df02ad4e660bd25a02d7392d2bae3
+Privater Build-Commit: 1474e4dd37de880a7e53514d04901e690f0137ce
