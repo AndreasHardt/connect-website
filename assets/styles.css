@@ -10,18 +10,14 @@ html { scroll-behavior:smooth; }
 body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background:linear-gradient(180deg,#eef5f9 0,#f8fafc 420px); }
 button,input,select,textarea { font:inherit; }
 button { cursor:pointer; }
-.site-header { position:relative; isolation:isolate; min-height:clamp(280px,31vw,390px); display:flex; align-items:stretch; overflow:hidden; color:#fff; background:#0f2e49 url('./graphics/hero-welding.jpg?v=cff3584c244a') 50% 52%/cover no-repeat; border-bottom:1px solid rgba(15,46,73,.82); box-shadow:0 14px 34px rgba(15,46,73,.16); }
-.site-header:before { content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(90deg,rgba(10,27,40,.22) 0%,rgba(10,27,40,.32) 42%,rgba(15,46,73,.88) 72%,rgba(15,46,73,.96) 100%); }
-.site-header-inner { position:relative; z-index:1; width:min(1180px,100%); margin:0 auto; padding:clamp(40px,6vw,76px) 18px; display:flex; align-items:center; justify-content:flex-end; }
-.brand-block { display:flex; align-items:center; gap:18px; width:min(540px,52%); }
-.brand-mark { width:64px; height:64px; flex:0 0 auto; border-radius:18px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.34); display:grid; place-items:center; backdrop-filter:blur(8px); box-shadow:0 12px 28px rgba(0,0,0,.2); }
-.brand-mark svg { width:44px; fill:none; stroke:#fff; stroke-width:3.2; stroke-linejoin:round; stroke-linecap:round; }
+.site-header { position:relative; isolation:isolate; min-height:clamp(224px,25vw,312px); display:flex; align-items:stretch; overflow:hidden; color:#fff; background:#0f2e49 url('./graphics/hero-industrial-hall.jpg?v=d4a983a8d9f7') 50% 44%/cover no-repeat; border-bottom:1px solid rgba(15,46,73,.82); box-shadow:0 14px 34px rgba(15,46,73,.16); }
+.site-header:before { content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(90deg,rgba(8,21,32,.10) 0%,rgba(8,21,32,.24) 36%,rgba(15,46,73,.72) 58%,rgba(15,46,73,.92) 78%,rgba(15,46,73,.97) 100%); }
+.site-header-inner { position:relative; z-index:1; width:min(1180px,100%); margin:0 auto; padding:clamp(32px,4.8vw,60px) 18px; display:flex; align-items:center; justify-content:flex-end; }
+.brand-block { width:min(540px,48%); }
 .brand { margin:0; color:#fff; font-size:clamp(2rem,4vw,3.35rem); line-height:1.02; font-weight:850; letter-spacing:-.025em; text-shadow:0 2px 14px rgba(0,0,0,.28); }
 .subtitle { margin:10px 0 0; color:#fff; font-size:clamp(.92rem,1.4vw,1.08rem); line-height:1.35; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
 .header-standard { margin:18px 0 0; color:rgba(255,255,255,.88); font-size:clamp(.82rem,1.2vw,.96rem); line-height:1.45; font-weight:650; }
 .header-standard span { padding:0 .38em; color:rgba(255,255,255,.52); }
-.hero-credit { position:absolute; z-index:1; left:max(14px,calc((100vw - 1180px)/2 + 18px)); bottom:10px; color:rgba(255,255,255,.78); font-size:.64rem; line-height:1.2; text-decoration:none; text-shadow:0 1px 5px rgba(0,0,0,.8); }
-.hero-credit:hover,.hero-credit:focus-visible { color:#fff; text-decoration:underline; }
 .page-shell { max-width:1180px; margin:18px auto 34px; padding:0 18px; }
 .panel { background:rgba(255,255,255,.97); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
 .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.09em; font-size:.72rem; font-weight:900; }
@@ -122,17 +118,14 @@ button:disabled { opacity:.45; cursor:not-allowed; }
   .quality-override { min-width:0; }
 }
 @media (max-width:620px) {
-  .site-header { min-height:320px; background-position:44% 50%; }
-  .site-header:before { background:linear-gradient(90deg,rgba(10,27,40,.18) 0%,rgba(10,27,40,.48) 34%,rgba(15,46,73,.94) 76%,rgba(15,46,73,.98) 100%); }
-  .site-header-inner { padding:44px 14px 48px; align-items:flex-end; }
-  .brand-block { width:min(82%,390px); gap:12px; align-items:flex-start; }
-  .brand-mark { width:50px; height:50px; border-radius:14px; }
-  .brand-mark svg { width:34px; }
+  .site-header { min-height:256px; background-position:52% 48%; }
+  .site-header:before { background:linear-gradient(90deg,rgba(8,21,32,.68) 0%,rgba(8,21,32,.80) 45%,rgba(15,46,73,.96) 100%); }
+  .site-header-inner { padding:30px 14px; align-items:center; }
+  .brand-block { width:min(92%,420px); }
   .brand { font-size:clamp(1.75rem,9vw,2.35rem); }
   .subtitle { margin-top:8px; font-size:.72rem; letter-spacing:.07em; }
   .header-standard { margin-top:13px; font-size:.76rem; }
   .header-standard span { display:none; }
-  .hero-credit { left:10px; bottom:7px; font-size:.58rem; }
   .page-shell { margin-top:14px; padding:0 10px; }
   .step-panel,.criterion-card { padding:20px 17px; }
   .step { padding:11px 5px; flex-direction:column; gap:4px; font-size:.68rem; }
@@ -469,4 +462,48 @@ button.primary,button.secondary { padding:9px 14px; }
   .area-2 .section-heading { margin-bottom:9px; }
   .area-2 .geometry-card { padding:7px; }
   .area-2 #geometry-fields { gap:8px; }
+}
+
+/* Bild-Header: historische Stahlwerkhalle, kompakter und kontraststabil */
+.site-header {
+  min-height:clamp(224px,25vw,312px);
+  padding:0;
+  background-position:50% 44%;
+}
+.site-header:before {
+  background:linear-gradient(90deg,rgba(8,21,32,.10) 0%,rgba(8,21,32,.24) 36%,rgba(15,46,73,.72) 58%,rgba(15,46,73,.92) 78%,rgba(15,46,73,.97) 100%);
+}
+.site-header-inner { padding:clamp(32px,4.8vw,60px) 18px; }
+.brand-block { width:min(540px,48%); }
+.brand { font-size:clamp(2rem,4vw,3.35rem); }
+.subtitle { font-size:clamp(.92rem,1.4vw,1.08rem); }
+
+@media (prefers-color-scheme:dark) {
+  .site-header:before {
+    background:linear-gradient(90deg,rgba(4,13,21,.22) 0%,rgba(4,13,21,.40) 36%,rgba(8,29,46,.80) 58%,rgba(8,29,46,.95) 78%,rgba(8,29,46,.99) 100%);
+  }
+}
+
+@media (max-width:620px) {
+  .site-header {
+    min-height:256px;
+    padding:0;
+    background-position:52% 48%;
+  }
+  .site-header:before {
+    background:linear-gradient(90deg,rgba(8,21,32,.68) 0%,rgba(8,21,32,.80) 45%,rgba(15,46,73,.96) 100%);
+  }
+  .site-header-inner {
+    padding:30px 14px;
+    align-items:center;
+  }
+  .brand-block { width:min(92%,420px); }
+  .brand { font-size:clamp(1.75rem,9vw,2.35rem); }
+  .subtitle { font-size:.72rem; }
+}
+
+@media (max-width:620px) and (prefers-color-scheme:dark) {
+  .site-header:before {
+    background:linear-gradient(90deg,rgba(4,13,21,.76) 0%,rgba(4,13,21,.86) 45%,rgba(8,29,46,.98) 100%);
+  }
 }

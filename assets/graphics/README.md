@@ -10,6 +10,6 @@ Für den Anwender gilt nur:
 
 Aktuelle Zuordnung:
 
-- `header.svg` – Grafik in der Kopfzeile der Startseite
+- `hero-industrial-hall.jpg` – Foto der historischen Stahlwerks- und Fertigungshalle im Kopfbereich der Startseite
 
-Für einen späteren Austausch von `header.svg` sind keine Änderungen am Build-Skript mehr erforderlich. Die Datei wird automatisch übernommen, geprüft und mit einer neuen Cache-Kennung veröffentlicht.
+Für einen späteren Austausch des Headerfotos sind neben der Bilddatei die CSS-Referenz, der Cache-Eintrag im Build-Skript, der UI-Regressionstest und die Bildquellendokumentation gemeinsam zu aktualisieren.
