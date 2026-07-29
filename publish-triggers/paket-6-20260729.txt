@@ -1,0 +1,3 @@
+Triggerdatei für Paket 6 – Geometriestatus auf der Winkelhalbierenden; wird nicht gemergt.
+Privater Freigabe-Commit: eb7a11252185c5878439eeb2277807bff92dbf84
+Privater Build-Commit: 3bc9d6ba886a58777a9abdfdba17540c0ff9312a
