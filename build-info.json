@@ -5,17 +5,17 @@
   "domain": "connect.hardt-wiehl.de",
   "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
   "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-29T11:59:43.598Z",
+  "built_at": "2026-07-29T12:39:12.610Z",
   "files": {
-    "assets/app.js": "10286721241596bab0328555773b8982cc48bc8cdd3056d7ffdad530f4ce7ecd",
+    "assets/app.js": "24c4b5211fe322269b5ca6265c03fc4d9b362b418b2b3f3bfcc05d6620ebd69c",
     "assets/criterion-filter.js": "4a01de6ecc5f68246680f9986130f2364d5b4cf7eed43da211a08dac1574c649",
     "assets/engine.js": "bc918a37258fb0957f2764366166d0071bdde9dabb11f0192172b9deae02c5cb",
-    "assets/evaluation.js": "fcaf9265f8055ba83be4b41717f8f6f714a284d64f74f77aaf2c6a77f17dbd2b",
-    "assets/geometry.js": "31dcb30ff6a5b7524c38aae4178d71463304cdca8a8817f95829fa63ac5d7d09",
+    "assets/evaluation.js": "948e5e771792413b872989eb84d3dc80875ed1073a16965a65a60e4a24aa497e",
+    "assets/geometry.js": "bda6fb5469b707bcebddaec48fc9df74873f834d8366bb93aee9ce74b9c57bb1",
     "assets/graphics/README.md": "f977af8e8f280f360219946cb9399357573c27baa6ee931985d6ec54667b558c",
     "assets/graphics/header.svg": "521b5c064cebe72451135ece8abc3c6a6489e873add1134d11cfa10ab041e04e",
     "assets/graphics/report-geometry.js": "a9ef7e972fab8839ea04ac1824c66d7fb0bf10abf17960511d8f1127e61f1f53",
-    "assets/report-page.js": "376f9aa1fd6fcae988603517b302f38d3fee3f822dd393ef19cc7cdffe8083ec",
+    "assets/report-page.js": "3b1eaf09a889171dd90dd432fd387281a9ab0b6887ee573d7653cc4830b4076b",
     "assets/report.css": "694f0612bbb8475d3ce1ad75718b514c37046d165a11e87100a2b52b6f2cd6f9",
     "assets/report.js": "7e2eaafd8c9f005c0b2137e1c09f93fc1009a1d9d0172c74d74f9ba7f6d63ecd",
     "assets/result-format.js": "044d1e9cde1fd44944c338db6a2ff7335e49d274a1e7cf4b08d69751fcb696f3",
@@ -23,6 +23,6 @@
     "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
     "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
     "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a",
-    "report.html": "a6edba4d8394b47133fcfccd2111cc9b613ffbe3b9e527907bc11e5d144d214b"
+    "report.html": "e1f811c24b228ba0c036fb91e26e997a3e34dea2d785512a3c5a59cc754680dc"
   }
 }

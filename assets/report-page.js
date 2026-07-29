@@ -22,6 +22,11 @@ const profileLabels = {
   convex: 'Überhöhung',
   concave: 'Unterwölbung',
 };
+const geometryStatusLabels = {
+  pass: 'erfüllt',
+  fail: 'nicht erfüllt',
+  incomplete: 'noch unvollständig',
+};
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, character => ({
@@ -44,6 +49,7 @@ function geometryRows(geometry, jointType) {
   }
   const profile = profileLabels[geometry.profile_class] || '—';
   const source = aASourceLabels[geometry.aA_source] || '—';
+  const geometryStatus = geometryStatusLabels[geometry.geometry_status?.status] || geometryStatusLabels.incomplete;
   return `<tr><td>Bauteildicke t</td><td>${mm(geometry.t)}</td><td>Nenn-Kehlnahtdicke a</td><td>${mm(geometry.a)}</td></tr>
     <tr><td>Bauteilwinkel γ</td><td>${degree(geometry.gamma)}</td><td>Messtechnische Toleranz</td><td>${mm(geometry.tolerance_mm)}</td></tr>
     <tr><td>Schenkellänge z1</td><td>${mm(geometry.z1)}</td><td>Schenkellänge z2</td><td>${mm(geometry.z2)}</td></tr>
@@ -52,6 +58,7 @@ function geometryRows(geometry, jointType) {
     <tr><td>Profilabweichung</td><td>${escapeHtml(profile)} | ${mm(geometry.profile_h)}</td><td>Ungleichschenkligkeit hz</td><td>${mm(geometry.asymmetry_h)}</td></tr>
     <tr><td>Tatsächliche Kehlnahtdicke aA</td><td>${mm(geometry.aA)}</td><td>Ermittlungsart</td><td>${escapeHtml(source)}</td></tr>
     <tr><td>Direkt gemessenes aA</td><td>${mm(geometry.direct_aA)}</td><td>Direkt gemessene Überhöhung h</td><td>${mm(geometry.direct_h)}</td></tr>
+    <tr><td>Geometriestatus aus Nr. 1.10, 1.16, 1.20 und 1.21</td><td>${escapeHtml(geometryStatus)}</td><td>Messlinie</td><td>Wurzelpunkt bis m auf der Winkelhalbierenden</td></tr>
     <tr><td>Einbrandkerbe 1 an Bauteil 1 (horizontal, z1)</td><td>${mm(geometry.notch1)}</td><td>Einbrandkerbe 2 an Bauteil 2 (senkrecht/abgewinkelt, z2)</td><td>${mm(geometry.notch2)}</td></tr>`;
 }
 

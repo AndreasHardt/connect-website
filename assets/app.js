@@ -1,6 +1,6 @@
-import { createEvaluationService } from './evaluation.js?v=fcaf9265f805';
+import { createEvaluationService } from './evaluation.js?v=948e5e771792';
 import { openReport } from './report.js?v=7e2eaafd8c9f';
-import { computeFilletGeometry, computeFilletNominalMeasurements, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=31dcb30ff6a5';
+import { computeFilletGeometry, computeFilletNominalMeasurements, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=bda6fb5469b7';
 
 const state = {
   config: null,
@@ -8,6 +8,7 @@ const state = {
   lastResult: null,
   service: null,
   geometry: null,
+  geometryStatus: 'incomplete',
   liveTimer: null,
   liveBusy: false,
   initialized: false,
@@ -82,7 +83,7 @@ function jointSvg(type) {
   </svg>`;
 }
 
-function filletGeometrySvg(geometry, nominalA) {
+function filletGeometrySvg(geometry, nominalA, geometryStatus = 'incomplete') {
   if (!geometry?.valid || !geometry.points) return '';
 
   const {root, transition1, transition2, middle, control} = geometry.points;
@@ -92,7 +93,7 @@ function filletGeometrySvg(geometry, nominalA) {
   const target1 = targetLeg === null ? null : {x: targetLeg / Math.sin(gammaRad), y: 0};
   const target2 = targetLeg === null ? null : {x: targetLeg / Math.tan(gammaRad), y: targetLeg};
 
-  const relevantSize = Math.max(geometry.z1, geometry.z2, geometry.m, nominal || 0);
+  const relevantSize = Math.max(geometry.z1, geometry.z2, geometry.m, nominalGeometry.valid ? nominalGeometry.a : 0);
   const overrun = Math.max(5, relevantSize * 0.2);
   const component1Length = Math.max(transition1.x, target1?.x || 0) + overrun;
   const component2Length = Math.max(
@@ -139,12 +140,16 @@ function filletGeometrySvg(geometry, nominalA) {
   const targetPath = target1 && target2
     ? `<path data-contour="target" d="M ${svgPoint(target1)} L ${svgPoint(target2)}" fill="none" stroke="#7f8b93" stroke-width="7" stroke-linecap="round"/>`
     : '';
+  const normalizedStatus = ['pass', 'fail'].includes(geometryStatus) ? geometryStatus : 'incomplete';
+  const statusColor = {pass:'#1f7a4d', fail:'#b33a3a', incomplete:'#7f8b93'}[normalizedStatus];
+  const geometryStatusPath = `<path data-geometry-status="${normalizedStatus}" d="M ${rootSvg} L ${svgPoint(middle)}" fill="none" stroke="${statusColor}" stroke-width="4" stroke-linecap="round"/>`;
 
   return `<svg viewBox="0 0 300 180" role="img" aria-label="Dynamische Plausibilitätsdarstellung der Kehlnaht">
     <path data-component="1" d="M ${rootSvg} L ${component1EndSvg}" fill="none" stroke="#173d5f" stroke-width="10" stroke-linecap="square"/>
     <path data-component="2" d="M ${rootSvg} L ${component2EndSvg}" fill="none" stroke="#173d5f" stroke-width="10" stroke-linecap="square"/>
     ${targetPath}
     <path data-weld-fill d="M ${transition1Svg} Q ${controlSvg} ${transition2Svg} L ${rootSvg} Z" fill="#d7e4eb" opacity=".7"/>
+    ${geometryStatusPath}
     <path data-contour="measured-upper" d="M ${transition1Svg} Q ${controlSvg} ${transition2Svg}" fill="none" stroke="#101820" stroke-width="3.5" stroke-linecap="round"/>
     <path data-contour="measured-lower" d="M ${transition1Svg} L ${rootSvg} L ${transition2Svg}" fill="none" stroke="#101820" stroke-width="3.5" stroke-linejoin="round"/>
   </svg>`;
@@ -202,7 +207,26 @@ function renderGeometrySummary(result) {
     Profilabweichung senkrecht zu b = <strong>${profileText}</strong><br>
     tatsächliche Kehlnahtdicke aA = <strong>${formatMm(result.aA)}</strong>${result.aASource ? ` (${escapeHtml(aASourceLabels[result.aASource])})` : ''}
     ${warnings.length ? `<div class="alert geometry-alert">${warnings.map(item => escapeHtml(item)).join('<br>')}</div>` : ''}${combined}<br>
-    <small>Symmetrie- und Profiltoleranz: ${formatMm(result.tolerance)}; messtechnische, nicht normative Toleranz.</small>`;
+    Geometriestatus (Nr. 1.10, 1.16, 1.20 und 1.21): <span id="fillet-geometry-status" class="badge incomplete">noch unvollständig</span><br>
+    <small>Symmetrie- und Profiltoleranz: ${formatMm(result.tolerance)}; messtechnische, nicht normative Toleranz. Die farbige Linie vom Wurzelpunkt bis m zeigt ausschließlich diesen Geometriestatus; Einbrandkerben und andere separate Kriterien ändern ihre Farbe nicht.</small>`;
+}
+
+function updateFilletGeometryStatus(status) {
+  const normalized = ['pass', 'fail'].includes(status) ? status : 'incomplete';
+  const labels = {pass:'erfüllt', fail:'nicht erfüllt', incomplete:'noch unvollständig'};
+  state.geometryStatus = normalized;
+  if (jointType() === 'fillet' && state.geometry?.valid) {
+    $('#geometry-schematic').innerHTML = filletGeometrySvg(
+      state.geometry,
+      numberOrNull(geometryValue('a')),
+      normalized,
+    );
+  }
+  const label = $('#fillet-geometry-status');
+  if (label) {
+    label.className = `badge ${normalized}`;
+    label.textContent = labels[normalized];
+  }
 }
 
 function refreshGeometry({schedule = true} = {}) {
@@ -215,9 +239,10 @@ function refreshGeometry({schedule = true} = {}) {
     if (schedule) scheduleLiveEvaluation();
     return;
   }
+  state.geometryStatus = 'incomplete';
   const result = computeFilletGeometry(filletGeometryInput());
   state.geometry = result;
-  $('#geometry-schematic').innerHTML = filletGeometrySvg(result, numberOrNull(geometryValue('a')));
+  $('#geometry-schematic').innerHTML = filletGeometrySvg(result, numberOrNull(geometryValue('a')), state.geometryStatus);
   const bField = $('#geo-b');
   const aAField = $('#geo-aA');
   if (bField) bField.value = Number.isFinite(result.b) ? result.b.toFixed(1) : '';
@@ -606,6 +631,7 @@ function setEvaluationState(status) {
 }
 
 function renderIncompleteState(errors = []) {
+  updateFilletGeometryStatus('incomplete');
   state.lastPayload = null;
   state.lastResult = null;
   setEvaluationState('incomplete');
@@ -620,6 +646,7 @@ function renderIncompleteState(errors = []) {
 
 function renderResults(data) {
   const primary = data.primary;
+  updateFilletGeometryStatus(data.geometry?.geometry_status?.status);
   setEvaluationState(primary.status);
   const summary = $('#result-summary');
   summary.querySelector('h2').textContent = primary.status === 'pass'

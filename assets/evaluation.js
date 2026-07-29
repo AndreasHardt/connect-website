@@ -1,5 +1,5 @@
 import { RuleEngine, EngineError, RequestError } from './engine.js?v=bc918a37258f';
-import { normalizeFilletGeometryPayload } from './geometry.js';
+import { deriveFilletGeometryStatus, normalizeFilletGeometryPayload } from './geometry.js';
 
 export function createEvaluationService(library, config) {
   const engine = new RuleEngine(library);
@@ -227,11 +227,15 @@ export function createEvaluationService(library, config) {
     if (errors.length) throw new RequestError(errors.join('\n'));
     const primary = decorateResults(evaluateEdition(normalizedPayload, 2023));
     const comparison = normalizedPayload.compare_2014 ? decorateResults(evaluateEdition(normalizedPayload, 2014)) : null;
+    const geometry = {...(normalizedPayload.geometry ?? {})};
+    if (normalizedPayload.joint_type === 'fillet') {
+      geometry.geometry_status = deriveFilletGeometryStatus(primary);
+    }
     return {
       assistant_version: config.prototype_version,
       app_mode: config.app_mode ?? 'test',
       report: normalizedPayload.report ?? {},
-      geometry: normalizedPayload.geometry ?? {},
+      geometry,
       accessibility: normalizedPayload.accessibility ?? {},
       primary,
       comparison,

@@ -1,6 +1,30 @@
 export const GEOMETRY_TOLERANCE_MM = 0.1;
 export const FILLET_MIN_ANGLE_DEG = 60;
 export const FILLET_MAX_ANGLE_DEG = 120;
+export const FILLET_GEOMETRY_STATUS_RULE_IDS = Object.freeze([
+  'IMP-000010', // Nr. 1.10 – zu große Nahtüberhöhung
+  'IMP-000016', // Nr. 1.16 – Ungleichschenkligkeit
+  'IMP-000020', // Nr. 1.20 – zu kleine Kehlnahtdicke
+  'IMP-000021', // Nr. 1.21 – zu große Kehlnahtdicke
+]);
+
+export function deriveFilletGeometryStatus(inspectionResult = {}) {
+  const resultById = new Map((inspectionResult.results ?? []).map(item => [item.rule_id, item]));
+  const criterionStatuses = Object.fromEntries(
+    FILLET_GEOMETRY_STATUS_RULE_IDS.map(ruleId => [ruleId, resultById.get(ruleId)?.status ?? 'incomplete']),
+  );
+  const statuses = Object.values(criterionStatuses);
+  const status = statuses.includes('fail')
+    ? 'fail'
+    : statuses.every(item => ['pass', 'not_applicable'].includes(item))
+      ? 'pass'
+      : 'incomplete';
+  return {
+    status,
+    rule_ids: [...FILLET_GEOMETRY_STATUS_RULE_IDS],
+    criterion_statuses: criterionStatuses,
+  };
+}
 
 function finitePositive(value) {
   return Number.isFinite(value) && value > 0;
