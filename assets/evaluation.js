@@ -221,6 +221,27 @@ export function createEvaluationService(library, config) {
     });
   }
 
+  function evaluateFilletGeometryStatus(payload) {
+    const reinforcementCriterion = payload.criteria?.['IMP-000010'] ?? {};
+    const reinforcementValues = reinforcementCriterion.values ?? reinforcementCriterion;
+    const dimensionalPayload = {
+      ...payload,
+      criteria: {
+        ...(payload.criteria ?? {}),
+        'IMP-000010': {
+          ...reinforcementCriterion,
+          values: {
+            ...reinforcementValues,
+            // RGL-01 bewertet an Nr. 1.10 ausschließlich h und b.
+            // Der weiche Übergang bleibt Teil der vollständigen Normbewertung.
+            smooth_transition: true,
+          },
+        },
+      },
+    };
+    return deriveFilletGeometryStatus(evaluateEdition(dimensionalPayload, 2023));
+  }
+
   function evaluatePayload(payload) {
     const normalizedPayload = normalizePayload(payload);
     const errors = validatePayload(normalizedPayload);
@@ -229,7 +250,7 @@ export function createEvaluationService(library, config) {
     const comparison = normalizedPayload.compare_2014 ? decorateResults(evaluateEdition(normalizedPayload, 2014)) : null;
     const geometry = {...(normalizedPayload.geometry ?? {})};
     if (normalizedPayload.joint_type === 'fillet') {
-      geometry.geometry_status = deriveFilletGeometryStatus(primary);
+      geometry.geometry_status = evaluateFilletGeometryStatus(normalizedPayload);
     }
     return {
       assistant_version: config.prototype_version,

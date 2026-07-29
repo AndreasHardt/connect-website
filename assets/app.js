@@ -1,4 +1,4 @@
-import { createEvaluationService } from './evaluation.js?v=948e5e771792';
+import { createEvaluationService } from './evaluation.js?v=fea4ea872f1a';
 import { openReport } from './report.js?v=7e2eaafd8c9f';
 import { computeFilletGeometry, computeFilletNominalMeasurements, GEOMETRY_TOLERANCE_MM } from './geometry.js?v=bda6fb5469b7';
 
@@ -801,6 +801,7 @@ function renderResultDetails(item, comparison) {
 
 renderResults = function renderResultsSemantic(data) {
   const primary = data.primary;
+  updateFilletGeometryStatus(data.geometry?.geometry_status?.status);
   setEvaluationState(primary.status);
   const summary = $('#result-summary');
   summary.querySelector('h2').textContent = primary.status === 'pass'
