@@ -1,0 +1,3 @@
+Triggerdatei für Paket 5 – automatische Vorbelegung von z1, z2 und m; wird nicht gemergt.
+Privater Freigabe-Commit: 4572f2e9c0cf769ff6cdacefefc4de090980add9
+Privater Build-Commit: db1d0146dcfd14db033631ebe5daac4f0bb3f9f3
