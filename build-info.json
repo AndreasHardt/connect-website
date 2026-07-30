@@ -1,28 +1,16 @@
 {
-  "application": "Hardt-Wiehl Connect – Schweißnaht mit Qualität",
-  "version": "0.3.0",
+  "application": "Connect – Plattform für Verbindungstechnik",
+  "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "library_version": "0.8 – Datenqualitätsaudit, Scope-Bereinigung und JSON-Exportvorbereitung",
-  "library_content_sha256": "f6d86d698e6dbcad27912cc67613572de9c9dd23cab168c59dcb0499963f6360",
-  "built_at": "2026-07-29T16:28:01.519Z",
+  "built_at": "2026-07-30T09:53:29.686Z",
   "files": {
-    "assets/app.js": "0ca6d54775dcec16e983654c6ae4b05ae0b7d48a7b7c0ac8d3deabbf8e5211dc",
-    "assets/criterion-filter.js": "4a01de6ecc5f68246680f9986130f2364d5b4cf7eed43da211a08dac1574c649",
-    "assets/engine.js": "bc918a37258fb0957f2764366166d0071bdde9dabb11f0192172b9deae02c5cb",
-    "assets/evaluation.js": "fea4ea872f1abaf1a6c4eef6e8d680def035c2be4d9f269114ec9b21260b5bd8",
-    "assets/fillet-geometry-svg.js": "ab8ab806d448e1af33dd17df5b4998acce82ae6cfa4099a3d7c3f5d0d74673f3",
-    "assets/geometry.js": "bda6fb5469b707bcebddaec48fc9df74873f834d8366bb93aee9ce74b9c57bb1",
-    "assets/graphics/README.md": "6659ccf0c9cf99a9f2c9244184c546a2599f50604072523d5e00ece6b6930f96",
-    "assets/graphics/hero-industrial-hall.jpg": "d4a983a8d9f737bd28840bbe931217dd56afa5c0433061fc6006330cd5157038",
-    "assets/report-page.js": "8560960cf9eeb9f6556c2ab6cc665c911980ccb4a844f442a29326ea939e8019",
-    "assets/report.css": "e64c7efb1f9433066f3102360d00192cf6f89bc2d6e4f3f61c1f5abefe5f9413",
-    "assets/report.js": "7e2eaafd8c9f005c0b2137e1c09f93fc1009a1d9d0172c74d74f9ba7f6d63ecd",
-    "assets/result-format.js": "044d1e9cde1fd44944c338db6a2ff7335e49d274a1e7cf4b08d69751fcb696f3",
-    "assets/styles.css": "a4d04d851fb1532b254e620e363af8557a1b74e632512d4f5183ae46a4ca61d9",
-    "data/rules.v1.json": "ba32075329dc31983c04f99314c1b65c2b5a1b5c761a5278784ae02adc141a7a",
-    "data/rules.v1.json.gz": "0937a1555fd3e17f5ccbe8390de7370e4eed953b8126c3aebcaf4cae72d6973c",
-    "data/ui-config.json": "349d3d6ba7235b321c2c4f8e67eb4fb00ef5a622ee217a007a73f64381f01e6a",
-    "report.html": "be86d08fe0ded624b08c4a7ad868e805ed69ddc09c9c78ec6b6bc9f55d767e73"
+    ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
+    ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "404.html": "8eacd36fea85f452e3f7e2b22280249062578d40d545426bba2156ad361a7251",
+    "CNAME": "d85111defc4e4d8a4bcc7bd7bb7048de29f05dca107d94a69790cb2fbebabbb9",
+    "index.html": "2312dd7a49b39cf0ff149e9e573a0be367724a06b629e3f012661e956213cc43",
+    "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+    "styles.css": "6fa3043e1471c5151a3295326af4ff5854b21855f9e85266efb4d977d7e4d905"
   }
 }
