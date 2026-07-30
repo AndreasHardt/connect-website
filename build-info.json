@@ -3,14 +3,14 @@
   "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-07-30T09:53:29.686Z",
+  "built_at": "2026-07-30T19:07:30.577Z",
   "files": {
     ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "404.html": "8eacd36fea85f452e3f7e2b22280249062578d40d545426bba2156ad361a7251",
     "CNAME": "d85111defc4e4d8a4bcc7bd7bb7048de29f05dca107d94a69790cb2fbebabbb9",
-    "index.html": "2312dd7a49b39cf0ff149e9e573a0be367724a06b629e3f012661e956213cc43",
+    "index.html": "8d0f62ee6ef4212bc92880c8860ef082d253b159342b9c23804ebdec74a8c49c",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "styles.css": "6fa3043e1471c5151a3295326af4ff5854b21855f9e85266efb4d977d7e4d905"
+    "styles.css": "c7da18705dc8bc11c013287730b7001f432003f9dd1799d852016c7dd2434d05"
   }
 }
