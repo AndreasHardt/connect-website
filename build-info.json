@@ -3,17 +3,18 @@
   "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-07-31T14:39:19.578Z",
+  "built_at": "2026-08-01T07:51:03.925Z",
   "files": {
     ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "404.html": "8eacd36fea85f452e3f7e2b22280249062578d40d545426bba2156ad361a7251",
     "CNAME": "d85111defc4e4d8a4bcc7bd7bb7048de29f05dca107d94a69790cb2fbebabbb9",
-    "datenschutz.html": "7fe9816b4d992b7a4efdb7f27639ab2a86854f9c698959e4762ad9caac7f8ba8",
-    "impressum.html": "2632b83c249cd649d4c3d1214c4b9b661037f2efe1e95e61476403ffc9cfda8e",
-    "index.html": "b2cae8115db13faba262a1032cc1fb8946121ad990d8f3d2e794ae8e7fa45496",
-    "kontakt.html": "5ec96af34f7d98a655cca0da80896c2307d97ce7f04a27907283e2ab68fc5299",
+    "datenschutz.html": "f4fd99e3c438e94d1e13523ef7db6d3d9e2e43fe1e4f8eed9b60803067192d97",
+    "fachbeitrag-qa-dokumentation-herstellung.html": "aae833e08d1a531ba5510d2125df1726fc7282cdb8676f77e43a7de7628464fa",
+    "impressum.html": "291768881e29988cd2ff152693469375b52c14bdf5849fe0701a0109d732bca8",
+    "index.html": "96f350be047931abe8d79faf00ab4143a69f5fedf8633b65c4e98d8dbd088411",
+    "kontakt.html": "76a584c741eabbb83463b7fab74765468a2e8d2162d10da7dd90986f1e9c90a0",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "styles.css": "c7c34da96b0c3216fad5f21ed2eb790f99f9d54ca4cb10657953f810ca5477fc"
+    "styles.css": "3409971214fe65fdc65697b9b8ddc7864aca678e19de780edcaa4ccb9a31da79"
   }
 }
