@@ -9,71 +9,76 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Connect – Praxislösungen für Verbindungstechnik</title>
   <meta name="description" content="Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen für anspruchsvolle Aufgaben der Verbindungstechnik.">
-  <link rel="stylesheet" href="./styles.css?v=a6b4f570fd58">
+  <link rel="stylesheet" href="./styles.css?v=89e835d3406c">
   <link rel="stylesheet" href="./card-types.css">
 </head>
 <body data-app-mode="test">
-  <div class="test-banner"><strong>TESTSYSTEM</strong><span>Die Plattform befindet sich im Aufbau.</span></div>
+  <div class="test-banner"><strong data-i18n="test.label">TESTSYSTEM</strong><span data-i18n="test.message">Die Plattform befindet sich im Aufbau.</span></div>
 
   <header class="site-header">
-    <a class="wordmark" href="./" aria-label="Connect Startseite">CONNECT</a>
-    <nav aria-label="Hauptnavigation">
-      <a href="#schweisstechnik">Schweißtechnik</a>
-      <a href="#schraubtechnik">Schraubtechnik</a>
-      <a href="./kontakt.html">Kontakt</a>
+    <a class="wordmark" href="./" aria-label="Connect Startseite" data-i18n-aria-label="brand.home">CONNECT</a>
+    <nav aria-label="Hauptnavigation" data-i18n-aria-label="nav.main">
+      <a href="#schweisstechnik" data-i18n="nav.welding">Schweißtechnik</a>
+      <a href="#schraubtechnik" data-i18n="nav.bolting">Schraubtechnik</a>
+      <a href="./kontakt.html" data-i18n="nav.contact">Kontakt</a>
+    </nav>
+    <nav class="language-switcher" aria-label="Sprachauswahl" data-i18n-aria-label="language.selector">
+      <a href="?lang=de" lang="de" data-lang="de">DE</a>
+      <a href="?lang=en" lang="en" data-lang="en">EN</a>
+      <a href="?lang=fr" lang="fr" data-lang="fr">FR</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
-      <p class="kicker">Fachwissen | Praxiserfahrung | digitale Arbeitshilfen</p>
-      <h1>Praxislösungen für Verbindungstechnik</h1>
-      <p class="lead">Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen – damit anspruchsvolle Aufgaben einfacher, sicherer und schneller gelingen.</p>
+      <p class="kicker" data-i18n="hero.kicker">Fachwissen | Praxiserfahrung | digitale Arbeitshilfen</p>
+      <h1 data-i18n="hero.title">Praxislösungen für Verbindungstechnik</h1>
+      <p class="lead" data-i18n="hero.lead">Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen – damit anspruchsvolle Aufgaben einfacher, sicherer und schneller gelingen.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#schweisstechnik">Schweißtechnik öffnen</a>
-        <a class="button secondary" href="./kontakt.html">Kontakt aufnehmen</a>
+        <a class="button primary" href="#schweisstechnik" data-i18n="hero.weldingCta">Schweißtechnik öffnen</a>
+        <a class="button secondary" href="./kontakt.html" data-i18n="hero.contactCta">Kontakt aufnehmen</a>
       </div>
     </section>
 
     <section id="schweisstechnik" class="section">
       <div class="section-heading">
-        <p class="kicker">Fachbereich</p>
-        <h2>Schweißtechnik</h2>
-        <p>Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Fachartikel erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
+        <p class="kicker" data-i18n="section.label">Fachbereich</p>
+        <h2 data-i18n="welding.title">Schweißtechnik</h2>
+        <p data-i18n="welding.intro">Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Fachartikel erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
       </div>
 
       <div class="content-group">
         <div class="content-group-heading">
-          <p class="content-label application-label">Fachanwendungen</p>
-          <p>Interaktive Werkzeuge führen durch Messwerterfassung, Plausibilitätsprüfung, Bewertung und dokumentierbare Ergebnisdarstellung.</p>
+          <p class="content-label application-label" data-i18n="applications.label">Fachanwendungen</p>
+          <p data-i18n="applications.intro">Interaktive Werkzeuge führen durch Messwerterfassung, Plausibilitätsprüfung, Bewertung und dokumentierbare Ergebnisdarstellung.</p>
         </div>
         <div class="cards application-cards">
           <article class="card application-card">
-            <span class="status protected">Geschützter Testzugang</span>
-            <h3>Stumpfnahtbewertung</h3>
-            <p>Geführte Bewertung von Unregelmäßigkeiten an Stumpfnähten nach DIN EN ISO 5817:2023. Die Anwendung verbindet Messwerterfassung, Plausibilitätsprüfung, den optionalen Vergleich mit der Ausgabe 2014 und einen erzeugbaren Prüfbericht.</p>
-            <a class="card-link" href="https://stumpfnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
+            <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
+            <h3 data-i18n="butt.title">Stumpfnahtbewertung</h3>
+            <p data-i18n="butt.description">Geführte Bewertung von Unregelmäßigkeiten an Stumpfnähten nach DIN EN ISO 5817:2023. Die Anwendung verbindet Messwerterfassung, Plausibilitätsprüfung, den optionalen Vergleich mit der Ausgabe 2014 und einen erzeugbaren Prüfbericht.</p>
+            <a class="card-link" href="https://stumpfnaht.hardt-wiehl.de" data-i18n="applications.open">Fachanwendung öffnen</a>
           </article>
           <article class="card application-card">
-            <span class="status protected">Geschützter Testzugang</span>
-            <h3>Kehlnahtbewertung</h3>
-            <p>Geführte Bewertung von Kehlnähten nach DIN EN ISO 5817:2023. Messwerte, geometrische Plausibilitätsdarstellung und relevante Prüfkriterien werden in einem nachvollziehbaren Ablauf zusammengeführt und für den Bericht aufbereitet.</p>
-            <a class="card-link" href="https://kehlnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
+            <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
+            <h3 data-i18n="fillet.title">Kehlnahtbewertung</h3>
+            <p data-i18n="fillet.description">Geführte Bewertung von Kehlnähten nach DIN EN ISO 5817:2023. Messwerte, geometrische Plausibilitätsdarstellung und relevante Prüfkriterien werden in einem nachvollziehbaren Ablauf zusammengeführt und für den Bericht aufbereitet.</p>
+            <a class="card-link" href="https://kehlnaht.hardt-wiehl.de" data-i18n="applications.open">Fachanwendung öffnen</a>
           </article>
         </div>
       </div>
 
       <div class="content-group">
         <div class="content-group-heading">
-          <p class="content-label article-label">Fachartikel</p>
-          <p>Technische Fallanalysen mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
+          <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
+          <p data-i18n="articles.weldingIntro">Technische Fallanalysen mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
         </div>
         <div class="cards article-cards">
           <article class="card feature-card article-card">
-            <span class="status public">Fachbeitrag</span>
-            <h3>Wenn vollständige Unterlagen trügerische Sicherheit schaffen</h3>
-            <p>Der Einsturz am Kew Recreation Centre zeigt, warum ein vollständiges QA-Paket noch keine Übereinstimmung von Dokumentation und Herstellung beweist. Der Beitrag erklärt, wie Zeichnungen, WPS, Qualifikationen, Prüfplanung und Prüfberichte bauteilbezogen verifiziert werden müssen – relevant für Schweißaufsicht, Fertigung, Prüfung, Einkauf und technische Projektverantwortung.</p>
-            <a class="card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html">Fachbeitrag lesen</a>
+            <span class="status public" data-i18n="status.article">Fachbeitrag</span>
+            <h3 data-i18n="qa.title">Wenn vollständige Unterlagen trügerische Sicherheit schaffen</h3>
+            <p data-i18n="qa.description">Der Einsturz am Kew Recreation Centre zeigt, warum ein vollständiges QA-Paket noch keine Übereinstimmung von Dokumentation und Herstellung beweist. Der Beitrag erklärt, wie Zeichnungen, WPS, Qualifikationen, Prüfplanung und Prüfberichte bauteilbezogen verifiziert werden müssen – relevant für Schweißaufsicht, Fertigung, Prüfung, Einkauf und technische Projektverantwortung.</p>
+            <a class="card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html" data-i18n="articles.read">Fachbeitrag lesen</a>
           </article>
         </div>
       </div>
@@ -81,40 +86,36 @@
 
     <section id="schraubtechnik" class="section muted-section">
       <div class="section-heading">
-        <p class="kicker">Fachbereich</p>
-        <h2>Schraubtechnik</h2>
-        <p>Fachbeiträge zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
+        <p class="kicker" data-i18n="section.label">Fachbereich</p>
+        <h2 data-i18n="bolting.title">Schraubtechnik</h2>
+        <p data-i18n="bolting.intro">Fachbeiträge zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
       </div>
 
       <div class="content-group">
         <div class="content-group-heading">
-          <p class="content-label article-label">Fachartikel</p>
-          <p>Praxisnahe Analysen von Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
+          <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
+          <p data-i18n="articles.boltingIntro">Praxisnahe Analysen von Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
         </div>
         <div class="cards article-cards">
           <article class="card feature-card article-card">
-            <span class="status public">Fachbeitrag</span>
-            <h3>Warum eine kleine Änderung tragische Auswirkungen hatte</h3>
-            <p>Die technische Fallanalyse des Hyatt-Regency-Einsturzes behandelt einen geänderten Hängestab- und Mutteranschluss. Sie erklärt den veränderten Lastpfad, die örtliche Überbeanspruchung des Kastenträgers, den Versagensmechanismus und die berufsrechtlichen Folgen – mit besonderem Nutzen für Konstruktion, Statik, Werkstattplanung, Montage und die Freigabe von Änderungen.</p>
-            <a class="card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html">Fachbeitrag lesen</a>
+            <span class="status public" data-i18n="status.article">Fachbeitrag</span>
+            <h3 data-i18n="hyatt.title">Warum eine kleine Änderung tragische Auswirkungen hatte</h3>
+            <p data-i18n="hyatt.description">Die technische Fallanalyse des Hyatt-Regency-Einsturzes behandelt einen geänderten Hängestab- und Mutteranschluss. Sie erklärt den veränderten Lastpfad, die örtliche Überbeanspruchung des Kastenträgers, den Versagensmechanismus und die berufsrechtlichen Folgen – mit besonderem Nutzen für Konstruktion, Statik, Werkstattplanung, Montage und die Freigabe von Änderungen.</p>
+            <a class="card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html" data-i18n="articles.read">Fachbeitrag lesen</a>
           </article>
         </div>
-      </div>
-
-      <div class="development-note">
-        <span class="coming-soon">Fachanwendungen in Vorbereitung</span>
-        <p>Digitale Arbeitshilfen zur Schraubtechnik werden schrittweise ergänzt.</p>
       </div>
     </section>
   </main>
 
   <footer>
     <div><strong>CONNECT</strong><span>connect.hardt-wiehl.de</span></div>
-    <nav aria-label="Rechtliche Hinweise">
-      <a href="./kontakt.html">Kontakt</a>
-      <a href="./datenschutz.html">Datenschutz</a>
-      <a href="./impressum.html">Impressum</a>
+    <nav aria-label="Rechtliche Hinweise" data-i18n-aria-label="footer.legal">
+      <a href="./kontakt.html" data-i18n="nav.contact">Kontakt</a>
+      <a href="./datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+      <a href="./impressum.html" data-i18n="footer.imprint">Impressum</a>
     </nav>
   </footer>
+  <script type="module" src="./i18n.js?v=b3122276e4e8"></script>
 </body>
 </html>
