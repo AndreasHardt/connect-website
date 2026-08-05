@@ -3,7 +3,7 @@
   "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-08-05T13:29:19.382Z",
+  "built_at": "2026-08-05T14:05:12.263Z",
   "files": {
     ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -16,13 +16,14 @@
     "fachbeitrag-hyatt-kleine-aenderung.html": "e9596dc24a04b3421598872f400748ade27c5cb6476da5297fb03e6c4d3a5408",
     "fachbeitrag-qa-dokumentation-herstellung.html": "f4acbc9035c71a2b48d560bcbb870376f275500c0d457cb04e2db42619d1546f",
     "fachbeitrag-tretten-blockscheren.html": "7c210aaf56f2fe3c90f9908f557fcdc3a616cce3b3e7a9865850598c6faafbb0",
-    "i18n/de.json": "4068add47bb41953b3672ca03e8e2e70d4659e864e6a4ad37403488745e3c43f",
-    "i18n/en.json": "d4982fc84959032714e5125b92006537fe89048abe579c7a70f7d43750972a24",
-    "i18n/fr.json": "24f7187446ee28c4652773b85a89debc0f491f4cd21c9c3a74fba37b159f6e49",
+    "i18n/de.json": "fadf86de82d15e3cbe16b1c0e7e550e2ecd3a83f202f99009d4de6d3d971de52",
+    "i18n/en.json": "564c01f491e091aeeac7f97ed3d410118bc6ee2ae5d0b4684fb5ad8c8f2e89d2",
+    "i18n/fr.json": "94cc10bb2ca5ab06e5ddfff3925ba6170d8a62b0dd0164eec6666fdf1458eade",
     "i18n.js": "b3122276e4e8763bf5b885e33ef7b45b8a93acb06e7325647334251155461b30",
     "impressum.html": "d5171b17f0bd868cdb17f9218223fd532af9165a1a6321849b3d3afb03ab61bd",
-    "index.html": "957a4070058c2b16aad6281bc34ad460677df5d59f20e7454e90e93abe02e8f5",
+    "index.html": "a61299d70dc03b943cf5d3725ad69ba1fdf88b8067c9294921e03adf2f5964b2",
     "kontakt.html": "b63a33d1be8a9ed8d588a615bd665fdd93d4eb49f411d2880411d41ef3f47d27",
+    "portal-refinements.css": "1fc6e7654c513f5ac716a7f4defcb96a81ad9c270c1ea948df2ae3bd49b7d23a",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
     "styles.css": "3c611c636701e63aa051456a3a0272a3facf5fac0c0c7f90640ab6e1ad243111"
   }

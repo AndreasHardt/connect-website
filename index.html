@@ -11,6 +11,7 @@
   <meta name="description" content="Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen für anspruchsvolle Aufgaben der Verbindungstechnik.">
   <link rel="stylesheet" href="./styles.css?v=3c611c636701">
   <link rel="stylesheet" href="./card-types.css">
+  <link rel="stylesheet" href="./portal-refinements.css">
 </head>
 <body data-app-mode="test">
   <div class="test-banner"><strong data-i18n="test.label">TESTSYSTEM</strong><span data-i18n="test.message">Die Plattform befindet sich im Aufbau.</span></div>
@@ -20,6 +21,7 @@
     <nav aria-label="Hauptnavigation" data-i18n-aria-label="nav.main">
       <a href="#schweisstechnik" data-i18n="nav.welding">Schweißtechnik</a>
       <a href="#schraubtechnik" data-i18n="nav.bolting">Schraubtechnik</a>
+      <a href="#fachartikel" data-i18n="nav.articles">Fachartikel</a>
       <a href="./kontakt.html" data-i18n="nav.contact">Kontakt</a>
     </nav>
     <nav class="language-switcher" aria-label="Sprachauswahl" data-i18n-aria-label="language.selector">
@@ -34,10 +36,6 @@
       <p class="kicker" data-i18n="hero.kicker">Fachwissen | Praxiserfahrung | digitale Arbeitshilfen</p>
       <h1 data-i18n="hero.title">Praxislösungen für Verbindungstechnik</h1>
       <p class="lead" data-i18n="hero.lead">Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen – damit anspruchsvolle Aufgaben einfacher, sicherer und schneller gelingen.</p>
-      <div class="hero-actions">
-        <a class="button primary" href="#schweisstechnik" data-i18n="hero.weldingCta">Schweißtechnik öffnen</a>
-        <a class="button secondary" href="./kontakt.html" data-i18n="hero.contactCta">Kontakt aufnehmen</a>
-      </div>
     </section>
 
     <section id="schweisstechnik" class="section welding-section">
@@ -53,18 +51,16 @@
           <p data-i18n="applications.intro">Interaktive Werkzeuge führen durch Messwerterfassung, Plausibilitätsprüfung, Bewertung und dokumentierbare Ergebnisdarstellung.</p>
         </div>
         <div class="cards application-cards">
-          <article class="card application-card">
+          <a class="card application-card application-card-link" href="https://stumpfnaht.hardt-wiehl.de">
             <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
             <h3 data-i18n="butt.title">Stumpfnahtbewertung</h3>
             <p data-i18n="butt.description">Geführte Bewertung von Unregelmäßigkeiten an Stumpfnähten nach DIN EN ISO 5817:2023. Die Anwendung verbindet Messwerterfassung, Plausibilitätsprüfung, den optionalen Vergleich mit der Ausgabe 2014 und einen erzeugbaren Prüfbericht.</p>
-            <a class="card-link" href="https://stumpfnaht.hardt-wiehl.de" data-i18n="applications.open">Fachanwendung öffnen</a>
-          </article>
-          <article class="card application-card">
+          </a>
+          <a class="card application-card application-card-link" href="https://kehlnaht.hardt-wiehl.de">
             <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
             <h3 data-i18n="fillet.title">Kehlnahtbewertung</h3>
             <p data-i18n="fillet.description">Geführte Bewertung von Kehlnähten nach DIN EN ISO 5817:2023. Messwerte, geometrische Plausibilitätsdarstellung und relevante Prüfkriterien werden in einem nachvollziehbaren Ablauf zusammengeführt und für den Bericht aufbereitet.</p>
-            <a class="card-link" href="https://kehlnaht.hardt-wiehl.de" data-i18n="applications.open">Fachanwendung öffnen</a>
-          </article>
+          </a>
         </div>
       </div>
 
@@ -107,6 +103,41 @@
             <p>Die Tretten-Brücke stürzte nicht unter einer nachgewiesenen Überlast ein. Wahrscheinlich hatte wiederholter Schwerverkehr einen hoch ausgelasteten Holz-Stahl-Anschluss geschwächt. Der Fall zeigt, warum ein rechnerisch erkannter Mangel nicht durch Sichtprüfungen verwaltet werden kann.</p>
           </a>
         </div>
+      </div>
+    </section>
+
+    <section id="fachartikel" class="section articles-index-section">
+      <div class="section-heading">
+        <p class="kicker" data-i18n="articlesIndex.kicker">Übersicht</p>
+        <h2 data-i18n="articlesIndex.title">Fachartikel</h2>
+        <p data-i18n="articlesIndex.intro">Alle veröffentlichten Fallanalysen in alphabetischer Reihenfolge nach Bauwerk oder Objekt. Zu jedem Beitrag werden das Veröffentlichungsdatum und der zugehörige Fachbereich angezeigt.</p>
+      </div>
+
+      <div class="article-index-list" aria-label="Alphabetisches Fachartikelregister">
+        <a class="article-index-item" href="./fachbeitrag-hyatt-kleine-aenderung.html">
+          <span class="article-index-title" data-i18n="articlesIndex.hyatt">Hyatt Regency Hotel – Atriumlaufstege</span>
+          <span class="article-index-meta">
+            <time datetime="2026-08-04" data-i18n="articlesIndex.hyattDate">4. August 2026</time>
+            <span aria-hidden="true">·</span>
+            <span class="article-index-area bolting-index" data-i18n="bolting.title">Schraubtechnik</span>
+          </span>
+        </a>
+        <a class="article-index-item" href="./fachbeitrag-qa-dokumentation-herstellung.html">
+          <span class="article-index-title" data-i18n="articlesIndex.kew">Kew Recreation Centre – Stahltragwerk</span>
+          <span class="article-index-meta">
+            <time datetime="2026-08-01" data-i18n="articlesIndex.kewDate">1. August 2026</time>
+            <span aria-hidden="true">·</span>
+            <span class="article-index-area welding-index" data-i18n="welding.title">Schweißtechnik</span>
+          </span>
+        </a>
+        <a class="article-index-item" href="./fachbeitrag-tretten-blockscheren.html">
+          <span class="article-index-title" data-i18n="articlesIndex.tretten">Tretten-Brücke</span>
+          <span class="article-index-meta">
+            <time datetime="2026-08-05" data-i18n="articlesIndex.trettenDate">5. August 2026</time>
+            <span aria-hidden="true">·</span>
+            <span class="article-index-area bolting-index" data-i18n="bolting.title">Schraubtechnik</span>
+          </span>
+        </a>
       </div>
     </section>
   </main>
