@@ -11,6 +11,14 @@
   --line: #cbd5db;
   --success: #246b4a;
   --warning: #8a5b00;
+  --welding-soft: #e4f1f7;
+  --welding-soft-strong: #cfe5ef;
+  --welding-accent: #3f7898;
+  --welding-accent-dark: #2f607b;
+  --bolting-soft: #e7f2e9;
+  --bolting-soft-strong: #d3e7d9;
+  --bolting-accent: #4f8063;
+  --bolting-accent-dark: #355c46;
   --radius: 14px;
   --shadow: 0 18px 45px rgba(38, 55, 70, .11);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -165,6 +173,8 @@ footer {
 
 .section { background: var(--white); }
 .section + .section { border-top: 1px solid var(--line); }
+.welding-section { background: var(--welding-soft); }
+.bolting-section { background: var(--bolting-soft); }
 .section-heading { max-width: 760px; }
 .section-heading h2 {
   margin: .2rem 0 .8rem;
@@ -300,6 +310,37 @@ footer {
   color: rgba(255,255,255,.76);
   font-size: .95rem;
 }
+
+body:has(.back-link a[href="./#schweisstechnik"]) {
+  --article-soft: var(--welding-soft);
+  --article-soft-strong: var(--welding-soft-strong);
+  --article-accent: var(--welding-accent);
+  --article-accent-dark: var(--welding-accent-dark);
+}
+body:has(.back-link a[href="./#schraubtechnik"]) {
+  --article-soft: var(--bolting-soft);
+  --article-soft-strong: var(--bolting-soft-strong);
+  --article-accent: var(--bolting-accent);
+  --article-accent-dark: var(--bolting-accent-dark);
+}
+body:has(.back-link a[href^="./#"]) .article-hero {
+  color: var(--navy);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,.72), transparent 36%),
+    linear-gradient(118deg, var(--article-soft-strong), var(--article-soft));
+  border-bottom: 1px solid var(--article-accent);
+}
+body:has(.back-link a[href^="./#"]) .article-hero .kicker {
+  color: var(--article-accent-dark);
+}
+body:has(.back-link a[href^="./#"]) .article-hero .lead {
+  color: #344650;
+  text-shadow: none;
+}
+body:has(.back-link a[href^="./#"]) .article-meta {
+  color: #52626c;
+}
+
 .article-content {
   max-width: 920px;
   margin: 0 auto;
@@ -321,6 +362,10 @@ footer {
   background: #edf2f4;
   font-size: 1.13rem;
 }
+body:has(.back-link a[href^="./#"]) .article-intro {
+  border-left-color: var(--article-accent);
+  background: var(--article-soft);
+}
 .article-chain {
   max-width: none;
   padding: 1.25rem 1.4rem;
@@ -328,6 +373,9 @@ footer {
   color: #fff;
   background: var(--navy);
   overflow-wrap: anywhere;
+}
+body:has(.back-link a[href^="./#"]) .article-chain {
+  background: var(--article-accent-dark);
 }
 .article-content ol,
 .article-content ul { max-width: 780px; padding-left: 1.4rem; }
@@ -339,6 +387,9 @@ footer {
 }
 .article-sources li { color: var(--muted); }
 .back-link { margin-top: 2.5rem; }
+body:has(.back-link a[href^="./#"]) .back-link .text-link {
+  color: var(--article-accent-dark);
+}
 
 footer {
   display: grid;

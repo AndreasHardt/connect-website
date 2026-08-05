@@ -3,7 +3,7 @@
   "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-08-05T12:48:28.567Z",
+  "built_at": "2026-08-05T13:29:19.382Z",
   "files": {
     ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -11,19 +11,19 @@
     "CNAME": "d85111defc4e4d8a4bcc7bd7bb7048de29f05dca107d94a69790cb2fbebabbb9",
     "article-video.css": "2b770edd450c805cd25fdf392b49c12c2cdc3c2fb155a89b223b317ccfb5ef0d",
     "assets/hero-connect-stahlhalle-20260805.webp": "954996e20a86dbfb235453cde62f9665758bdcbddd7728aaacafbdb9f116e4e7",
-    "card-types.css": "b6f432ebf4e286fe039dc194adccbd9a7179db9c34451319ee78f44c57b10868",
-    "datenschutz.html": "41ae9a3da90d468e636f37f1944bee0b049fc593cbd789d6e91db2c1c81b48d5",
-    "fachbeitrag-hyatt-kleine-aenderung.html": "926bfe7e8ed345b9614575784da3b1800e1a27df4c6c46b44ae247deb8fb14ac",
-    "fachbeitrag-qa-dokumentation-herstellung.html": "2978206c065f3de162898850fac28b9bfa30e9127aafce8c61962e3e520210ff",
+    "card-types.css": "5d450f7698d2a693086341651fe7b9399ba20f4b60b7fc225b504ad7b7e5aaee",
+    "datenschutz.html": "993903427dc604bc89cb293555932a02d7c0b860a66d9ea4dffb687e099598de",
+    "fachbeitrag-hyatt-kleine-aenderung.html": "e9596dc24a04b3421598872f400748ade27c5cb6476da5297fb03e6c4d3a5408",
+    "fachbeitrag-qa-dokumentation-herstellung.html": "f4acbc9035c71a2b48d560bcbb870376f275500c0d457cb04e2db42619d1546f",
+    "fachbeitrag-tretten-blockscheren.html": "7c210aaf56f2fe3c90f9908f557fcdc3a616cce3b3e7a9865850598c6faafbb0",
     "i18n/de.json": "4068add47bb41953b3672ca03e8e2e70d4659e864e6a4ad37403488745e3c43f",
     "i18n/en.json": "d4982fc84959032714e5125b92006537fe89048abe579c7a70f7d43750972a24",
     "i18n/fr.json": "24f7187446ee28c4652773b85a89debc0f491f4cd21c9c3a74fba37b159f6e49",
     "i18n.js": "b3122276e4e8763bf5b885e33ef7b45b8a93acb06e7325647334251155461b30",
-    "impressum.html": "3dac903638a7dfd9626adb5c19e0f4fdfe1f007670d51698845f3a406afab6be",
-    "index.html": "b24528ca6c67101e38699ea0425560f5d61133eb17ba08308f05cbfcfe1d7236",
-    "kontakt.html": "9f186b5999bf6a0c65215864b8fae8502e715a0d68f86d1e842009f6d882e2d3",
+    "impressum.html": "d5171b17f0bd868cdb17f9218223fd532af9165a1a6321849b3d3afb03ab61bd",
+    "index.html": "957a4070058c2b16aad6281bc34ad460677df5d59f20e7454e90e93abe02e8f5",
+    "kontakt.html": "b63a33d1be8a9ed8d588a615bd665fdd93d4eb49f411d2880411d41ef3f47d27",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "styles.css": "89e835d3406c32d01a7a46f6c54bc92d80a5eef8a914dfad0549ad40ee588b7a",
-    "fachbeitrag-tretten-blockscheren.html": "b53678129624e5c2ba26fcd594e1947489db03f16a1bc4f4d9192d75f5ab3bb9"
+    "styles.css": "3c611c636701e63aa051456a3a0272a3facf5fac0c0c7f90640ab6e1ad243111"
   }
 }

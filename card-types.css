@@ -26,7 +26,8 @@
 }
 
 .application-label { color: var(--blue-dark); }
-.article-label { color: #725f2d; }
+.welding-section .article-label { color: var(--welding-accent-dark); }
+.bolting-section .article-label { color: var(--bolting-accent-dark); }
 
 .application-card {
   border-color: #9dbdcd;
@@ -44,10 +45,6 @@
   box-shadow: 0 18px 45px rgba(98, 82, 42, .10);
 }
 
-.article-card .card-link {
-  background: #665329;
-}
-
 .application-card::before,
 .article-card::before {
   display: block;
@@ -59,6 +56,41 @@
 
 .application-card::before { background: var(--blue); }
 .article-card::before { background: #9a8246; }
+
+.article-card-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.article-card-link:hover {
+  transform: translateY(-4px);
+  border-color: #a98d4a;
+  background: linear-gradient(180deg, #fffef9, #ece5d3);
+  box-shadow: 0 24px 54px rgba(73, 60, 28, .18);
+}
+
+.article-card-link:hover h3 {
+  text-decoration: underline;
+  text-decoration-thickness: .08em;
+  text-underline-offset: .16em;
+}
+
+.article-card-link:focus-visible {
+  outline: 3px solid var(--blue-dark);
+  outline-offset: 4px;
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(38, 55, 70, .18);
+}
+
+.article-card-link:active {
+  transform: translateY(0);
+}
 
 .development-note {
   max-width: 780px;
@@ -72,6 +104,12 @@
 .development-note p {
   margin: .7rem 0 0;
   color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-card-link { transition: none; }
+  .article-card-link:hover,
+  .article-card-link:focus-visible { transform: none; }
 }
 
 @media (max-width: 820px) {
