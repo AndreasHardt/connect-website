@@ -10,6 +10,7 @@
   <title>Connect – Praxislösungen für Verbindungstechnik</title>
   <meta name="description" content="Connect verbindet ausgewähltes Detailwissen mit konkreten Arbeitshilfen für anspruchsvolle Aufgaben der Verbindungstechnik.">
   <link rel="stylesheet" href="./styles.css?v=a6b4f570fd58">
+  <link rel="stylesheet" href="./card-types.css">
 </head>
 <body data-app-mode="test">
   <div class="test-banner"><strong>TESTSYSTEM</strong><span>Die Plattform befindet sich im Aufbau.</span></div>
@@ -38,43 +39,72 @@
       <div class="section-heading">
         <p class="kicker">Fachbereich</p>
         <h2>Schweißtechnik</h2>
-        <p>Digitale Bewertung von Schweißnähten nach DIN EN ISO 5817. Die Berechnung erfolgt lokal im Browser; Messwerte und Ergebnisse werden nicht zentral gespeichert.</p>
+        <p>Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Fachartikel erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
       </div>
-      <div class="cards">
-        <article class="card">
-          <span class="status protected">Geschützter Testzugang</span>
-          <h3>Stumpfnahtbewertung</h3>
-          <p>Bewertungsassistent für Stumpfnähte mit Ausgabe 2023 und optionalem Vergleich zur Ausgabe 2014.</p>
-          <a class="card-link" href="https://stumpfnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
-        </article>
-        <article class="card">
-          <span class="status protected">Geschützter Testzugang</span>
-          <h3>Kehlnahtbewertung</h3>
-          <p>Bewertungsassistent für Kehlnähte einschließlich geometrischer Plausibilitätsdarstellung und Bericht.</p>
-          <a class="card-link" href="https://kehlnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
-        </article>
-        <article class="card feature-card">
-          <span class="status public">Fachbeitrag</span>
-          <h3>Warum eine kleine Änderung tragische Auswirkungen hatte</h3>
-          <p>Der Einsturz der Hyatt-Regency-Laufstege zeigt, warum eine montagefreundliche Änderung den Lastpfad verändert und einen örtlichen Anschluss überlastet hat.</p>
-          <a class="card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html">Fachbeitrag lesen</a>
-        </article>
-        <article class="card feature-card">
-          <span class="status public">Fachbeitrag</span>
-          <h3>Wenn vollständige Unterlagen trügerische Sicherheit schaffen</h3>
-          <p>Der Einsturz am Kew Recreation Centre zeigt, warum ein vollständiges QA-Paket noch keine Übereinstimmung von Dokumentation und Herstellung beweist.</p>
-          <a class="card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html">Fachbeitrag lesen</a>
-        </article>
+
+      <div class="content-group">
+        <div class="content-group-heading">
+          <p class="content-label application-label">Fachanwendungen</p>
+          <p>Interaktive Werkzeuge führen durch Messwerterfassung, Plausibilitätsprüfung, Bewertung und dokumentierbare Ergebnisdarstellung.</p>
+        </div>
+        <div class="cards application-cards">
+          <article class="card application-card">
+            <span class="status protected">Geschützter Testzugang</span>
+            <h3>Stumpfnahtbewertung</h3>
+            <p>Geführte Bewertung von Unregelmäßigkeiten an Stumpfnähten nach DIN EN ISO 5817:2023. Die Anwendung verbindet Messwerterfassung, Plausibilitätsprüfung, den optionalen Vergleich mit der Ausgabe 2014 und einen erzeugbaren Prüfbericht.</p>
+            <a class="card-link" href="https://stumpfnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
+          </article>
+          <article class="card application-card">
+            <span class="status protected">Geschützter Testzugang</span>
+            <h3>Kehlnahtbewertung</h3>
+            <p>Geführte Bewertung von Kehlnähten nach DIN EN ISO 5817:2023. Messwerte, geometrische Plausibilitätsdarstellung und relevante Prüfkriterien werden in einem nachvollziehbaren Ablauf zusammengeführt und für den Bericht aufbereitet.</p>
+            <a class="card-link" href="https://kehlnaht.hardt-wiehl.de">Fachanwendung öffnen</a>
+          </article>
+        </div>
+      </div>
+
+      <div class="content-group">
+        <div class="content-group-heading">
+          <p class="content-label article-label">Fachartikel</p>
+          <p>Technische Fallanalysen mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
+        </div>
+        <div class="cards article-cards">
+          <article class="card feature-card article-card">
+            <span class="status public">Fachbeitrag</span>
+            <h3>Wenn vollständige Unterlagen trügerische Sicherheit schaffen</h3>
+            <p>Der Einsturz am Kew Recreation Centre zeigt, warum ein vollständiges QA-Paket noch keine Übereinstimmung von Dokumentation und Herstellung beweist. Der Beitrag erklärt, wie Zeichnungen, WPS, Qualifikationen, Prüfplanung und Prüfberichte bauteilbezogen verifiziert werden müssen – relevant für Schweißaufsicht, Fertigung, Prüfung, Einkauf und technische Projektverantwortung.</p>
+            <a class="card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html">Fachbeitrag lesen</a>
+          </article>
+        </div>
       </div>
     </section>
 
     <section id="schraubtechnik" class="section muted-section">
       <div class="section-heading">
-        <p class="kicker">Nächster Fachbereich</p>
+        <p class="kicker">Fachbereich</p>
         <h2>Schraubtechnik</h2>
-        <p>Ausgewählte Praxisthemen, Detailwissen und digitale Arbeitshilfen zur Schraubtechnik sind für den weiteren Ausbau vorgesehen.</p>
+        <p>Fachbeiträge zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
       </div>
-      <span class="coming-soon">In Vorbereitung</span>
+
+      <div class="content-group">
+        <div class="content-group-heading">
+          <p class="content-label article-label">Fachartikel</p>
+          <p>Praxisnahe Analysen von Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
+        </div>
+        <div class="cards article-cards">
+          <article class="card feature-card article-card">
+            <span class="status public">Fachbeitrag</span>
+            <h3>Warum eine kleine Änderung tragische Auswirkungen hatte</h3>
+            <p>Die technische Fallanalyse des Hyatt-Regency-Einsturzes behandelt einen geänderten Hängestab- und Mutteranschluss. Sie erklärt den veränderten Lastpfad, die örtliche Überbeanspruchung des Kastenträgers, den Versagensmechanismus und die berufsrechtlichen Folgen – mit besonderem Nutzen für Konstruktion, Statik, Werkstattplanung, Montage und die Freigabe von Änderungen.</p>
+            <a class="card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html">Fachbeitrag lesen</a>
+          </article>
+        </div>
+      </div>
+
+      <div class="development-note">
+        <span class="coming-soon">Fachanwendungen in Vorbereitung</span>
+        <p>Digitale Arbeitshilfen zur Schraubtechnik werden schrittweise ergänzt.</p>
+      </div>
     </section>
   </main>
 
