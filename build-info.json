@@ -3,18 +3,20 @@
   "app_target": "portal",
   "app_mode": "test",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-08-01T07:51:03.925Z",
+  "built_at": "2026-08-05T10:16:11.502Z",
   "files": {
     ".htaccess": "24b8e3c3e9957eaec53fb7a56160ee882523035c2b2fbff3b3fa9430196e2276",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "404.html": "8eacd36fea85f452e3f7e2b22280249062578d40d545426bba2156ad361a7251",
     "CNAME": "d85111defc4e4d8a4bcc7bd7bb7048de29f05dca107d94a69790cb2fbebabbb9",
-    "datenschutz.html": "f4fd99e3c438e94d1e13523ef7db6d3d9e2e43fe1e4f8eed9b60803067192d97",
-    "fachbeitrag-qa-dokumentation-herstellung.html": "aae833e08d1a531ba5510d2125df1726fc7282cdb8676f77e43a7de7628464fa",
-    "impressum.html": "291768881e29988cd2ff152693469375b52c14bdf5849fe0701a0109d732bca8",
-    "index.html": "96f350be047931abe8d79faf00ab4143a69f5fedf8633b65c4e98d8dbd088411",
-    "kontakt.html": "76a584c741eabbb83463b7fab74765468a2e8d2162d10da7dd90986f1e9c90a0",
+    "article-video.css": "2b770edd450c805cd25fdf392b49c12c2cdc3c2fb155a89b223b317ccfb5ef0d",
+    "datenschutz.html": "d9330b20253a83323dfd76ae8d1d0399ff7db738e8f9add1dd5371abe135b625",
+    "fachbeitrag-hyatt-kleine-aenderung.html": "c3650e17515aeaf7d95b1b89f249dc6fcb484b87369a22c5bcb745807508c01c",
+    "fachbeitrag-qa-dokumentation-herstellung.html": "50fdbbe5abb8dc0aea72537a8cebd45aa65f7802d38e6423269af4bcbf12ad37",
+    "impressum.html": "e185388afddf11ca1d6ed574f5308074f494e06bc0733a755e231f5922fc0967",
+    "index.html": "d278e65c2d92c670358c86ad8c7ccedcdc18da31610d889d7d803ffb419bd6df",
+    "kontakt.html": "e55d6b5344505a9a595b433461d7ed201e1fd5f112d4ace3edfdb8198063dbd5",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "styles.css": "3409971214fe65fdc65697b9b8ddc7864aca678e19de780edcaa4ccb9a31da79"
+    "styles.css": "a6b4f570fd58e6503dc102e4485ffb4cf3ba2d3a6b31174f59a0aa1105873d06"
   }
 }
