@@ -3,7 +3,7 @@
   "app_target": "portal",
   "app_mode": "production",
   "domain": "connect.hardt-wiehl.de",
-  "built_at": "2026-08-06T04:48:43.824Z",
+  "built_at": "2026-08-06T04:55:57.287Z",
   "files": {
     ".htaccess": "1eb7223bcebef4bdffa6076197e31f1389a7ad38a202bc93850a262ac17fbbd2",
     ".nojekyll": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
