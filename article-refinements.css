@@ -3,6 +3,19 @@
   font-size: clamp(2.5rem, 5vw, 4.2rem);
 }
 
+.article-video-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  padding: .28rem .68rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: .76rem;
+  font-weight: 850;
+  letter-spacing: .035em;
+  line-height: 1;
+}
+
 .article-prevention,
 .article-image-source {
   max-width: 780px;
