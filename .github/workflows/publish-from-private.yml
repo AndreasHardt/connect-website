@@ -2,6 +2,11 @@ name: Connect-Portal veröffentlichen
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-from-private.yml
 
 permissions:
   contents: write
@@ -54,11 +59,33 @@ jobs:
           grep -qx "$EXPECTED_DOMAIN" "$source_dir/CNAME"
           grep -q '"app_target": "portal"' "$source_dir/build-info.json"
           grep -q '"app_mode": "production"' "$source_dir/build-info.json"
-          grep -q 'TESTSYSTEM' "$source_dir/index.html"
-          ! grep -q 'noindex,nofollow,noarchive' "$source_dir/index.html"
-          grep -q 'class="article-prevention"' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
-          grep -q 'IDEA StatiCa Connection' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
-          grep -q 'class="article-prevention"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement-fr.html"
+          ! grep -R 'data-app-mode="test"' "$source_dir"
+          ! grep -R 'noindex,nofollow,noarchive' "$source_dir"
+
+          article_count="$(find "$source_dir" -maxdepth 1 -type f -name 'fachbeitrag-*.html' | wc -l | tr -d ' ')"
+          test "$article_count" -eq 12
+          box_count="$(grep -R -l 'class="article-prevention"' "$source_dir"/fachbeitrag-*.html | wc -l | tr -d ' ')"
+          test "$box_count" -eq 12
+          row_count="$(grep -R -h 'class="article-prevention-row"' "$source_dir"/fachbeitrag-*.html | wc -l | tr -d ' ')"
+          test "$row_count" -eq 60
+
+          for base in \
+            fachbeitrag-hyatt-kleine-aenderung \
+            fachbeitrag-qa-dokumentation-herstellung \
+            fachbeitrag-tretten-blockscheren \
+            fachbeitrag-morandi-bruecke-bestandsmanagement
+          do
+            test -f "$source_dir/$base.html"
+            test -f "$source_dir/$base-en.html"
+            test -f "$source_dir/$base-fr.html"
+          done
+
+          grep -q 'ideastatica.com/de/steel/connection-design' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
+          grep -q 'ideastatica.com/de/support-center/allgemeine-einleitung' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
+          grep -q 'ideastatica.com/support-center/strength-analysis' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
+          grep -q 'hreflang="en"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
+          grep -q 'hreflang="fr"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
+          grep -q '06.08.2026' "$source_dir/index.html"
 
           rm -rf _site
           mkdir _site
