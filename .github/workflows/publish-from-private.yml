@@ -2,6 +2,11 @@ name: Connect-Portal veröffentlichen
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-from-private.yml
 
 permissions:
   contents: write
@@ -13,7 +18,7 @@ concurrency:
 env:
   PUBLISH_TARGET: portal
   EXPECTED_DOMAIN: connect.hardt-wiehl.de
-  APP_MODE: test
+  APP_MODE: production
 
 jobs:
   publish:
@@ -53,7 +58,12 @@ jobs:
           test -f "$source_dir/CNAME"
           grep -qx "$EXPECTED_DOMAIN" "$source_dir/CNAME"
           grep -q '"app_target": "portal"' "$source_dir/build-info.json"
+          grep -q '"app_mode": "production"' "$source_dir/build-info.json"
           grep -q 'TESTSYSTEM' "$source_dir/index.html"
+          ! grep -q 'noindex,nofollow,noarchive' "$source_dir/index.html"
+          grep -q 'class="article-prevention"' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
+          grep -q 'IDEA StatiCa Connection' "$source_dir/fachbeitrag-hyatt-kleine-aenderung.html"
+          grep -q 'class="article-prevention"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement-fr.html"
 
           rm -rf _site
           mkdir _site
