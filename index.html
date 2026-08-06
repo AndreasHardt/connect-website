@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#263746">
-  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="robots" content="index,follow">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Connect – Praxislösungen für Verbindungstechnik</title>
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./card-types.css">
   <link rel="stylesheet" href="./portal-refinements.css">
 </head>
-<body data-app-mode="test">
+<body data-app-mode="production">
   <div class="test-banner"><strong data-i18n="test.label">TESTSYSTEM</strong><span data-i18n="test.message">Die Plattform befindet sich im Aufbau.</span></div>
 
   <header class="site-header">
@@ -40,38 +40,32 @@
 
     <section id="schweisstechnik" class="section welding-section">
       <div class="section-heading">
-        <p class="kicker" data-i18n="section.label">Fachbereich</p>
         <h2 data-i18n="welding.title">Schweißtechnik</h2>
         <p data-i18n="welding.intro">Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Fachartikel erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
       </div>
 
-      <div class="content-group">
-        <div class="content-group-heading">
-          <p class="content-label application-label" data-i18n="applications.label">Fachanwendungen</p>
-          <p data-i18n="applications.intro">Interaktive Werkzeuge führen durch Messwerterfassung, Plausibilitätsprüfung, Bewertung und dokumentierbare Ergebnisdarstellung.</p>
-        </div>
+      <div class="content-group application-group">
         <div class="cards application-cards">
           <a class="card application-card application-card-link" href="https://stumpfnaht.hardt-wiehl.de">
-            <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
             <h3 data-i18n="butt.title">Stumpfnahtbewertung</h3>
+            <p class="application-card-type" data-i18n="applications.toolLabel">Interaktives Werkzeug</p>
             <p data-i18n="butt.description">Geführte Bewertung von Unregelmäßigkeiten an Stumpfnähten nach DIN EN ISO 5817:2023. Die Anwendung verbindet Messwerterfassung, Plausibilitätsprüfung, den optionalen Vergleich mit der Ausgabe 2014 und einen erzeugbaren Prüfbericht.</p>
           </a>
           <a class="card application-card application-card-link" href="https://kehlnaht.hardt-wiehl.de">
-            <span class="status protected" data-i18n="status.protected">Geschützter Testzugang</span>
             <h3 data-i18n="fillet.title">Kehlnahtbewertung</h3>
+            <p class="application-card-type" data-i18n="applications.toolLabel">Interaktives Werkzeug</p>
             <p data-i18n="fillet.description">Geführte Bewertung von Kehlnähten nach DIN EN ISO 5817:2023. Messwerte, geometrische Plausibilitätsdarstellung und relevante Prüfkriterien werden in einem nachvollziehbaren Ablauf zusammengeführt und für den Bericht aufbereitet.</p>
           </a>
         </div>
       </div>
 
-      <div class="content-group">
+      <div class="content-group article-group">
         <div class="content-group-heading">
           <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
           <p data-i18n="articles.weldingIntro">Technische Fallanalysen mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
         </div>
         <div class="cards article-cards">
-          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html">
-            <span class="status public" data-i18n="status.article">Fachbeitrag</span>
+          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-qa-dokumentation-herstellung.html" data-i18n-href="qa.href">
             <h3 data-i18n="qa.title">Wenn vollständige Unterlagen trügerische Sicherheit schaffen</h3>
             <p data-i18n="qa.description">Der Einsturz am Kew Recreation Centre zeigt, warum ein vollständiges QA-Paket noch keine Übereinstimmung von Dokumentation und Herstellung beweist. Der Beitrag erklärt, wie Zeichnungen, WPS, Qualifikationen, Prüfplanung und Prüfberichte bauteilbezogen verifiziert werden müssen – relevant für Schweißaufsicht, Fertigung, Prüfung, Einkauf und technische Projektverantwortung.</p>
           </a>
@@ -81,26 +75,27 @@
 
     <section id="schraubtechnik" class="section bolting-section">
       <div class="section-heading">
-        <p class="kicker" data-i18n="section.label">Fachbereich</p>
         <h2 data-i18n="bolting.title">Schraubtechnik</h2>
         <p data-i18n="bolting.intro">Fachbeiträge zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
       </div>
 
-      <div class="content-group">
+      <div class="content-group article-group">
         <div class="content-group-heading">
           <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
           <p data-i18n="articles.boltingIntro">Praxisnahe Analysen von Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
         </div>
         <div class="cards article-cards">
-          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html">
-            <span class="status public" data-i18n="status.article">Fachbeitrag</span>
+          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html" data-i18n-href="hyatt.href">
             <h3 data-i18n="hyatt.title">Warum eine kleine Änderung tragische Auswirkungen hatte</h3>
             <p data-i18n="hyatt.description">Die technische Fallanalyse des Hyatt-Regency-Einsturzes behandelt einen geänderten Hängestab- und Mutteranschluss. Sie erklärt den veränderten Lastpfad, die örtliche Überbeanspruchung des Kastenträgers, den Versagensmechanismus und die berufsrechtlichen Folgen – mit besonderem Nutzen für Konstruktion, Statik, Werkstattplanung, Montage und die Freigabe von Änderungen.</p>
           </a>
-          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-tretten-blockscheren.html">
-            <span class="status public">Fachbeitrag</span>
-            <h3>Eine zulässige Last – und kaum noch Tragreserve</h3>
-            <p>Die Tretten-Brücke stürzte nicht unter einer nachgewiesenen Überlast ein. Wahrscheinlich hatte wiederholter Schwerverkehr einen hoch ausgelasteten Holz-Stahl-Anschluss geschwächt. Der Fall zeigt, warum ein rechnerisch erkannter Mangel nicht durch Sichtprüfungen verwaltet werden kann.</p>
+          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-morandi-bruecke-bestandsmanagement.html" data-i18n-href="morandi.href">
+            <h3 data-i18n="morandi.title">Warum regelmäßige Prüfungen den entscheidenden Schaden nicht verhindern konnten</h3>
+            <p data-i18n="morandi.description">Die Morandi-Brücke wurde regelmäßig geprüft. Der Beitrag zeigt, warum der Zustand verdeckter Spannstähle trotzdem unbekannt blieb und weshalb nicht auflösbare Unsicherheit bei einem versagenskritischen Tragglied selbst als Sicherheitsbefund behandelt werden muss.</p>
+          </a>
+          <a class="card feature-card article-card article-card-link" href="./fachbeitrag-tretten-blockscheren.html" data-i18n-href="tretten.href">
+            <h3 data-i18n="tretten.title">Eine zulässige Last – und kaum noch Tragreserve</h3>
+            <p data-i18n="tretten.description">Die Tretten-Brücke stürzte nicht unter einer nachgewiesenen Überlast ein. Wahrscheinlich hatte wiederholter Schwerverkehr einen hoch ausgelasteten Holz-Stahl-Anschluss geschwächt. Der Fall zeigt, warum ein rechnerisch erkannter Mangel nicht durch Sichtprüfungen verwaltet werden kann.</p>
           </a>
         </div>
       </div>
@@ -108,36 +103,57 @@
 
     <section id="fachartikel" class="section articles-index-section">
       <div class="section-heading">
-        <p class="kicker" data-i18n="articlesIndex.kicker">Übersicht</p>
         <h2 data-i18n="articlesIndex.title">Fachartikel</h2>
-        <p data-i18n="articlesIndex.intro">Alle veröffentlichten Fallanalysen in alphabetischer Reihenfolge nach Bauwerk oder Objekt. Zu jedem Beitrag werden das Veröffentlichungsdatum und der zugehörige Fachbereich angezeigt.</p>
+        <p data-i18n="articlesIndex.intro">Alle veröffentlichten Fallanalysen in alphabetischer Reihenfolge. Die Angaben sind nach Bauwerksname, Stadt, Land, Einsturzdatum, Fachbereich und Veröffentlichungsdatum geordnet.</p>
       </div>
 
-      <div class="article-index-list" aria-label="Alphabetisches Fachartikelregister">
-        <a class="article-index-item" href="./fachbeitrag-hyatt-kleine-aenderung.html">
-          <span class="article-index-title" data-i18n="articlesIndex.hyatt">Hyatt Regency Hotel – Atriumlaufstege</span>
-          <span class="article-index-meta">
-            <time datetime="2026-08-04" data-i18n="articlesIndex.hyattDate">4. August 2026</time>
-            <span aria-hidden="true">·</span>
-            <span class="article-index-area bolting-index" data-i18n="bolting.title">Schraubtechnik</span>
-          </span>
-        </a>
-        <a class="article-index-item" href="./fachbeitrag-qa-dokumentation-herstellung.html">
-          <span class="article-index-title" data-i18n="articlesIndex.kew">Kew Recreation Centre – Stahltragwerk</span>
-          <span class="article-index-meta">
-            <time datetime="2026-08-01" data-i18n="articlesIndex.kewDate">1. August 2026</time>
-            <span aria-hidden="true">·</span>
-            <span class="article-index-area welding-index" data-i18n="welding.title">Schweißtechnik</span>
-          </span>
-        </a>
-        <a class="article-index-item" href="./fachbeitrag-tretten-blockscheren.html">
-          <span class="article-index-title" data-i18n="articlesIndex.tretten">Tretten-Brücke</span>
-          <span class="article-index-meta">
-            <time datetime="2026-08-05" data-i18n="articlesIndex.trettenDate">5. August 2026</time>
-            <span aria-hidden="true">·</span>
-            <span class="article-index-area bolting-index" data-i18n="bolting.title">Schraubtechnik</span>
-          </span>
-        </a>
+      <div class="article-index-table" role="table" aria-label="Alphabetisches Fachartikelregister" data-i18n-aria-label="articlesIndex.ariaLabel">
+        <div class="article-index-header" role="row">
+          <span role="columnheader" data-i18n="articlesIndex.columnStructure">Bauwerksname</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnCity">Stadt</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnCountry">Land</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnArea">Fachbereich</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span>
+        </div>
+
+        <div class="article-index-list" role="rowgroup">
+          <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-hyatt-kleine-aenderung.html" data-i18n-href="hyatt.href">
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.hyatt">Hyatt Regency Hotel – Atriumlaufstege</span></span>
+            <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.hyattCity">Kansas City</span></span>
+            <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.hyattCountry">USA</span></span>
+            <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="1981-07-17" data-i18n="articlesIndex.hyattCollapseDate">17.07.1981</time></span>
+            <span class="article-index-area bolting-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="bolting.title">Schraubtechnik</span></span>
+            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-04" data-i18n="articlesIndex.hyattPublicationDate">04.08.2026</time></span>
+          </a>
+
+          <a class="article-index-item welding-index-item" role="row" href="./fachbeitrag-qa-dokumentation-herstellung.html" data-i18n-href="qa.href">
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.kew">Kew Recreation Centre – Stahltragwerk</span></span>
+            <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.kewCity">Melbourne (Kew)</span></span>
+            <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.kewCountry">Australien</span></span>
+            <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2022-10-20" data-i18n="articlesIndex.kewCollapseDate">20.10.2022</time></span>
+            <span class="article-index-area welding-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="welding.title">Schweißtechnik</span></span>
+            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-01" data-i18n="articlesIndex.kewPublicationDate">01.08.2026</time></span>
+          </a>
+
+          <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-morandi-bruecke-bestandsmanagement.html" data-i18n-href="morandi.href">
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.morandi">Morandi-Brücke – Polcevera-Viadukt</span></span>
+            <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.morandiCity">Genua</span></span>
+            <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.morandiCountry">Italien</span></span>
+            <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2018-08-14" data-i18n="articlesIndex.morandiCollapseDate">14.08.2018</time></span>
+            <span class="article-index-area bolting-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="bolting.title">Schraubtechnik</span></span>
+            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-06" data-i18n="articlesIndex.morandiPublicationDate">06.08.2026</time></span>
+          </a>
+
+          <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-tretten-blockscheren.html" data-i18n-href="tretten.href">
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.tretten">Tretten-Brücke</span></span>
+            <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.trettenCity">Tretten</span></span>
+            <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.trettenCountry">Norwegen</span></span>
+            <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2022-08-15" data-i18n="articlesIndex.trettenCollapseDate">15.08.2022</time></span>
+            <span class="article-index-area bolting-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="bolting.title">Schraubtechnik</span></span>
+            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-05" data-i18n="articlesIndex.trettenPublicationDate">05.08.2026</time></span>
+          </a>
+        </div>
       </div>
     </section>
   </main>
@@ -150,6 +166,6 @@
       <a href="./impressum.html" data-i18n="footer.imprint">Impressum</a>
     </nav>
   </footer>
-  <script type="module" src="./i18n.js?v=b3122276e4e8"></script>
+  <script type="module" src="./i18n.js?v=f6ae92a390bd"></script>
 </body>
 </html>

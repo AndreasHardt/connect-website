@@ -26,6 +26,10 @@ function applyMessages(messages) {
     const value = messages[element.dataset.i18nAriaLabel];
     if (typeof value === 'string') element.setAttribute('aria-label', value);
   }
+  for (const element of document.querySelectorAll('[data-i18n-href]')) {
+    const value = messages[element.dataset.i18nHref];
+    if (typeof value === 'string') element.setAttribute('href', value);
+  }
 }
 
 const language = requestedLanguage();

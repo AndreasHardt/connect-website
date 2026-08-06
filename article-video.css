@@ -1,3 +1,22 @@
 .video-embed { max-width: 780px; margin: 1.25rem 0 1rem; }
 .video-embed iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; }
 .video-note { color: var(--muted); font-size: .95rem; }
+
+body:has(.article-video) .article-meta::after,
+body:has(a[href*="youtube.com"]) .article-meta::after,
+body:has(a[href*="youtu.be"]) .article-meta::after,
+body:has(a[href*="vimeo.com"]) .article-meta::after,
+body:has(video) .article-meta::after {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  padding: .28rem .68rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  content: "mit Video";
+  font-size: .76rem;
+  font-weight: 850;
+  letter-spacing: .035em;
+  line-height: 1;
+  text-transform: none;
+}

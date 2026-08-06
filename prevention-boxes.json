@@ -1,0 +1,146 @@
+{
+  "fachbeitrag-hyatt-kleine-aenderung.html": {
+    "title": "Vermeidung des Schadens",
+    "introHtml": "Eine heutige rechnerische Analyse des geänderten Anschlusses – beispielsweise mit <a href=\"https://www.ideastatica.com/de/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – hätte bei korrektem Ansatz der Geometrie und Belastung den veränderten Lastpfad, die hohe örtliche Beanspruchung des Kastenträgers und die unzureichende Tragfähigkeit deutlich sichtbar machen können. Entscheidend wäre anschließend gewesen, die Änderung nicht freizugeben.<br><br>Dabei ist eine wichtige Einschränkung zu beachten: Auch der ursprüngliche Anschluss erfüllte nach der NIST-Untersuchung nicht das erforderliche Sicherheitsniveau. Eine unabhängige Prüfung hätte deshalb nicht nur die geänderte Lösung zurückweisen dürfen. Sie hätte auch für das ursprüngliche Detail einen vollständigen Tragfähigkeitsnachweis oder eine neue Anschlussausbildung verlangen müssen.",
+    "fields": [
+      ["Kritischer Entscheidungspunkt", "Freigabe des geänderten Anschlussdetails."],
+      ["Geeignete heutige Methode", "Nichtlineare Anschlussanalyse des tatsächlich vorgesehenen Details – beispielsweise mit <a href=\"https://www.ideastatica.com/de/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – und unabhängige statische Prüfung der Änderung."],
+      ["Erkennbarer Befund", "Veränderter Lastpfad, erhöhte lokale Biege- und Schubbeanspruchung des Kastenträgers sowie fehlende Tragreserve des Anschlusses."],
+      ["Erforderliche Maßnahme", "Änderung nicht freigeben; Anschluss vollständig neu bemessen und konstruktiv anpassen. Auch der ursprüngliche Anschluss muss unabhängig nachgewiesen werden."],
+      ["Grenze", "Die Berechnung schützt nur, wenn das tatsächliche Ausführungsdetail, die Lasten, Exzentrizitäten, Kontakte und Verbindungsmittel vollständig und richtig modelliert werden. Software ersetzt weder die fachkundige Prüfung noch die verantwortliche Freigabe."]
+    ],
+    "sourceItems": [
+      "IDEA StatiCa: <a href=\"https://www.ideastatica.com/de/support-center/allgemeine-einleitung\" target=\"_blank\" rel=\"noopener noreferrer\">Allgemeine Einleitung zur Component-Based Finite Element Method (CBFEM)</a>.",
+      "IDEA StatiCa: <a href=\"https://www.ideastatica.com/support-center/strength-analysis\" target=\"_blank\" rel=\"noopener noreferrer\">Strength analysis of steel joints</a>."
+    ]
+  },
+  "fachbeitrag-hyatt-kleine-aenderung-en.html": {
+    "title": "How the damage could have been prevented",
+    "introHtml": "A present-day analysis of the modified connection – for example with <a href=\"https://www.ideastatica.com/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – could have made the changed load path, the high local demand on the box beam and the inadequate connection capacity clearly visible, provided that geometry and loading were modelled correctly. The decisive next step would have been not to approve the change.<br><br>An important qualification remains: the original connection also failed to meet the required safety level according to the NIST investigation. Independent review should therefore have required a complete capacity verification or a redesigned connection for both arrangements.",
+    "fields": [
+      ["Critical decision point", "Approval of the modified connection detail."],
+      ["Suitable present-day method", "Nonlinear analysis of the connection as actually intended – for example with <a href=\"https://www.ideastatica.com/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – together with an independent structural review."],
+      ["Finding that would become visible", "Changed load path, increased local bending and shear demand in the box beam and insufficient connection reserve."],
+      ["Required action", "Do not approve the change; redesign and re-detail the connection. Independently verify the original detail as well."],
+      ["Limit", "The analysis protects only when the actual execution detail, loads, eccentricities, contacts and fasteners are modelled completely and correctly. Software does not replace competent review or responsible approval."]
+    ],
+    "sourceItems": [
+      "IDEA StatiCa: <a href=\"https://www.ideastatica.com/support-center/general-theoretical-background\" target=\"_blank\" rel=\"noopener noreferrer\">General theoretical background of the Component-Based Finite Element Method (CBFEM)</a>.",
+      "IDEA StatiCa: <a href=\"https://www.ideastatica.com/support-center/strength-analysis\" target=\"_blank\" rel=\"noopener noreferrer\">Strength analysis of steel joints</a>."
+    ]
+  },
+  "fachbeitrag-hyatt-kleine-aenderung-fr.html": {
+    "title": "Comment le dommage aurait pu être évité",
+    "introHtml": "Une analyse actuelle de l’assemblage modifié – par exemple avec <a href=\"https://www.ideastatica.com/fr/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – aurait pu mettre clairement en évidence le chemin de charge modifié, les fortes sollicitations locales de la poutre-caisson et l’insuffisance de la capacité, à condition de modéliser correctement la géométrie et les charges. La décision déterminante aurait ensuite été de ne pas approuver la modification.<br><br>Une réserve importante subsiste : selon l’enquête du NIST, l’assemblage initial ne satisfaisait pas non plus au niveau de sécurité requis. Une vérification indépendante aurait donc dû exiger un contrôle complet de capacité ou une nouvelle conception pour les deux solutions.",
+    "fields": [
+      ["Point de décision critique", "Validation du détail d’assemblage modifié."],
+      ["Méthode actuelle appropriée", "Analyse non linéaire du détail réellement prévu – par exemple avec <a href=\"https://www.ideastatica.com/fr/steel/connection-design\" target=\"_blank\" rel=\"noopener noreferrer\">IDEA StatiCa Connection</a> – et vérification structurale indépendante."],
+      ["Constat qui aurait été visible", "Chemin de charge modifié, augmentation des sollicitations locales de flexion et de cisaillement dans la poutre-caisson et réserve insuffisante de l’assemblage."],
+      ["Mesure nécessaire", "Ne pas approuver la modification ; recalculer et redéfinir complètement l’assemblage. Vérifier également le détail initial de manière indépendante."],
+      ["Limite", "L’analyse ne protège que si le détail réellement exécuté, les charges, les excentricités, les contacts et les organes sont modélisés intégralement et correctement. Le logiciel ne remplace ni l’examen compétent ni la validation responsable."]
+    ],
+    "sourceItems": [
+      "IDEA StatiCa : <a href=\"https://www.ideastatica.com/support-center/general-theoretical-background\" target=\"_blank\" rel=\"noopener noreferrer\">fondements généraux de la Component-Based Finite Element Method (CBFEM)</a>.",
+      "IDEA StatiCa : <a href=\"https://www.ideastatica.com/support-center/strength-analysis\" target=\"_blank\" rel=\"noopener noreferrer\">Strength analysis of steel joints</a>."
+    ]
+  },
+  "fachbeitrag-qa-dokumentation-herstellung.html": {
+    "title": "Vermeidung des Schadens",
+    "introHtml": "Eine heutige bauteilbezogene Konformitätsprüfung hätte vor der Montage die Konstruktionszeichnungen, Fertigungsanforderungen, Schweißanweisungen, Personalqualifikationen, Prüfplanung und Prüfberichte mit dem tatsächlich gelieferten GT1-Träger verknüpft. Eine unabhängige Schweißaufsicht hätte zusätzlich prüfen müssen, ob die vorgesehenen Sicht- und Ultraschallprüfungen eindeutig den tragenden Stumpfnähten zugeordnet waren und ob die Befunde die reale Ausführung bestätigten. Entscheidend wäre gewesen, den Träger ohne schriftlichen Konformitätsnachweis nicht zur Montage freizugeben.",
+    "fields": [
+      ["Kritischer Entscheidungspunkt", "Annahme und Montagefreigabe des importierten GT1-Trägers."],
+      ["Geeignete heutige Methode", "Unabhängige bauteilbezogene Schweiß-QA-Prüfung mit vollständiger Rückverfolgbarkeit sowie gezielte Sicht- und Ultraschallprüfung der tragenden Schweißverbindungen."],
+      ["Erkennbarer Befund", "Fehlende oder nicht belastbare Übereinstimmung zwischen Zeichnung, Fertigungsanforderungen, WPS, Schweißerqualifikationen, Prüfumfang, Prüfberichten und tatsächlicher Ausführung."],
+      ["Erforderliche Maßnahme", "Träger sperren und nicht montieren; tatsächliche Ausführung vollständig verifizieren, Abweichungen fachkundig bewerten und den Träger reparieren, ersetzen oder erst nach schriftlichem Nachweis freigeben."],
+      ["Grenze", "Ein vollständiges Dokumentenpaket und stichprobenartige Prüfungen beweisen die reale Ausführung nur, wenn Bauteil, Nahtidentität und Prüfumfang eindeutig rückverfolgbar sind. Auch zerstörungsfreie Prüfungen besitzen verfahrens- und zugänglichkeitsabhängige Nachweisgrenzen."]
+    ]
+  },
+  "fachbeitrag-qa-dokumentation-herstellung-en.html": {
+    "title": "How the damage could have been prevented",
+    "introHtml": "Before erection, a present-day component-specific conformity review would have linked the design drawings, fabrication requirements, welding procedures, personnel qualifications, inspection plan and reports to the actual GT1 girder delivered. Independent welding coordination should also have confirmed that visual and ultrasonic examinations were uniquely assigned to the load-bearing butt welds and that their findings represented the real fabrication. The girder should not have been released for erection without written confirmation of conformity.",
+    "fields": [
+      ["Critical decision point", "Acceptance and erection release of the imported GT1 girder."],
+      ["Suitable present-day method", "Independent component-specific welding QA review with full traceability and targeted visual and ultrasonic examination of load-bearing welds."],
+      ["Finding that would become visible", "Missing or unreliable consistency between drawing, fabrication requirements, WPS, welder qualifications, inspection extent, reports and actual execution."],
+      ["Required action", "Quarantine the girder and do not erect it; verify the actual fabrication completely, assess deviations competently and repair, replace or release the girder only after written evidence."],
+      ["Limit", "A complete documentation package and sample inspections prove the real execution only when component, weld identity and inspection scope are uniquely traceable. Non-destructive testing also has method- and access-dependent detection limits."]
+    ]
+  },
+  "fachbeitrag-qa-dokumentation-herstellung-fr.html": {
+    "title": "Comment le dommage aurait pu être évité",
+    "introHtml": "Avant le montage, une vérification actuelle de conformité liée à l’élément aurait relié les plans, exigences de fabrication, DMOS, qualifications du personnel, plan de contrôle et rapports à la poutre GT1 effectivement livrée. Une coordination indépendante en soudage aurait également dû confirmer que les contrôles visuels et ultrasonores étaient attribués sans ambiguïté aux soudures bout à bout porteuses et que leurs résultats représentaient l’exécution réelle. La poutre n’aurait pas dû être autorisée au montage sans confirmation écrite de conformité.",
+    "fields": [
+      ["Point de décision critique", "Acceptation et autorisation de montage de la poutre GT1 importée."],
+      ["Méthode actuelle appropriée", "Contrôle AQ indépendant lié à l’élément, avec traçabilité complète et contrôles visuels et ultrasonores ciblés des soudures porteuses."],
+      ["Constat qui aurait été visible", "Absence de concordance fiable entre plans, exigences, DMOS, qualifications des soudeurs, étendue des contrôles, rapports et exécution réelle."],
+      ["Mesure nécessaire", "Mettre la poutre en quarantaine et ne pas la monter ; vérifier intégralement l’exécution, évaluer les écarts et réparer, remplacer ou libérer la poutre uniquement après preuve écrite."],
+      ["Limite", "Un dossier complet et des contrôles par sondage ne prouvent l’exécution réelle que si l’élément, l’identité des soudures et l’étendue du contrôle sont traçables sans ambiguïté. Les contrôles non destructifs possèdent aussi des limites liées à la méthode et à l’accessibilité."]
+    ]
+  },
+  "fachbeitrag-tretten-blockscheren.html": {
+    "title": "Vermeidung des Schadens",
+    "introHtml": "Die entscheidende Möglichkeit zur Vermeidung lag spätestens 2016 vor. Nach dem Einsturz der Perkolo-Brücke wurde Tretten nach den neueren Regeln gegen Blockscheren nachgerechnet. Dabei wurden schwerwiegende Überbeanspruchungen erkannt und eine Verstärkung empfohlen. Eine unabhängige Prüfung und ein verbindlicher, risikobasierter Entscheidungsprozess hätten aus diesem Befund unmittelbar eine Sperrung, Verkehrsbeschränkung oder Verstärkung ableiten müssen. Weitere Sichtprüfungen konnten den fehlenden rechnerischen Nachweis nicht ersetzen.",
+    "fields": [
+      ["Kritischer Entscheidungspunkt", "Bewertung und Bearbeitung der Nachrechnung aus dem Jahr 2016."],
+      ["Geeignete heutige Methode", "Nachrechnung der Holz-Stahl-Anschlüsse gegen Blockscheren nach dem aktuellen Regelwerk, unabhängige statische Prüfung sowie ergänzende Ermüdungs- und Robustheitsbewertung."],
+      ["Erkennbarer Befund", "Schwere Überausnutzung mehrerer Anschlüsse, fehlende rechnerische Tragreserve, geringe Robustheit und ein nicht ausreichend bekannter Ermüdungszustand."],
+      ["Erforderliche Maßnahme", "Brücke sofort sperren oder den Verkehr beschränken, Anschlüsse verstärken und eine normale Nutzung erst nach belastbarem Nachweis wieder zulassen."],
+      ["Grenze", "Eine Nachrechnung zeigt die fehlende Reserve, bestimmt aber nicht automatisch den tatsächlichen Ermüdungsschaden und die verbleibende Resttragfähigkeit. Diese Unsicherheit verlangt bis zur Klärung konservative betriebliche Maßnahmen."]
+    ]
+  },
+  "fachbeitrag-tretten-blockscheren-en.html": {
+    "title": "How the damage could have been prevented",
+    "introHtml": "The decisive opportunity for prevention existed no later than 2016. After the Perkolo Bridge collapse, Tretten was reassessed under the newer block-shear rules. Serious overutilisation was identified and strengthening was recommended. Independent review and a binding risk-based decision process should have led directly to closure, traffic restrictions or strengthening. Further visual inspections could not replace the missing capacity verification.",
+    "fields": [
+      ["Critical decision point", "Assessment and handling of the 2016 reassessment."],
+      ["Suitable present-day method", "Reassessment of the timber-steel connections for block shear under current rules, independent structural review and complementary fatigue and robustness assessment."],
+      ["Finding that would become visible", "Severe overutilisation of several connections, no analytical reserve, low robustness and an insufficiently known fatigue condition."],
+      ["Required action", "Close the bridge immediately or restrict traffic, strengthen the connections and permit normal use only after robust verification."],
+      ["Limit", "Reassessment demonstrates missing reserve but does not automatically determine the actual fatigue damage or residual capacity. Until resolved, this uncertainty requires conservative operational measures."]
+    ]
+  },
+  "fachbeitrag-tretten-blockscheren-fr.html": {
+    "title": "Comment le dommage aurait pu être évité",
+    "introHtml": "La possibilité décisive de prévention existait au plus tard en 2016. Après l’effondrement du pont de Perkolo, Tretten a été recalculé selon les règles plus récentes de cisaillement de bloc. Des surutilisations graves ont été identifiées et un renforcement recommandé. Une vérification indépendante et un processus de décision contraignant fondé sur le risque auraient dû conduire directement à une fermeture, une limitation de circulation ou un renforcement. De nouvelles inspections visuelles ne pouvaient pas remplacer la vérification de capacité manquante.",
+    "fields": [
+      ["Point de décision critique", "Évaluation et traitement du recalcul de 2016."],
+      ["Méthode actuelle appropriée", "Recalcul des assemblages bois-acier au cisaillement de bloc selon les règles actuelles, vérification structurale indépendante et évaluation complémentaire de fatigue et de robustesse."],
+      ["Constat qui aurait été visible", "Surutilisation grave de plusieurs assemblages, absence de réserve de calcul, faible robustesse et état de fatigue insuffisamment connu."],
+      ["Mesure nécessaire", "Fermer immédiatement le pont ou limiter la circulation, renforcer les assemblages et n’autoriser l’usage normal qu’après une justification robuste."],
+      ["Limite", "Le recalcul montre l’absence de réserve, mais ne détermine pas automatiquement le dommage de fatigue réel ni la capacité résiduelle. Jusqu’à clarification, cette incertitude exige des mesures d’exploitation conservatrices."]
+    ]
+  },
+  "fachbeitrag-morandi-bruecke-bestandsmanagement.html": {
+    "title": "Vermeidung des Schadens",
+    "introHtml": "Eine heutige risikobasierte Zustandsbewertung hätte die schweren Schäden an den vergleichbaren Schrägseilen von Pfeiler 11 und den weiterhin unbekannten Zustand der verdeckten Spannstähle an den Pfeilern 9 und 10 als systemweiten Sicherheitsfall behandelt. Gezielt angeordnete Öffnungen im kritischen oberen Verankerungsbereich, eine für den erwarteten Schaden validierte Kombination aus Prüfverfahren, eine konservative Resttragfähigkeitsbewertung und eine unabhängige Prüfung hätten die verbleibende Unsicherheit sichtbar gemacht. Solange der wirksame Stahlquerschnitt nicht belastbar bestimmt war, hätte eine uneingeschränkte Weiternutzung nicht allein mit wiederholten Messungen oder Monitoring begründet werden dürfen.",
+    "fields": [
+      ["Kritischer Entscheidungspunkt", "Übertragung der Befunde von Pfeiler 11 auf die vergleichbaren Schrägseile der Pfeiler 9 und 10 sowie die Entscheidung über den Weiterbetrieb bis zur geplanten Verstärkung."],
+      ["Geeignete heutige Methode", "Gezielte direkte Öffnungen und Probenahmen in den kritischen Bereichen, validierte zerstörungsfreie Prüfverfahren, konservative Restquerschnitts- und Tragfähigkeitsbewertung sowie unabhängige risikobasierte Gesamtbeurteilung."],
+      ["Erkennbarer Befund", "Der tatsächliche tragende Stahlquerschnitt im kritischen Schrägseil war nicht ausreichend bekannt; Hohlräume, unvollständige Verpressung und Korrosion mussten als mögliche systematische Schwachstelle betrachtet werden."],
+      ["Erforderliche Maßnahme", "Betrieb einschränken oder das Bauwerk sperren, bis der Zustand direkt geklärt oder durch temporäre Sicherung, Verstärkung beziehungsweise Austausch beherrscht ist."],
+      ["Grenze", "Verdeckter örtlicher Querschnittsverlust einzelner Spannstähle kann trotz Monitoring und zerstörungsfreier Prüfung unentdeckt bleiben. Wenn das Verfahren den gesuchten Schaden nicht zuverlässig quantifizieren kann, sind direkte Öffnungen oder konservative Sicherungsmaßnahmen erforderlich."]
+    ]
+  },
+  "fachbeitrag-morandi-bruecke-bestandsmanagement-en.html": {
+    "title": "How the damage could have been prevented",
+    "introHtml": "A present-day risk-based condition assessment would have treated the severe damage found in the comparable stays of Pier 11 and the still-unknown condition of the concealed prestressing steel at Piers 9 and 10 as a system-wide safety case. Targeted openings in the critical upper anchorage region, a combination of inspection methods validated for the expected damage, a conservative residual-capacity assessment and independent review would have exposed the remaining uncertainty. Unrestricted continued use should not have been justified by repeated measurements or monitoring alone while the effective steel area remained unknown.",
+    "fields": [
+      ["Critical decision point", "Transfer of the Pier 11 findings to the comparable stays at Piers 9 and 10 and the decision on continued operation until planned strengthening."],
+      ["Suitable present-day method", "Targeted direct openings and sampling in critical areas, validated non-destructive methods, conservative residual-section and capacity assessment and independent risk-based overall evaluation."],
+      ["Finding that would become visible", "The actual load-bearing steel area in the critical stay was not adequately known; voids, incomplete grouting and corrosion had to be treated as a possible systematic weakness."],
+      ["Required action", "Restrict operation or close the structure until the condition is directly established or controlled by temporary safeguarding, strengthening or replacement."],
+      ["Limit", "Local concealed loss of individual prestressing wires can remain undetected despite monitoring and non-destructive inspection. If the method cannot reliably quantify the expected damage, direct openings or conservative safeguards are required."]
+    ]
+  },
+  "fachbeitrag-morandi-bruecke-bestandsmanagement-fr.html": {
+    "title": "Comment le dommage aurait pu être évité",
+    "introHtml": "Une évaluation actuelle de l’état fondée sur le risque aurait traité les dommages graves constatés sur les haubans comparables de la pile 11 et l’état toujours inconnu des aciers de précontrainte dissimulés aux piles 9 et 10 comme un dossier de sécurité concernant l’ensemble du système. Des ouvertures ciblées dans la zone critique de l’ancrage supérieur, une combinaison de méthodes validée pour le dommage attendu, une évaluation conservatrice de la capacité résiduelle et un examen indépendant auraient rendu l’incertitude visible. Tant que la section d’acier efficace n’était pas déterminée de manière fiable, la poursuite sans restriction ne pouvait pas être justifiée par les seules mesures répétées ou le monitoring.",
+    "fields": [
+      ["Point de décision critique", "Transposition des constatations de la pile 11 aux haubans comparables des piles 9 et 10 et décision de maintenir l’exploitation jusqu’au renforcement prévu."],
+      ["Méthode actuelle appropriée", "Ouvertures directes et prélèvements ciblés, méthodes non destructives validées, évaluation conservatrice de la section et de la capacité résiduelles et appréciation globale indépendante fondée sur le risque."],
+      ["Constat qui aurait été visible", "La section d’acier réellement porteuse du hauban critique n’était pas suffisamment connue ; les vides, l’injection incomplète et la corrosion devaient être considérés comme une faiblesse systématique possible."],
+      ["Mesure nécessaire", "Limiter l’exploitation ou fermer l’ouvrage jusqu’à ce que l’état soit établi directement ou maîtrisé par une sécurisation temporaire, un renforcement ou un remplacement."],
+      ["Limite", "Une perte locale dissimulée de fils de précontrainte peut rester non détectée malgré le monitoring et les contrôles non destructifs. Si la méthode ne peut pas quantifier fiablement le dommage attendu, des ouvertures directes ou des mesures conservatrices sont nécessaires."]
+    ]
+  }
+}

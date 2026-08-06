@@ -1,0 +1,22 @@
+{
+  "connect-de-hyatt-lastpfad-001": {
+    "de": "fachbeitrag-hyatt-kleine-aenderung.html",
+    "en": "fachbeitrag-hyatt-kleine-aenderung-en.html",
+    "fr": "fachbeitrag-hyatt-kleine-aenderung-fr.html"
+  },
+  "connect-de-kew-qa-001": {
+    "de": "fachbeitrag-qa-dokumentation-herstellung.html",
+    "en": "fachbeitrag-qa-dokumentation-herstellung-en.html",
+    "fr": "fachbeitrag-qa-dokumentation-herstellung-fr.html"
+  },
+  "connect-sf-2022-tretten-bridge": {
+    "de": "fachbeitrag-tretten-blockscheren.html",
+    "en": "fachbeitrag-tretten-blockscheren-en.html",
+    "fr": "fachbeitrag-tretten-blockscheren-fr.html"
+  },
+  "connect-sf-2018-morandi-polcevera": {
+    "de": "fachbeitrag-morandi-bruecke-bestandsmanagement.html",
+    "en": "fachbeitrag-morandi-bruecke-bestandsmanagement-en.html",
+    "fr": "fachbeitrag-morandi-bruecke-bestandsmanagement-fr.html"
+  }
+}
