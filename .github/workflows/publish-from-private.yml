@@ -1,5 +1,6 @@
 name: Connect-Portal veröffentlichen
 
+# Manuelle Produktionsveröffentlichung aus dem privaten Connect-main.
 on:
   workflow_dispatch:
 
