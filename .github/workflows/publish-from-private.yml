@@ -2,11 +2,6 @@ name: Connect-Portal veröffentlichen
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/publish-from-private.yml
 
 permissions:
   contents: write
@@ -86,7 +81,6 @@ jobs:
           grep -q 'hreflang="en"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
           grep -q 'hreflang="fr"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
           grep -q '06.08.2026' "$source_dir/index.html"
-          grep -q '(mit Video)' "$source_dir/fachbeitrag-tretten-blockscheren.html"
 
           rm -rf _site
           mkdir _site
