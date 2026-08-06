@@ -2,6 +2,11 @@ name: Connect-Portal veröffentlichen
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-from-private.yml
 
 permissions:
   contents: write
@@ -63,6 +68,8 @@ jobs:
           test "$box_count" -eq 12
           row_count="$(grep -R -h 'class="article-prevention-row"' "$source_dir"/fachbeitrag-*.html | wc -l | tr -d ' ')"
           test "$row_count" -eq 60
+          language_switch_count="$(grep -R -l 'class="language-switcher"' "$source_dir"/fachbeitrag-*.html | wc -l | tr -d ' ')"
+          test "$language_switch_count" -eq 12
 
           for base in \
             fachbeitrag-hyatt-kleine-aenderung \
@@ -81,6 +88,10 @@ jobs:
           grep -q 'hreflang="en"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
           grep -q 'hreflang="fr"' "$source_dir/fachbeitrag-morandi-bruecke-bestandsmanagement.html"
           grep -q '06.08.2026' "$source_dir/index.html"
+          grep -q 'Tretten-Brücke – Fachwerkbrücke' "$source_dir/index.html"
+          grep -q 'class="article-video-label">mit Video<' "$source_dir/fachbeitrag-tretten-blockscheren.html"
+          grep -q 'class="article-video-label">includes video<' "$source_dir/fachbeitrag-tretten-blockscheren-en.html"
+          grep -q 'class="article-video-label">avec vidéo<' "$source_dir/fachbeitrag-tretten-blockscheren-fr.html"
 
           rm -rf _site
           mkdir _site
