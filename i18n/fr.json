@@ -68,5 +68,13 @@
   "articlesIndex.trettenPublicationDate": "05.08.2026",
   "footer.legal": "Mentions juridiques",
   "footer.privacy": "Confidentialité",
-  "footer.imprint": "Mentions légales"
+  "footer.imprint": "Mentions légales",
+  "kielland.href": "./fachbeitrag-alexander-kielland-ermuedung-fr.html",
+  "kielland.title": "Comment un petit élément soudé a provoqué le chavirement d’une plateforme entière",
+  "kielland.description": "La rupture par fatigue de l’Alexander L. Kielland a commencé au niveau d’un petit support d’hydrophone soudé. L’article montre que l’importance d’un élément dépend du chemin de charge, de l’effet d’entaille et des conséquences d’une fissure, non de sa taille.",
+  "articlesIndex.kielland": "Alexander L. Kielland – plateforme d’hébergement",
+  "articlesIndex.kiellandCity": "champ d'Ekofisk",
+  "articlesIndex.kiellandCountry": "Norvège",
+  "articlesIndex.kiellandCollapseDate": "27.03.1980",
+  "articlesIndex.kiellandPublicationDate": "10.08.2026"
 }

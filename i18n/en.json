@@ -68,5 +68,13 @@
   "articlesIndex.trettenPublicationDate": "05.08.2026",
   "footer.legal": "Legal information",
   "footer.privacy": "Privacy",
-  "footer.imprint": "Legal notice"
+  "footer.imprint": "Legal notice",
+  "kielland.href": "./fachbeitrag-alexander-kielland-ermuedung-en.html",
+  "kielland.title": "How a small welded attachment caused an entire platform to capsize",
+  "kielland.description": "The fatigue fracture of Alexander L. Kielland began at a small welded hydrophone support. The article shows why an attachment’s significance depends on load path, notch effect and crack consequences—not on its size.",
+  "articlesIndex.kielland": "Alexander L. Kielland – accommodation platform",
+  "articlesIndex.kiellandCity": "Ekofisk field",
+  "articlesIndex.kiellandCountry": "Norway",
+  "articlesIndex.kiellandCollapseDate": "27.03.1980",
+  "articlesIndex.kiellandPublicationDate": "10.08.2026"
 }

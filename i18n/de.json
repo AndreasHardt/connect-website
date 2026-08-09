@@ -68,5 +68,13 @@
   "articlesIndex.trettenPublicationDate": "05.08.2026",
   "footer.legal": "Rechtliche Hinweise",
   "footer.privacy": "Datenschutz",
-  "footer.imprint": "Impressum"
+  "footer.imprint": "Impressum",
+  "kielland.href": "./fachbeitrag-alexander-kielland-ermuedung.html",
+  "kielland.title": "Warum ein kleines angeschweißtes Bauteil eine ganze Plattform zum Kentern brachte",
+  "kielland.description": "Der Ermüdungsbruch der Alexander L. Kielland begann an einem kleinen angeschweißten Hydrofonhalter. Der Beitrag zeigt, warum die Bedeutung eines Anbauteils vom Kraftfluss, der Kerbwirkung und den Folgen eines Risses abhängt – nicht von seiner Größe.",
+  "articlesIndex.kielland": "Alexander L. Kielland – Wohnplattform",
+  "articlesIndex.kiellandCity": "Ekofiskgebiet",
+  "articlesIndex.kiellandCountry": "Norwegen",
+  "articlesIndex.kiellandCollapseDate": "27.03.1980",
+  "articlesIndex.kiellandPublicationDate": "10.08.2026"
 }
