@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440">
+  <title>v(x), φ(x), Lb</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#263746"/></marker></defs>
+  <rect width="800" height="440" rx="12" fill="#f8fafb"/>
+  <g fill="none" stroke="#98a6b0" stroke-width="2" stroke-dasharray="7 6">
+    <path d="M100 80H700"/>
+    <path d="M100 80V355M400 80V355M700 80V355"/>
+  </g>
+  <path d="M100 80C200 120 290 155 400 155S600 120 700 80" fill="none" stroke="#256d94" stroke-width="5"/>
+  <g fill="none" stroke="#263746" stroke-width="1.8" marker-end="url(#arrow)">
+    <path d="M400 82V150"/>
+    <path d="M700 80H755"/>
+  </g>
+  <g font-family="Arial,sans-serif" font-size="22" fill="#263746"><text x="417" y="126">v</text><text x="750" y="65">x</text></g>
+  <g fill="none" stroke="#98a6b0" stroke-width="2" stroke-dasharray="5 4">
+    <path d="M60 260H140M100 260V350M60 350H140M360 260H440M400 260V350M360 350H440M660 260H740M700 260V350M660 350H740"/>
+  </g>
+  <g fill="none" stroke="#256d94" stroke-width="8">
+    <path d="M60 260H140M100 260V350M60 350H140M660 260H740M700 260V350M660 350H740"/>
+    <path d="M360 260H440M400 260V350M360 350H440" transform="rotate(18 400 305)"/>
+  </g>
+  <path d="M400 239A66 66 0 0 1 420.4 242.2" fill="none" stroke="#263746" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="425" y="230" font-family="Arial,sans-serif" font-size="22" fill="#263746">φ</text>
+  <g fill="none" stroke="#263746" stroke-width="1.8">
+    <path d="M100 370V410M700 370V410"/>
+    <path d="M104 393H696" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  </g>
+  <rect x="372" y="376" width="56" height="31" fill="#f8fafb"/>
+  <text x="383" y="400" font-family="Arial,sans-serif" font-size="22" fill="#263746">L<tspan baseline-shift="sub" font-size="15">b</tspan></text>
+</svg>

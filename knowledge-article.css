@@ -1,0 +1,84 @@
+.knowledge-figure {
+  max-width: 780px;
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fafb;
+}
+
+.knowledge-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.knowledge-figure figcaption {
+  margin-top: .75rem;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.knowledge-table-wrap {
+  max-width: 780px;
+  overflow-x: auto;
+  margin: 1.25rem 0 2rem;
+}
+
+.knowledge-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: .96rem;
+}
+
+.knowledge-table th,
+.knowledge-table td {
+  padding: .7rem .8rem;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.knowledge-table th {
+  color: var(--navy);
+  background: #e7edf1;
+}
+
+body:has(.knowledge-article) {
+  --article-soft: #e8edf1;
+  --article-soft-strong: #d6e0e6;
+  --article-accent: #667d8b;
+  --article-accent-dark: #405563;
+}
+
+body:has(.knowledge-article) .article-hero {
+  color: var(--navy);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,.72), transparent 36%),
+    linear-gradient(118deg, var(--article-soft-strong), var(--article-soft));
+  border-bottom: 1px solid var(--article-accent);
+}
+
+body:has(.knowledge-article) .article-hero .kicker,
+body:has(.knowledge-article) .back-link .text-link {
+  color: var(--article-accent-dark);
+}
+
+body:has(.knowledge-article) .article-hero .lead {
+  color: #344650;
+  text-shadow: none;
+}
+
+body:has(.knowledge-article) .article-meta {
+  color: #52626c;
+}
+
+body:has(.knowledge-article) .article-intro {
+  border-left-color: var(--article-accent);
+  background: var(--article-soft);
+}
+
+.knowledge-formula { max-width: 780px; padding: 1.25rem; margin: 1.25rem 0; background: #f0f4f6; font-size: 1.35rem; }
+.knowledge-article math { font-family: math; }
+.knowledge-article h3 { margin-top: 1.6rem; }
