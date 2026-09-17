@@ -102,5 +102,14 @@
   "weldPlanning.description": "Comment l’angle d’ouverture, le jeu et les surépaisseurs influencent-ils le besoin en matière ? Des équations simples de géométrie et de bilan aident à préparer les soudures, à estimer la consommation et le temps d’arc et à vérifier la plausibilité des paramètres.",
   "articlesIndex.weldPlanning": "Planifier les soudures",
   "articlesIndex.weldPlanningArea": "Techniques de soudage",
-  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026",
+  "transbay.href": "./fachbeitrag-transbay-traegerbrueche-fr.html",
+  "transbay.title": "Transbay : comment un détail de fabrication a fragilisé la poutre",
+  "transbay.description": "Au Transbay Transit Center de San Francisco, la découverte de ruptures de poutres a entraîné la fermeture du terminal. Ce cas montre pourquoi, dans les constructions en acier soudées, les zones travaillées à proximité d'une soudure demandent elles aussi de l'attention. Conception, fabrication et contrôle partagent une même tâche : évaluer ensemble la géométrie du détail, la séquence de fabrication et le comportement du matériau.",
+  "articlesIndex.transbay": "Transbay Transit Center",
+  "articlesIndex.transbayCity": "San Francisco",
+  "articlesIndex.transbayCountry": "États-Unis",
+  "articlesIndex.transbayCollapseDate": "25 septembre 2018 (découverte)",
+  "articlesIndex.transbayArea": "Techniques de soudage",
+  "articlesIndex.transbayPublicationDate": "17.09.2026"
 }

@@ -400,5 +400,89 @@
         "Calculs et contrôles ne protègent que si les données complètes sont évaluées avec compétence et les mesures appliquées."
       ]
     ]
+  },
+  "fachbeitrag-transbay-traegerbrueche.html": {
+    "title": "Vermeidung des Schadens",
+    "introHtml": "Für ein vergleichbares Detail ergibt sich aus der Untersuchung und den Fachquellen der folgende heutige Prüf- und Entscheidungsansatz. Er ist eine redaktionelle Ableitung, kein Nachweis einer garantiert möglichen historischen Verhinderung.",
+    "fields": [
+      [
+        "Kritischer Entscheidungspunkt",
+        "Freigabe des Aussparungs- und Nahtdetails sowie Freigabe des gefertigten Bauteils vor dem Einbau."
+      ],
+      [
+        "Geeignete heutige Methode",
+        "Gemeinsame Detail- und Fertigungsprüfung; qualifizierte Oberflächenrissprüfung der zugänglichen Schnittflächen, passende Werkstoffprüfung und bei Bedarf bruchmechanische Bewertung. Der Untersuchungsbericht dokumentiert unter anderem fluoreszierende Magnetpulverprüfung; die Übertragung in einen Fertigungsprüfplan muss gesondert qualifiziert werden."
+      ],
+      [
+        "Erkennbarer Befund",
+        "Erfassbare Rissanzeigen, ungünstige Detailausbildung oder für die Bewertung unzureichende Werkstoffdaten. Ein Befund ist anhand seiner Lage und Ausdehnung einzuordnen."
+      ],
+      [
+        "Erforderliche Maßnahme",
+        "Freigabe bei ungeklärtem kritischem Befund aussetzen. Detail oder Fertigung fachgerecht überarbeiten, erforderliche Nachweise ergänzen und die Wirksamkeit der Maßnahme prüfen."
+      ],
+      [
+        "Grenze",
+        "Zugänglichkeit, Oberflächenzustand und Nachweisgrenze begrenzen die Rissprüfung. Berechnungen hängen von Rissannahmen, Lasten, Eigenspannungen und Werkstoffdaten ab. Restunsicherheit bleibt; Verfahren und Software ersetzen weder fachkundige Bewertung noch die umgesetzte Entscheidung."
+      ]
+    ],
+    "position": "before-image-source",
+    "afterHtml": "<p>Methodenbezug: <a href=\"https://www.tjpa.org/files/2020/04/LPC-Final-Report-without-Appendices-Root-Cause-assessment-of-Girders-4MB.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">LPI, Untersuchungsumfang, S. 9–10</a>, <a href=\"https://www.twi-global.com/what-we-do/services-and-support/asset-management/bespoke-mechanical-testing/fracture-toughness-testing\" target=\"_blank\" rel=\"noopener noreferrer\">TWI: Bruchzähigkeitsprüfung</a>.</p>"
+  },
+  "fachbeitrag-transbay-traegerbrueche-en.html": {
+    "title": "Preventing the damage",
+    "introHtml": "For a comparable detail, the investigation and technical sources suggest the following present-day approach to inspection and decision-making. It is an editorial inference, not evidence that prevention of the historical failure could have been guaranteed.",
+    "fields": [
+      [
+        "Critical decision point",
+        "Approval of the opening and weld detail, and release of the fabricated component before installation."
+      ],
+      [
+        "Suitable present-day method",
+        "Joint review of detail design and fabrication; qualified surface crack testing of accessible cut surfaces, suitable material testing and, where needed, a fracture mechanics assessment. The investigation report documents fluorescent magnetic particle testing among other methods; its incorporation into a fabrication inspection plan requires separate qualification."
+      ],
+      [
+        "Detectable finding",
+        "Detectable crack indications, unfavourable detailing or material data that are insufficient for the assessment. A finding must be assessed in terms of its location and extent."
+      ],
+      [
+        "Required action",
+        "Suspend release when a critical finding remains unresolved. Revise the detail or fabrication appropriately, provide the necessary additional evidence and verify the effectiveness of the action."
+      ],
+      [
+        "Limit",
+        "Access, surface condition and the detection limit constrain crack testing. Calculations depend on assumed cracks, loads, residual stresses and material data. Residual uncertainty remains; methods and software replace neither expert assessment nor implementation of the decision."
+      ]
+    ],
+    "position": "before-image-source",
+    "afterHtml": "<p>Method references: <a href=\"https://www.tjpa.org/files/2020/04/LPC-Final-Report-without-Appendices-Root-Cause-assessment-of-Girders-4MB.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">LPI, scope of investigation, pp. 9–10</a>, <a href=\"https://www.twi-global.com/what-we-do/services-and-support/asset-management/bespoke-mechanical-testing/fracture-toughness-testing\" target=\"_blank\" rel=\"noopener noreferrer\">TWI: Fracture toughness testing</a>.</p>"
+  },
+  "fachbeitrag-transbay-traegerbrueche-fr.html": {
+    "title": "Prévention du dommage",
+    "introHtml": "Pour un détail comparable, l'investigation et les sources techniques conduisent à l'approche actuelle suivante en matière de contrôle et de décision. Il s'agit d'une déduction de la rédaction, et non de la preuve qu'il aurait été possible de garantir la prévention du dommage historique.",
+    "fields": [
+      [
+        "Point de décision critique",
+        "Approbation du détail des découpes et de la soudure, puis libération du composant fabriqué avant sa mise en place."
+      ],
+      [
+        "Méthode actuelle appropriée",
+        "Examen conjoint du détail et de la fabrication ; recherche qualifiée des fissures de surface sur les faces de coupe accessibles, essais appropriés du matériau et, si nécessaire, évaluation par la mécanique de la rupture. Le rapport d'investigation documente notamment un contrôle par magnétoscopie fluorescente ; son intégration dans un plan de contrôle de fabrication doit faire l'objet d'une qualification distincte."
+      ],
+      [
+        "Constat détectable",
+        "Indications de fissures détectables, disposition défavorable du détail ou données matériau insuffisantes pour l'évaluation. Un constat doit être évalué en fonction de sa position et de son étendue."
+      ],
+      [
+        "Mesure requise",
+        "Suspendre la libération du composant lorsqu'un constat critique reste non élucidé. Revoir le détail ou la fabrication dans les règles de l'art, compléter les justifications nécessaires et vérifier l'efficacité de la mesure."
+      ],
+      [
+        "Limite",
+        "L'accessibilité, l'état de surface et la limite de détection restreignent la recherche des fissures. Les calculs dépendent des hypothèses de fissuration, des charges, des contraintes résiduelles et des données matériau. Une incertitude résiduelle demeure ; ni les méthodes ni les logiciels ne remplacent l'évaluation par des spécialistes compétents ou la mise en œuvre de la décision."
+      ]
+    ],
+    "position": "before-image-source",
+    "afterHtml": "<p>Références méthodologiques : <a href=\"https://www.tjpa.org/files/2020/04/LPC-Final-Report-without-Appendices-Root-Cause-assessment-of-Girders-4MB.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">LPI, périmètre de l'investigation, p. 9–10</a>, <a href=\"https://www.twi-global.com/what-we-do/services-and-support/asset-management/bespoke-mechanical-testing/fracture-toughness-testing\" target=\"_blank\" rel=\"noopener noreferrer\">TWI : essais de ténacité à la rupture</a>.</p>"
   }
 }

@@ -102,5 +102,14 @@
   "weldPlanning.description": "Wie verändern Öffnungswinkel, Spalt und Nahtüberhöhung den Materialbedarf? Einfache Geometrie- und Bilanzgleichungen helfen, Schweißnähte vorzubereiten, Verbrauch und Lichtbogenzeit abzuschätzen und Prozesswerte auf Plausibilität zu prüfen.",
   "articlesIndex.weldPlanning": "Schweißnähte planen",
   "articlesIndex.weldPlanningArea": "Schweißtechnik",
-  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026",
+  "transbay.href": "./fachbeitrag-transbay-traegerbrueche.html",
+  "transbay.title": "Transbay: Wie ein Fertigungsdetail den Träger schwächte",
+  "transbay.description": "Am Transbay Transit Center in San Francisco führten entdeckte Trägerbrüche zur Schließung des Terminals. Der Fall zeigt, warum bei geschweißten Stahlkonstruktionen auch die bearbeiteten Bereiche neben einer Naht Aufmerksamkeit brauchen. Für Konstruktion, Fertigung und Prüfung entsteht daraus eine gemeinsame Aufgabe: Detailgeometrie, Herstellungsfolge und Werkstoffverhalten zusammen beurteilen.",
+  "articlesIndex.transbay": "Transbay Transit Center",
+  "articlesIndex.transbayCity": "San Francisco",
+  "articlesIndex.transbayCountry": "USA",
+  "articlesIndex.transbayCollapseDate": "25.09.2018 (Entdeckung)",
+  "articlesIndex.transbayArea": "Schweißtechnik",
+  "articlesIndex.transbayPublicationDate": "17.09.2026"
 }

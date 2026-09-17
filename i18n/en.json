@@ -102,5 +102,14 @@
   "weldPlanning.description": "How do groove angle, gap and weld reinforcement affect material requirements? Simple geometry and balance equations help prepare welds, estimate consumption and arc-on time, and check the plausibility of process values.",
   "articlesIndex.weldPlanning": "Planning welds",
   "articlesIndex.weldPlanningArea": "Welding technology",
-  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026",
+  "transbay.href": "./fachbeitrag-transbay-traegerbrueche-en.html",
+  "transbay.title": "Transbay: How a fabrication detail weakened the girder",
+  "transbay.description": "At the Transbay Transit Center in San Francisco, the discovery of fractured girders led to the terminal's closure. The case shows why welded steel structures also require attention to areas worked next to a weld. Designers, fabricators and inspectors share a task: assessing detail geometry, fabrication sequence and material behaviour together.",
+  "articlesIndex.transbay": "Transbay Transit Center",
+  "articlesIndex.transbayCity": "San Francisco",
+  "articlesIndex.transbayCountry": "USA",
+  "articlesIndex.transbayCollapseDate": "25 September 2018 (discovery)",
+  "articlesIndex.transbayArea": "Welding technology",
+  "articlesIndex.transbayPublicationDate": "17.09.2026"
 }
