@@ -118,6 +118,19 @@
   min-width: 1080px;
 }
 
+.technical-article-index-table .article-index-header,
+.technical-article-index-table .article-index-item {
+  grid-template-columns:
+    minmax(17rem, 2.2fr)
+    minmax(9.5rem, 1fr)
+    minmax(11rem, 1.15fr);
+  min-width: 720px;
+}
+
+.technical-article-index-table .article-index-list {
+  min-width: 720px;
+}
+
 .article-index-item {
   --index-soft: #fff;
   --index-soft-strong: #fbfdfe;

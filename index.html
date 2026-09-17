@@ -23,6 +23,7 @@
       <a href="#stahlbau" data-i18n="nav.steel">Stahlbau</a>
       <a href="#schraubtechnik" data-i18n="nav.bolting">Schraubtechnik</a>
       <a href="#fachartikel" data-i18n="nav.articles">Fachartikel</a>
+      <a href="#schadensberichte" data-i18n="nav.damageReports">Schadensberichte</a>
       <a href="./kontakt.html" data-i18n="nav.contact">Kontakt</a>
     </nav>
     <nav class="language-switcher" aria-label="Sprachauswahl" data-i18n-aria-label="language.selector">
@@ -42,7 +43,7 @@
     <section id="schweisstechnik" class="section welding-section">
       <div class="section-heading">
         <h2 data-i18n="welding.title">Schweißtechnik</h2>
-        <p data-i18n="welding.intro">Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Fachartikel erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
+        <p data-i18n="welding.intro">Digitale Fachanwendungen unterstützen die strukturierte Bewertung von Schweißnähten. Ergänzende Schadensberichte erklären technische Schadensfälle, Qualitätssicherungsprozesse und übertragbare Lehren für Planung, Fertigung und Prüfung.</p>
       </div>
 
       <div class="content-group application-group">
@@ -62,8 +63,8 @@
 
       <div class="content-group article-group">
         <div class="content-group-heading">
-          <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
-          <p data-i18n="articles.weldingIntro">Technische Fallanalysen mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
+          <p class="content-label article-label" data-i18n="damageReports.label">Schadensberichte</p>
+          <p data-i18n="damageReports.weldingIntro">Schadensberichte mit belastbaren Quellen, klarer Einordnung und konkretem Nutzen für die berufliche Praxis.</p>
         </div>
         <div class="cards article-cards">
 
@@ -99,13 +100,13 @@
     <section id="schraubtechnik" class="section bolting-section">
       <div class="section-heading">
         <h2 data-i18n="bolting.title">Schraubtechnik</h2>
-        <p data-i18n="bolting.intro">Fachbeiträge zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
+        <p data-i18n="bolting.intro">Schadensberichte zu Schrauben-, Gewinde- und Anschlussverbindungen zeigen, wie Lastpfade, Montageänderungen, örtliche Beanspruchungen und technische Freigaben die Sicherheit einer Konstruktion bestimmen.</p>
       </div>
 
       <div class="content-group article-group">
         <div class="content-group-heading">
-          <p class="content-label article-label" data-i18n="articles.label">Fachartikel</p>
-          <p data-i18n="articles.boltingIntro">Praxisnahe Analysen von Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
+          <p class="content-label article-label" data-i18n="damageReports.label">Schadensberichte</p>
+          <p data-i18n="damageReports.boltingIntro">Praxisnahe Schadensberichte zu Anschlussversagen und konstruktiven Änderungen für Konstruktion, Statik, Werkstattplanung, Montage und technische Verantwortung.</p>
         </div>
         <div class="cards article-cards">
           <a class="card feature-card article-card article-card-link" href="./fachbeitrag-hyatt-kleine-aenderung.html" data-i18n-href="hyatt.href">
@@ -124,15 +125,39 @@
       </div>
     </section>
 
+
     <section id="fachartikel" class="section articles-index-section">
       <div class="section-heading">
         <h2 data-i18n="articlesIndex.title">Fachartikel</h2>
-        <p data-i18n="articlesIndex.intro">Alle veröffentlichten Fach- und Wissensartikel in alphabetischer Reihenfolge. Bei Wissensartikeln ohne Ereignisbezug entfallen Stadt, Land und Einsturzdatum.</p>
+        <p data-i18n="articlesIndex.intro">Alle veröffentlichten Fachartikel in alphabetischer Reihenfolge.</p>
       </div>
 
-      <div class="article-index-table" role="table" aria-label="Alphabetisches Fachartikelregister" data-i18n-aria-label="articlesIndex.ariaLabel">
+      <div class="article-index-table technical-article-index-table" role="table" aria-label="Alphabetisches Fachartikelregister" data-i18n-aria-label="articlesIndex.ariaLabel">
         <div class="article-index-header" role="row">
-          <span role="columnheader" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnTopic">Thema</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnArea">Fachbereich</span>
+          <span role="columnheader" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span>
+        </div>
+
+        <div class="article-index-list" role="rowgroup">
+          <a class="article-index-item welding-index-item" role="row" href="./fachwissen-kranbahntraeger-biegedrillknicken.html" data-i18n-href="crane.href">
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnTopic">Thema</span><span class="article-index-value" data-i18n="articlesIndex.crane">Kranbahnträger – Biegedrillknicken</span></span>
+            <span class="article-index-area welding-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="articlesIndex.craneArea">Stahlbau</span></span>
+            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-09-05" data-i18n="articlesIndex.cranePublicationDate">05.09.2026</time></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="schadensberichte" class="section articles-index-section">
+      <div class="section-heading">
+        <h2 data-i18n="damageReportsIndex.title">Schadensberichte</h2>
+        <p data-i18n="damageReportsIndex.intro">Alle veröffentlichten Schadensberichte in alphabetischer Reihenfolge. Die Angaben sind nach Bauwerksname, Stadt, Land, Einsturzdatum, Fachbereich und Veröffentlichungsdatum geordnet.</p>
+      </div>
+
+      <div class="article-index-table damage-reports-index-table" role="table" aria-label="Alphabetisches Register der Schadensberichte" data-i18n-aria-label="damageReportsIndex.ariaLabel">
+        <div class="article-index-header" role="row">
+          <span role="columnheader" data-i18n="articlesIndex.columnStructure">Bauwerksname</span>
           <span role="columnheader" data-i18n="articlesIndex.columnCity">Stadt</span>
           <span role="columnheader" data-i18n="articlesIndex.columnCountry">Land</span>
           <span role="columnheader" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span>
@@ -143,7 +168,7 @@
         <div class="article-index-list" role="rowgroup">
 
           <a class="article-index-item welding-index-item" role="row" href="./fachbeitrag-alexander-kielland-ermuedung.html" data-i18n-href="kielland.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.kielland">Alexander L. Kielland – Wohnplattform</span></span>
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.kielland">Alexander L. Kielland – Wohnplattform</span></span>
             <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.kiellandCity">Ekofiskgebiet</span></span>
             <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.kiellandCountry">Norwegen</span></span>
             <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="1980-03-27" data-i18n="articlesIndex.kiellandCollapseDate">27.03.1980</time></span>
@@ -151,7 +176,7 @@
             <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-10" data-i18n="articlesIndex.kiellandPublicationDate">10.08.2026</time></span>
           </a>
           <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-hyatt-kleine-aenderung.html" data-i18n-href="hyatt.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.hyatt">Hyatt Regency Hotel – Atriumlaufstege</span></span>
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.hyatt">Hyatt Regency Hotel – Atriumlaufstege</span></span>
             <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.hyattCity">Kansas City</span></span>
             <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.hyattCountry">USA</span></span>
             <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="1981-07-17" data-i18n="articlesIndex.hyattCollapseDate">17.07.1981</time></span>
@@ -160,7 +185,7 @@
           </a>
 
           <a class="article-index-item welding-index-item" role="row" href="./fachbeitrag-qa-dokumentation-herstellung.html" data-i18n-href="qa.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.kew">Kew Recreation Centre – Stahltragwerk</span></span>
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.kew">Kew Recreation Centre – Stahltragwerk</span></span>
             <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.kewCity">Melbourne (Kew)</span></span>
             <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.kewCountry">Australien</span></span>
             <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2022-10-20" data-i18n="articlesIndex.kewCollapseDate">20.10.2022</time></span>
@@ -168,17 +193,8 @@
             <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-08-01" data-i18n="articlesIndex.kewPublicationDate">01.08.2026</time></span>
           </a>
 
-
-          <a class="article-index-item welding-index-item" role="row" href="./fachwissen-kranbahntraeger-biegedrillknicken.html" data-i18n-href="crane.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.crane">Kranbahnträger – Biegedrillknicken</span></span>
-            <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.craneCity">—</span></span>
-            <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.craneCountry">—</span></span>
-            <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><span class="article-index-value" data-i18n="articlesIndex.craneCollapseDate">—</span></span>
-            <span class="article-index-area welding-index article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnArea">Fachbereich</span><span class="article-index-value" data-i18n="articlesIndex.craneArea">Stahlbau</span></span>
-            <span class="article-index-publication-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnPublicationDate">Veröffentlichungsdatum</span><time class="article-index-value" datetime="2026-09-05" data-i18n="articlesIndex.cranePublicationDate">05.09.2026</time></span>
-          </a>
           <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-morandi-bruecke-bestandsmanagement.html" data-i18n-href="morandi.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.morandi">Morandi-Brücke – Polcevera-Viadukt</span></span>
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.morandi">Morandi-Brücke – Polcevera-Viadukt</span></span>
             <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.morandiCity">Genua</span></span>
             <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.morandiCountry">Italien</span></span>
             <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2018-08-14" data-i18n="articlesIndex.morandiCollapseDate">14.08.2018</time></span>
@@ -187,7 +203,7 @@
           </a>
 
           <a class="article-index-item bolting-index-item" role="row" href="./fachbeitrag-tretten-blockscheren.html" data-i18n-href="tretten.href">
-            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerk / Thema</span><span class="article-index-value" data-i18n="articlesIndex.tretten">Tretten-Brücke – Fachwerkbrücke</span></span>
+            <span class="article-index-title article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnStructure">Bauwerksname</span><span class="article-index-value" data-i18n="articlesIndex.tretten">Tretten-Brücke – Fachwerkbrücke</span></span>
             <span class="article-index-city article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCity">Stadt</span><span class="article-index-value" data-i18n="articlesIndex.trettenCity">Tretten</span></span>
             <span class="article-index-country article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCountry">Land</span><span class="article-index-value" data-i18n="articlesIndex.trettenCountry">Norwegen</span></span>
             <span class="article-index-collapse-date article-index-cell" role="cell"><span class="article-index-mobile-label" data-i18n="articlesIndex.columnCollapseDate">Datum Einsturz</span><time class="article-index-value" datetime="2022-08-15" data-i18n="articlesIndex.trettenCollapseDate">15.08.2022</time></span>
