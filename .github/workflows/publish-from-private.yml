@@ -2,6 +2,11 @@ name: Connect-Portal veröffentlichen
 
 on:
   workflow_dispatch:
+    inputs:
+      private_commit_sha:
+        description: Vollständiger freigegebener Commit-SHA aus AndreasHardt/connect.hardt-wiehl
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -31,7 +36,24 @@ jobs:
         with:
           repository: AndreasHardt/connect.hardt-wiehl
           token: ${{ secrets.CONNECT_CODE_TOKEN }}
+          ref: ${{ inputs.private_commit_sha }}
           path: _private
+
+      - name: Privaten Quellstand verifizieren
+        working-directory: _private
+        env:
+          EXPECTED_PRIVATE_COMMIT: ${{ inputs.private_commit_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "$EXPECTED_PRIVATE_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+            echo 'Der private Commit muss als vollständiger 40-stelliger SHA angegeben werden.' >&2
+            exit 1
+          fi
+          actual_private_commit="$(git rev-parse HEAD)"
+          test "$actual_private_commit" = "$EXPECTED_PRIVATE_COMMIT"
+          echo "PRIVATE_SOURCE_COMMIT=$actual_private_commit" >> "$GITHUB_ENV"
+          echo "Private source commit: `$actual_private_commit`" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Node.js einrichten
         uses: actions/setup-node@v4
@@ -92,5 +114,6 @@ jobs:
             echo 'Keine Änderungen zu veröffentlichen.'
             exit 0
           fi
-          git commit -m 'Connect-Portal aus privatem Quellstand veröffentlichen'
+          git commit -m 'Connect-Portal aus privatem Quellstand veröffentlichen' \
+            -m "Private source: $PRIVATE_SOURCE_COMMIT"
           git push origin main
