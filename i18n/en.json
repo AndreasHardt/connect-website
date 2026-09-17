@@ -96,5 +96,11 @@
   "articlesIndex.craneCountry": "—",
   "articlesIndex.craneCollapseDate": "—",
   "articlesIndex.cranePublicationDate": "05.09.2026",
-  "articlesIndex.craneArea": "Structural steelwork"
+  "articlesIndex.craneArea": "Structural steelwork",
+  "weldPlanning.href": "./fachwissen-schweissnaehte-planen-en.html",
+  "weldPlanning.title": "Planning welds",
+  "weldPlanning.description": "How do groove angle, gap and weld reinforcement affect material requirements? Simple geometry and balance equations help prepare welds, estimate consumption and arc-on time, and check the plausibility of process values.",
+  "articlesIndex.weldPlanning": "Planning welds",
+  "articlesIndex.weldPlanningArea": "Welding technology",
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
 }

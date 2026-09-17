@@ -96,5 +96,11 @@
   "articlesIndex.craneCountry": "—",
   "articlesIndex.craneCollapseDate": "—",
   "articlesIndex.cranePublicationDate": "05.09.2026",
-  "articlesIndex.craneArea": "Stahlbau"
+  "articlesIndex.craneArea": "Stahlbau",
+  "weldPlanning.href": "./fachwissen-schweissnaehte-planen.html",
+  "weldPlanning.title": "Schweißnähte planen",
+  "weldPlanning.description": "Wie verändern Öffnungswinkel, Spalt und Nahtüberhöhung den Materialbedarf? Einfache Geometrie- und Bilanzgleichungen helfen, Schweißnähte vorzubereiten, Verbrauch und Lichtbogenzeit abzuschätzen und Prozesswerte auf Plausibilität zu prüfen.",
+  "articlesIndex.weldPlanning": "Schweißnähte planen",
+  "articlesIndex.weldPlanningArea": "Schweißtechnik",
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
 }

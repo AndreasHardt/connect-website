@@ -96,5 +96,11 @@
   "articlesIndex.craneCountry": "—",
   "articlesIndex.craneCollapseDate": "—",
   "articlesIndex.cranePublicationDate": "05.09.2026",
-  "articlesIndex.craneArea": "Construction métallique"
+  "articlesIndex.craneArea": "Construction métallique",
+  "weldPlanning.href": "./fachwissen-schweissnaehte-planen-fr.html",
+  "weldPlanning.title": "Planifier les soudures",
+  "weldPlanning.description": "Comment l’angle d’ouverture, le jeu et les surépaisseurs influencent-ils le besoin en matière ? Des équations simples de géométrie et de bilan aident à préparer les soudures, à estimer la consommation et le temps d’arc et à vérifier la plausibilité des paramètres.",
+  "articlesIndex.weldPlanning": "Planifier les soudures",
+  "articlesIndex.weldPlanningArea": "Techniques de soudage",
+  "articlesIndex.weldPlanningPublicationDate": "17.09.2026"
 }

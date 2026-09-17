@@ -1,0 +1,11 @@
+.weld-planning-article { overflow-wrap: anywhere; }
+.weld-planning-article p { max-width: 780px; }
+.weld-planning-article math { font-family: math; font-size: 1.12em; }
+.weld-equation { display: flex; align-items: center; gap: .6rem; max-width: 780px; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: .5rem; background: #f0f4f6; break-inside: avoid; }
+.weld-equation-scroll { flex: 1; min-width: 0; overflow-x: auto; padding: .5rem .1rem; }
+.weld-equation-scroll:focus-visible { outline: 2px solid #174d64; outline-offset: 3px; }
+.weld-equation math { font-size: 1.3rem; width: max-content; min-width: 100%; }
+.weld-equation-number { flex: none; color: #52626c; font-size: .9rem; }
+.weld-planning-article .knowledge-table { min-width: 0; }
+@media (max-width: 600px) { .weld-equation { padding: .6rem; } .weld-equation math { font-size: 1.12rem; } }
+@media print { .weld-equation-scroll { overflow: visible; } .weld-equation { background: white; } }
